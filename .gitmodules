@@ -1,0 +1,3 @@
+[submodule "submodules/ChaosUtil.Debug"]
+	path = submodules/ChaosUtil.Debug
+	url = ../../ChaosFramework/ChaosUtil.Debug.git
