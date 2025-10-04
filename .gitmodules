@@ -79,3 +79,6 @@
 [submodule "submodules/ChaosFramework.Sound"]
 	path = submodules/ChaosFramework.Sound
 	url = ../../ChaosFramework/ChaosFramework.Sound.git
+[submodule "submodules/ChaosFramework.Sound.OpenAL"]
+	path = submodules/ChaosFramework.Sound.OpenAL
+	url = ../../ChaosFramework/ChaosFramework.Sound.OpenAL.git
