@@ -20,8 +20,8 @@
 
   <!-- Configuration and Platform -->
   <Import Project="$(ChaosPresets_Targets)/Configurations.targets" />
-  <PropertyGroup Condition=" '$(Platform)' == 'X86' " />
-  <PropertyGroup Condition=" '$(Platform)' == 'X64' " />
+  <PropertyGroup Condition=" '$(Platform)' == 'x86' " />
+  <PropertyGroup Condition=" '$(Platform)' == 'x64' " />
 
   <!-- Included Files -->
   <ItemGroup>
