@@ -49,3 +49,6 @@
 [submodule "submodules/ChaosFramework.Collections"]
 	path = submodules/ChaosFramework.Collections
 	url = ../../ChaosFramework/ChaosFramework.Collections.git
+[submodule "submodules/ChaosFramework.Components"]
+	path = submodules/ChaosFramework.Components
+	url = ../../ChaosFramework/ChaosFramework.Components.git
