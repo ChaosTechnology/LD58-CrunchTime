@@ -25,3 +25,6 @@
 [submodule "submodules/ChaosAnalyzers.ClassIntegrity.Types"]
 	path = submodules/ChaosAnalyzers.ClassIntegrity.Types
 	url = ../../ChaosFramework/ChaosAnalyzers.ClassIntegrity.Types.git
+[submodule "submodules/ChaosAnalyzers.CleanCode"]
+	path = submodules/ChaosAnalyzers.CleanCode
+	url = ../../ChaosFramework/ChaosAnalyzers.CleanCode.git
