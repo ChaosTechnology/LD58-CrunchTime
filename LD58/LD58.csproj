@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import
+    Project="$(MSBuildExtensionsPath)/$(MSBuildToolsVersion)/Microsoft.Common.props"
+    Condition="Exists('$(MSBuildExtensionsPath)/$(MSBuildToolsVersion)/Microsoft.Common.props')"
+    />
+
+  <PropertyGroup>
+    <AssemblyName>LD58</AssemblyName>
+    <RootNamespace>LD58</RootNamespace>
+    <ProjectGuid>{ADFC01E7-7D26-4518-8403-C1164AD3B0EF}</ProjectGuid>
+
+    <ChaosPresets_References>../submodules/ChaosPresets.References</ChaosPresets_References>
+    <ChaosPresets_Targets>../submodules/ChaosPresets.Targets</ChaosPresets_Targets>
+  </PropertyGroup>
+
+  <!-- Properties -->
+  <Import Project="$(ChaosPresets_Targets)/Properties/Executable.targets" />
+  <Import Project="$(ChaosPresets_Targets)/Paths/Output/Branch-Platform-Config.targets" />
+
+  <!-- Configuration and Platform -->
+  <Import Project="$(ChaosPresets_Targets)/Configurations.targets" />
+  <PropertyGroup Condition=" '$(Platform)' == 'x86' " />
+  <PropertyGroup Condition=" '$(Platform)' == 'x64' " />
+
+  <!-- Included Files -->
+  <ItemGroup>
+    <Compile Include="source\**\*.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosUtil.Debug.targets" />
+  <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosUtil.Platform.targets" />
+  <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosUtil.Platform.Windows.targets" />
+  <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosUtil.Primitives.targets" />
+  <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosUtil.Reflection.targets" />
+  <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosUtil.Serialization.targets" />
+  <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosFramework.Collections.targets" />
+  <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosFramework.Components.targets" />
+  <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosFramework.Core.targets" />
+  <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosFramework.Input.targets" />
+  <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosFramework.Input.RawInput.targets" />
+  <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosFramework.Input.RawInput.Sharp.targets" />
+  <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosFramework.IO.targets" />
+  <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosFramework.Math.targets" />
+  <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosFramework.Shapes.targets" />
+  <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosFramework.Sound.targets" />
+  <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosFramework.Sound.OpenAL.targets" />
+  <ItemGroup>
+    <Reference Include="ChaosFramework.Graphics">
+      <HintPath>..\libs\ChaosFramework.Graphics\ChaosFramework.Graphics.dll</HintPath>
+    </Reference>
+    <Reference Include="ChaosFramework.Graphics.OpenGL">
+      <HintPath>..\libs\ChaosFramework.Graphics.OpenGL\ChaosFramework.Graphics.OpenGL.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+
+  <!-- Analyzers -->
+  <Import Project="$(ChaosPresets_References)/Analyzers/ChaosAnalyzers.CleanCode.targets" />
+
+  <!-- Cleanup Task -->
+  <Import Project="$(ChaosPresets_References)/BuildTasks/ChaosBuild.CodeFormatter.Tasks.ChangedProjectFiles.targets" />
+
+  <!-- Default Targets for Building CSharp Projects -->
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

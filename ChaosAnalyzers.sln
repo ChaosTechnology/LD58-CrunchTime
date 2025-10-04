@@ -1,0 +1,58 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ChaosAnalyzers", "ChaosAnalyzers", "{8E4ED20C-538E-4073-9F36-2570CD7C5F9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChaosAnalyzers", "submodules\ChaosAnalyzers\ChaosAnalyzers.csproj", "{5AD17D0E-56B3-499D-920C-EE08E40482E1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D46D324D-2D15-4AA1-B632-F9730299C410} = {D46D324D-2D15-4AA1-B632-F9730299C410}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChaosAnalyzers.Util.NonPortable.Windows", "submodules\ChaosAnalyzers.Util.NonPortable.Windows\ChaosAnalyzers.Util.NonPortable.Windows.csproj", "{D46D324D-2D15-4AA1-B632-F9730299C410}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ChaosAnalyzers.ClassIntegrity", "ChaosAnalyzers.ClassIntegrity", "{BE8DD42A-782B-43E0-B9D8-C581446346B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChaosAnalyzers.ClassIntegrity", "submodules\ChaosAnalyzers.ClassIntegrity\ChaosAnalyzers.ClassIntegrity.csproj", "{2EA7D420-634E-47AA-9C79-4BCEFFA9A4A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChaosAnalyzers.ClassIntegrity.Types", "submodules\ChaosAnalyzers.ClassIntegrity.Types\ChaosAnalyzers.ClassIntegrity.Types.csproj", "{531C057D-4677-462A-A664-1AA5DED0367B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChaosAnalyzers.CleanCode", "submodules\ChaosAnalyzers.CleanCode\ChaosAnalyzers.CleanCode.csproj", "{C30C22DE-1AD8-4B62-A439-6ECF3B1792B1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5AD17D0E-56B3-499D-920C-EE08E40482E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AD17D0E-56B3-499D-920C-EE08E40482E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AD17D0E-56B3-499D-920C-EE08E40482E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AD17D0E-56B3-499D-920C-EE08E40482E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D46D324D-2D15-4AA1-B632-F9730299C410}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D46D324D-2D15-4AA1-B632-F9730299C410}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D46D324D-2D15-4AA1-B632-F9730299C410}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D46D324D-2D15-4AA1-B632-F9730299C410}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EA7D420-634E-47AA-9C79-4BCEFFA9A4A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EA7D420-634E-47AA-9C79-4BCEFFA9A4A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EA7D420-634E-47AA-9C79-4BCEFFA9A4A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EA7D420-634E-47AA-9C79-4BCEFFA9A4A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{531C057D-4677-462A-A664-1AA5DED0367B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{531C057D-4677-462A-A664-1AA5DED0367B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{531C057D-4677-462A-A664-1AA5DED0367B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{531C057D-4677-462A-A664-1AA5DED0367B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C30C22DE-1AD8-4B62-A439-6ECF3B1792B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C30C22DE-1AD8-4B62-A439-6ECF3B1792B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C30C22DE-1AD8-4B62-A439-6ECF3B1792B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C30C22DE-1AD8-4B62-A439-6ECF3B1792B1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5AD17D0E-56B3-499D-920C-EE08E40482E1} = {8E4ED20C-538E-4073-9F36-2570CD7C5F9F}
+		{D46D324D-2D15-4AA1-B632-F9730299C410} = {8E4ED20C-538E-4073-9F36-2570CD7C5F9F}
+		{2EA7D420-634E-47AA-9C79-4BCEFFA9A4A3} = {BE8DD42A-782B-43E0-B9D8-C581446346B9}
+		{531C057D-4677-462A-A664-1AA5DED0367B} = {BE8DD42A-782B-43E0-B9D8-C581446346B9}
+	EndGlobalSection
+EndGlobal
