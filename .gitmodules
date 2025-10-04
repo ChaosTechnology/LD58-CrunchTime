@@ -37,3 +37,6 @@
 [submodule "submodules/ChaosBuild.CodeFormatter.Tasks"]
 	path = submodules/ChaosBuild.CodeFormatter.Tasks
 	url = ../../ChaosFramework/ChaosBuild.CodeFormatter.Tasks.git
+[submodule "submodules/ChaosBuild.ProjectAnalyzer"]
+	path = submodules/ChaosBuild.ProjectAnalyzer
+	url = ../../ChaosFramework/ChaosBuild.ProjectAnalyzer.git
