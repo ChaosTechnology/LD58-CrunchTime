@@ -73,3 +73,6 @@
 [submodule "submodules/ChaosFramework.Physics"]
 	path = submodules/ChaosFramework.Physics
 	url = ../../ChaosFramework/ChaosFramework.Physics.git
+[submodule "submodules/ChaosFramework.Shapes"]
+	path = submodules/ChaosFramework.Shapes
+	url = ../../ChaosFramework/ChaosFramework.Shapes.git
