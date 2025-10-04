@@ -10,3 +10,6 @@
 [submodule "submodules/ChaosUtil.Primitives"]
 	path = submodules/ChaosUtil.Primitives
 	url = ../../ChaosFramework/ChaosUtil.Primitives.git
+[submodule "submodules/ChaosUtil.Reflection"]
+	path = submodules/ChaosUtil.Reflection
+	url = ../../ChaosFramework/ChaosUtil.Reflection.git
