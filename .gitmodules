@@ -64,3 +64,6 @@
 [submodule "submodules/ChaosFramework.Input.RawInput.Sharp"]
 	path = submodules/ChaosFramework.Input.RawInput.Sharp
 	url = ../../ChaosFramework/ChaosFramework.Input.RawInput.Sharp.git
+[submodule "submodules/ChaosFramework.IO"]
+	path = submodules/ChaosFramework.IO
+	url = ../../ChaosFramework/ChaosFramework.IO.git
