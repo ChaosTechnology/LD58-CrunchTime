@@ -1,3 +1,9 @@
+[submodule "submodules/ChaosPresets.References"]
+	path = submodules/ChaosPresets.References
+	url = ../../ChaosFramework/ChaosPresets.References.git
+[submodule "submodules/ChaosPresets.Targets"]
+	path = submodules/ChaosPresets.Targets
+	url = ../../ChaosFramework/ChaosPresets.Targets.git
 [submodule "submodules/ChaosUtil.Debug"]
 	path = submodules/ChaosUtil.Debug
 	url = ../../ChaosFramework/ChaosUtil.Debug.git

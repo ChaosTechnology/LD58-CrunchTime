@@ -10,8 +10,8 @@
     <RootNamespace>LD58</RootNamespace>
     <ProjectGuid>{ADFC01E7-7D26-4518-8403-C1164AD3B0EF}</ProjectGuid>
 
-    <ChaosPresets_References>../submodules/ChaosFramework.Shapes/submodules/ChaosPresets.References</ChaosPresets_References>
-    <ChaosPresets_Targets>../submodules/ChaosFramework.Shapes/submodules/ChaosPresets.Targets</ChaosPresets_Targets>
+    <ChaosPresets_References>../submodules/ChaosPresets.References</ChaosPresets_References>
+    <ChaosPresets_Targets>../submodules/ChaosPresets.Targets</ChaosPresets_Targets>
   </PropertyGroup>
 
   <!-- Properties -->
