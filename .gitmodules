@@ -28,3 +28,6 @@
 [submodule "submodules/ChaosAnalyzers.CleanCode"]
 	path = submodules/ChaosAnalyzers.CleanCode
 	url = ../../ChaosFramework/ChaosAnalyzers.CleanCode.git
+[submodule "submodules/ChaosAnalyzers.Util.NonPortable.Windows"]
+	path = submodules/ChaosAnalyzers.Util.NonPortable.Windows
+	url = ../../ChaosFramework/ChaosAnalyzers.Util.NonPortable.Windows.git
