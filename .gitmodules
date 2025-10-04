@@ -19,3 +19,6 @@
 [submodule "submodules/ChaosAnalyzers"]
 	path = submodules/ChaosAnalyzers
 	url = ../../ChaosFramework/ChaosAnalyzers.git
+[submodule "submodules/ChaosAnalyzers.ClassIntegrity"]
+	path = submodules/ChaosAnalyzers.ClassIntegrity
+	url = ../../ChaosFramework/ChaosAnalyzers.ClassIntegrity.git
