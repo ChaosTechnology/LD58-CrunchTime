@@ -7,3 +7,6 @@
 [submodule "submodules/ChaosUtil.Platform.Windows"]
 	path = submodules/ChaosUtil.Platform.Windows
 	url = ../../ChaosFramework/ChaosUtil.Platform.Windows.git
+[submodule "submodules/ChaosUtil.Primitives"]
+	path = submodules/ChaosUtil.Primitives
+	url = ../../ChaosFramework/ChaosUtil.Primitives.git
