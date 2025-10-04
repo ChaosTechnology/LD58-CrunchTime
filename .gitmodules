@@ -46,3 +46,6 @@
 [submodule "submodules/ChaosBuild.Util"]
 	path = submodules/ChaosBuild.Util
 	url = ../../ChaosFramework/ChaosBuild.Util.git
+[submodule "submodules/ChaosFramework.Collections"]
+	path = submodules/ChaosFramework.Collections
+	url = ../../ChaosFramework/ChaosFramework.Collections.git
