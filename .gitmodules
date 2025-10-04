@@ -67,3 +67,6 @@
 [submodule "submodules/ChaosFramework.IO"]
 	path = submodules/ChaosFramework.IO
 	url = ../../ChaosFramework/ChaosFramework.IO.git
+[submodule "submodules/ChaosFramework.Math"]
+	path = submodules/ChaosFramework.Math
+	url = ../../ChaosFramework/ChaosFramework.Math.git
