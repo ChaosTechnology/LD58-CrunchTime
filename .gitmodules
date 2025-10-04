@@ -40,3 +40,6 @@
 [submodule "submodules/ChaosBuild.ProjectAnalyzer"]
 	path = submodules/ChaosBuild.ProjectAnalyzer
 	url = ../../ChaosFramework/ChaosBuild.ProjectAnalyzer.git
+[submodule "submodules/ChaosBuild.Solution"]
+	path = submodules/ChaosBuild.Solution
+	url = ../../ChaosFramework/ChaosBuild.Solution.git
