@@ -16,3 +16,6 @@
 [submodule "submodules/ChaosUtil.Serialization"]
 	path = submodules/ChaosUtil.Serialization
 	url = ../../ChaosFramework/ChaosUtil.Serialization.git
+[submodule "submodules/ChaosAnalyzers"]
+	path = submodules/ChaosAnalyzers
+	url = ../../ChaosFramework/ChaosAnalyzers.git
