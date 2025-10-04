@@ -47,7 +47,14 @@
   <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosFramework.Sound.targets" />
   <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosFramework.Sound.OpenAL.targets" />
   <ItemGroup>
+    <Reference Include="ChaosFramework.Graphics">
+      <HintPath>..\libs\ChaosFramework.Graphics\ChaosFramework.Graphics.dll</HintPath>
+    </Reference>
+    <Reference Include="ChaosFramework.Graphics.OpenGL">
+      <HintPath>..\libs\ChaosFramework.Graphics.OpenGL\ChaosFramework.Graphics.OpenGL.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
 
   <!-- Analyzers -->

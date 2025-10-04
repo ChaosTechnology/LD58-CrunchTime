@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ChaosFramework.Components;
+using System;
 using System.Windows.Forms;
 
 namespace LD58
@@ -13,7 +11,7 @@ namespace LD58
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new BaseGame().window);
         }
     }
 }
