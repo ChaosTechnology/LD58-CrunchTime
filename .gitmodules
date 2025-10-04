@@ -31,3 +31,6 @@
 [submodule "submodules/ChaosAnalyzers.Util.NonPortable.Windows"]
 	path = submodules/ChaosAnalyzers.Util.NonPortable.Windows
 	url = ../../ChaosFramework/ChaosAnalyzers.Util.NonPortable.Windows.git
+[submodule "submodules/ChaosBuild.CodeFormatter"]
+	path = submodules/ChaosBuild.CodeFormatter
+	url = ../../ChaosFramework/ChaosBuild.CodeFormatter.git
