@@ -55,3 +55,6 @@
 [submodule "submodules/ChaosFramework.Core"]
 	path = submodules/ChaosFramework.Core
 	url = ../../ChaosFramework/ChaosFramework.Core.git
+[submodule "submodules/ChaosFramework.Input"]
+	path = submodules/ChaosFramework.Input
+	url = ../../ChaosFramework/ChaosFramework.Input.git
