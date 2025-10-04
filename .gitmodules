@@ -13,3 +13,6 @@
 [submodule "submodules/ChaosUtil.Reflection"]
 	path = submodules/ChaosUtil.Reflection
 	url = ../../ChaosFramework/ChaosUtil.Reflection.git
+[submodule "submodules/ChaosUtil.Serialization"]
+	path = submodules/ChaosUtil.Serialization
+	url = ../../ChaosFramework/ChaosUtil.Serialization.git
