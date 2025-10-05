@@ -4,6 +4,7 @@ using ChaosFramework.Input.InputEvents;
 using ChaosFramework.Input.RawInput;
 using ChaosFramework.Math;
 using ChaosFramework.Math.Vectors;
+using System.Linq;
 
 namespace LD58.World
 {
@@ -45,9 +46,12 @@ namespace LD58.World
         protected override void Create(CreateParameters args)
         {
             base.Create(args);
-            position = new Vector2i(bone.GetPosition().xz);
+            position = OccupiedTiles().First();
             direction = new Vector2i(bone.GetDirection().xz);
         }
+
+        public override bool CanStepOn(Vector2i pos)
+            => true;
 
         public override void SetUpdateCalls()
         {
