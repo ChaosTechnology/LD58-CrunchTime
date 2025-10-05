@@ -65,11 +65,11 @@ namespace LD58.World
                         }
                 }
 
+            size += 1;
             this.size = size;
-            tiles = new WorldObject[size.x + 1, size.y + 1];
+            tiles = new WorldObject[size.x, size.y];
             foreach (SysCol.KeyValuePair<Vector2i, WorldObject> pos in occupied)
                 tiles[pos.Key.x, pos.Key.y] = pos.Value;
-
 
             foreach (string rigPath in source.EnumerateKeys($"stages/{name}/deco/*.rig"))
                 using (Stream rigStream = source.OpenRead(rigPath))
@@ -88,7 +88,7 @@ namespace LD58.World
         }
 
         public bool OutOfBounds(Vector2i pos)
-            => !pos.GreaterEquals(0) || !pos.LessEquals(size);
+            => !pos.GreaterEquals(0) || !pos.Less(size);
 
         public bool CanEnter(Vector2i pos)
             => !OutOfBounds(pos) && (tiles[pos.x, pos.y]?.CanStepOn(pos) ?? true);
