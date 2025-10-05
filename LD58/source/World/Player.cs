@@ -106,7 +106,7 @@ namespace LD58.World
 
         bool StartWalking(Direction direction)
         {
-            inputs.Add(direction);
+            inputs.Insert(0, direction);
 
             if (float.IsNaN(walkingHowLong))
             {
@@ -129,7 +129,7 @@ namespace LD58.World
             if (inputs.empty)
                 walkingHowLong = float.NaN;
             else
-                TurnTo(inputs.last);
+                TurnTo(inputs.first);
 
             return false;
         }
@@ -158,9 +158,22 @@ namespace LD58.World
 
         void Step()
         {
-            Vector2i desiredPos = position + MapDirection(facing);
+            if (!TryStep(facing))
+                foreach (Direction dir in inputs)
+                    if (TryStep(dir))
+                        return;
+        }
+
+        bool TryStep(Direction d)
+        {
+            Vector2i desiredPos = position + MapDirection(d);
             if (scene.CanEnter(desiredPos))
+            {
                 position = desiredPos;
+                return true;
+            }
+            else
+                return false;
         }
 
         public override void GiveMeInstances(InstancingAttribute[] instancers)
