@@ -1,3 +1,4 @@
+using ChaosFramework.Collections;
 using ChaosFramework.Components;
 using ChaosFramework.Graphics.OpenGl.Instancing;
 using ChaosFramework.Input.InputEvents;
@@ -43,6 +44,10 @@ namespace LD58.World
         Direction facing;
         float walkingHowLong = float.NaN;
         Vector2f visualPosition;
+
+        // TODO: Capture actual input instead of just direction,
+        //       to support multiple keys (or keyboards) for the same action
+        LinkedList<Direction> inputs = new LinkedList<Direction>();
 
         protected override void Create(CreateParameters args)
         {
@@ -101,6 +106,8 @@ namespace LD58.World
 
         bool StartWalking(Direction direction)
         {
+            inputs.Add(direction);
+
             if (float.IsNaN(walkingHowLong))
             {
                 // start walking
@@ -117,8 +124,12 @@ namespace LD58.World
 
         bool StopWalking(Direction direction)
         {
-            if (direction == facing)
+            inputs.Remove(direction);
+
+            if (inputs.empty)
                 walkingHowLong = float.NaN;
+            else
+                TurnTo(inputs.last);
 
             return false;
         }
