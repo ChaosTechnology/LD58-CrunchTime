@@ -18,7 +18,7 @@ namespace LD58.World.Objects.WorldObjects
         static readonly Item ESSENCE_OF_DARKNESS = new Item("Essence of darkness", Traits.Weird | Traits.Beverage);
 
         bool collectedEssenceOfDarkness = false;
-        LinkedList<Item> stock = new LinkedList<Item>();
+        ItemBag stock = new ItemBag();
 
         public Fridge()
             : base(2, 1)
@@ -31,14 +31,14 @@ namespace LD58.World.Objects.WorldObjects
         public override bool Interact(Interactor interactor)
         {
             LinkedList<System.Tuple<string, InteractionStep[]>> choices = new LinkedList<System.Tuple<string, InteractionStep[]>>();
-            foreach (Item _i in stock)
+            foreach (System.Tuple<Item, int> _i in stock)
             {
-                Item i = _i;
+                System.Tuple<Item, int> i = _i;
                 choices.Add(new System.Tuple<string, InteractionStep[]>(
-                    i.displayName,
+                    $"{i.Item1.displayName} x{i.Item2}",
                     new InteractionStep[] {
-                        new AddItem(interactor, i),
-                        new CustomAction(interactor, () => stock.Remove(i))
+                        new AddItem(interactor, i.Item1),
+                        new CustomAction(interactor, () => stock.Remove(i.Item1))
                         }
                     )
                 );
