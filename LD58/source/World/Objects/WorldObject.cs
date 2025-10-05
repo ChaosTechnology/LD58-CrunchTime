@@ -52,8 +52,8 @@ namespace LD58.World.Objects
                 {
                     Vector2i offset = new Vector2i(x, y) * 2 + 1;
                     offset = new Vector2i(
-                        offset.x * dir.x + offset.y * dir.y,
-                        -offset.x * dir.y + offset.y * dir.x
+                        offset.x * dir.x - offset.y * dir.y,
+                        offset.x * dir.y + offset.y * dir.x
                         );
                     yield return pos + (offset - 1) / 2;
                 }
