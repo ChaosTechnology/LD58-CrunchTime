@@ -7,6 +7,7 @@ using ChaosFramework.Graphics.OpenGl.Lights;
 using ChaosFramework.Graphics.OpenGl.Lights.Intrinsic;
 using ChaosFramework.Graphics.OpenGl.PostProcessors;
 using ChaosFramework.Math.Vectors;
+using LD58.source;
 using OpenTK.Graphics.OpenGL;
 using static ChaosFramework.Math.Constants;
 
@@ -71,6 +72,7 @@ namespace LD58
             antiEdger = new AntiAliasing();
 
             lights.Add(theFamousInsideSun);
+            AddComponent<Background>();
         }
 
         void UpdateView() => view.Update(view.Position, view.Direction, view.Up, float.NaN, float.NaN, float.NaN, game.graphics.ratio);
