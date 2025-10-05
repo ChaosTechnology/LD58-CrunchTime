@@ -5,6 +5,7 @@ using ChaosFramework.Input.RawInput;
 using ChaosFramework.Math;
 using ChaosFramework.Math.Vectors;
 using System.Linq;
+using static ChaosFramework.Math.Exponentials;
 
 namespace LD58.World
 {
@@ -16,7 +17,6 @@ namespace LD58.World
     {
         public enum Direction
         {
-            None,
             Left,
             Right,
             Up,
@@ -40,14 +40,16 @@ namespace LD58.World
         public Vector2i position;
         public Vector2i direction;
 
-        Direction walkingTo;
-        float walkingHowLong = 0;
+        Direction facing;
+        float walkingHowLong = float.NaN;
+        Vector2f visualPosition;
 
         protected override void Create(CreateParameters args)
         {
             base.Create(args);
             position = OccupiedTiles().First();
             direction = new Vector2i(bone.GetDirection().xz);
+            visualPosition = position;
         }
 
         public override bool CanStepOn(Vector2i pos)
@@ -66,7 +68,7 @@ namespace LD58.World
 
         void UpdateView()
         {
-            Vector3f target = new Vector3f(position.x, 1, position.y);
+            Vector3f target = new Vector3f(visualPosition.x, 1, visualPosition.y);
             Vector3f direction = new Vector3f(0, -1, 0);
             Vector3f pos = target - direction * 10;
             scene.view.Update(pos, direction, new Vector3f(0, 0, 1));
@@ -99,24 +101,31 @@ namespace LD58.World
 
         bool StartWalking(Direction direction)
         {
-            walkingTo = direction;
-            walkingHowLong = 0;
+            if (float.IsNaN(walkingHowLong))
+            {
+                // start walking
+                walkingHowLong = 0;
+
+                // allow tapping for a single step
+                if (facing == direction)
+                    Step();
+            }
+
+            TurnTo(direction);
             return true;
         }
 
         bool StopWalking(Direction direction)
         {
-            if (direction == walkingTo)
-                TurnTo(direction);
-
-            walkingTo = Direction.None;
-            walkingHowLong = 0;
+            if (direction == facing)
+                walkingHowLong = float.NaN;
 
             return false;
         }
 
         void TurnTo(Direction direction)
         {
+            facing = direction;
             this.direction = MapDirection(direction);
         }
 
@@ -125,15 +134,22 @@ namespace LD58.World
 
         void Move()
         {
-            if (walkingTo != Direction.None)
+            if (!float.IsNaN(walkingHowLong))
                 if ((walkingHowLong += ftime) > WALKING_INTERVAL)
                 {
                     walkingHowLong -= WALKING_INTERVAL;
-                    TurnTo(walkingTo);
-                    Vector2i desiredPos = position + MapDirection(walkingTo);
-                    if (scene.CanEnter(desiredPos))
-                        position = desiredPos;
+                    TurnTo(facing);
+                    Step();
                 }
+
+            visualPosition += (position - visualPosition) * EaseIn(ftime * 10);
+        }
+
+        void Step()
+        {
+            Vector2i desiredPos = position + MapDirection(facing);
+            if (scene.CanEnter(desiredPos))
+                position = desiredPos;
         }
 
         public override void GiveMeInstances(InstancingAttribute[] instancers)
@@ -142,7 +158,7 @@ namespace LD58.World
                     direction.y, 0, -direction.x, 0,
                     0, 1, 0, 0,
                     direction.x, 0, direction.y, 0,
-                    position.x + 0.5f, 0, position.y + 0.5f, 1
+                    visualPosition.x + 0.5f, 0, visualPosition.y + 0.5f, 1
                     )
                 );
     }
