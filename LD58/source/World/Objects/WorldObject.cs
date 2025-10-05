@@ -1,4 +1,4 @@
-﻿using ChaosFramework.Components;
+using ChaosFramework.Components;
 using ChaosFramework.Math.Vectors;
 using ChaosUtil.Reflection;
 using SysCol = System.Collections.Generic;
@@ -9,8 +9,6 @@ namespace LD58.World.Objects
     public abstract class WorldObject
         : BaseObject
     {
-        protected override void Create(CreateParameters args) { }
-
         /// <summary>
         ///     Determine whether the player can occupy the same space
         ///     as this object at the provided location.
@@ -30,12 +28,12 @@ namespace LD58.World.Objects
         /// <returns> The set of tiles this object occupies. </returns>
         public virtual SysCol.IEnumerable<Vector2i> OccupiedTiles()
         {
-            Vector2f posf = bone.GetPosition().xy;
+            Vector2f posf = bone.GetPosition().xz;
             Vector2i pos = new Vector2i(posf);
             if (pos != posf || !pos.GreaterEquals(0))
                 throw new System.Exception("Object bones must have unsigned integer positions!");
 
-            Vector2f dirf = bone.GetDirection().xy;
+            Vector2f dirf = bone.GetDirection().xz;
             Vector2i dir = new Vector2i(dirf);
             if (pos != posf)
                 throw new System.Exception("Object bones must have integer directions!");

@@ -1,7 +1,7 @@
-﻿namespace LD58.World.Objects.WorldObjects
+namespace LD58.World.Objects.WorldObjects
 {
     [DefaultInstancer(64, "objects/ApartmentWall.gmdl", "objects/ApartmentWall.mat")]
-    class ApartmentWall
+    public class ApartmentWall
         : WorldObject
     { }
 }

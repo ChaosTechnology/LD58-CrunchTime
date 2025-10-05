@@ -10,6 +10,8 @@ using OpenTK.Graphics.OpenGL;
 
 namespace LD58
 {
+    using World;
+
     public class Game : BaseGame
     {
         public readonly Settings settings;
@@ -59,7 +61,7 @@ namespace LD58
             shaderCode = new ShaderCodeContainer(new StreamSourceCollection(StreamSources.shaderCode, assetSource));
             shaders = new ShaderContainer(assetSource, graphics, shaderCode);
             animations = new AnimationContainer(assetSource, false);
-            scenes.Add(new WorldScene(this));
+            scenes.Add(new Stage(this, assetSource, "home"));
 
             window.BackgroundImage.Dispose();
             window.BackgroundImage = null;
