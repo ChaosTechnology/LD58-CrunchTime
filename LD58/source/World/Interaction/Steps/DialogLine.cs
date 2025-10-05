@@ -1,12 +1,11 @@
 using ChaosFramework.Graphics.Colors;
+using ChaosFramework.Graphics.OpenGl;
+using ChaosFramework.Graphics.OpenGl.AssetContainers;
 using ChaosFramework.Graphics.OpenGl.Text;
 using ChaosFramework.Graphics.Text;
 using ChaosFramework.Input.InputEvents;
 using ChaosFramework.Input.RawInput;
-using ChaosFramework.Graphics.OpenGl.AssetContainers;
 using ChaosFramework.Math;
-using ChaosFramework.Math.Vectors;
-using ChaosFramework.Graphics.OpenGl;
 
 namespace LD58.World.Interaction.Steps
 {
@@ -14,8 +13,9 @@ namespace LD58.World.Interaction.Steps
         : InteractionStep
     {
         readonly ShaderContainer.Entry shader;
-        readonly Text text;
         readonly Matrix boxTransform, invBoxTransform;
+
+        protected readonly Text text;
 
         bool done;
 

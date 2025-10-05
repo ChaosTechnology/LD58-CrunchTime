@@ -14,7 +14,11 @@ namespace LD58.World.Objects.WorldObjects
                 new DialogLine(interactor, "World? What World?"),
                 new DialogLine(interactor, "Oh, this world!"),
                 new DialogLine(interactor, "Well, this world sucks..."),
-                new DialogLine(interactor, "Goodbye, cruel world.")
+                new DialogLine(interactor, "Goodbye, cruel world."),
+                new Choice(interactor, "Act accordingly?",
+                    new System.Tuple<string, InteractionStep>("Meh.", null),
+                    new System.Tuple<string, InteractionStep>("Suicide...", new Suicide(interactor))
+                    )
                 );
             return true;
         }
