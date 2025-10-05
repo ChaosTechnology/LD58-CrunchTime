@@ -8,6 +8,18 @@ namespace LD58.World.Objects
     public abstract class WorldObject
         : BaseObject
     {
+        public readonly uint width, height;
+
+        public WorldObject()
+            : this(1, 1)
+        { }
+
+            public WorldObject(uint width, uint height)
+        {
+            this.width = width;
+            this.height = height;
+        }
+
         /// <summary>
         ///     Determine whether the player can occupy the same space
         ///     as this object at the provided location.
@@ -25,7 +37,7 @@ namespace LD58.World.Objects
         ///     The default is to occupy exactly one tile.
         /// </summary>
         /// <returns> The set of tiles this object occupies. </returns>
-        public virtual SysCol.IEnumerable<Vector2i> OccupiedTiles()
+        public SysCol.IEnumerable<Vector2i> OccupiedTiles()
         {
             Vector2f posf = bone.GetPosition().xz;
             Vector2i pos = new Vector2i((int)System.Math.Round(posf.x), (int)System.Math.Round(posf.y));
@@ -33,18 +45,18 @@ namespace LD58.World.Objects
                 throw new System.Exception("Object bones must have unsigned positions!");
 
             Vector2f dirf = bone.GetDirection().xz;
-            Vector2i dir = new Vector2i((int)System.Math.Round(dirf.x), (int)System.Math.Round(dirf.y));
+            Vector2i dir = new Vector2i((int)System.Math.Round(dirf.y), (int)System.Math.Round(-dirf.x));
 
-            if (dir.x == 0 && dir.y == 1)
-                yield return pos;
-            else if (dir.x == 0 && dir.y == -1)
-                yield return pos - 1;
-            else if (dir.x == 1 && dir.y == 0)
-                yield return pos - new Vector2i(0, 1);
-            else if (dir.x == -1 && dir.y == 0)
-                yield return pos - new Vector2i(1, 0);
-            else
-                throw new System.Exception("Carthesian directions only!");
+            for (int y = 0; y < height; y++)
+                for (int x = 0; x < width; x++)
+                {
+                    Vector2i offset = new Vector2i(x, y) * 2 + 1;
+                    offset = new Vector2i(
+                        offset.x * dir.x - offset.y * dir.y,
+                        offset.x * dir.y + offset.y * dir.x
+                        );
+                    yield return pos + (offset - 1) / 2;
+                }
         }
     }
 }

@@ -90,6 +90,12 @@ namespace LD58
             window.BackgroundImage = null;
         }
 
+        public void SwitchStage(string newStage)
+        {
+            scenes.Add(new Stage(this, assetSource, newStage));
+            this.GetScene<Stage>()?.Dispose();
+        }
+
         protected override void Update()
         {
             base.Update();

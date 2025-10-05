@@ -7,6 +7,8 @@ namespace LD58.World.Objects.WorldObjects
     class Shower
         : WorldObject
     {
+        public Shower() : base(2, 2) { }
+
         public override void GiveMeInstances(InstancingAttribute[] instancers)
         {
             base.GiveMeInstances(instancers);
