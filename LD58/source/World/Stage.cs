@@ -86,6 +86,9 @@ namespace LD58.World
 
         public bool CanEnter(Vector2i pos)
         {
+            if (!pos.GreaterEquals(0) || !pos.LessEquals(size))
+                return false;
+
             WorldObject obj = tiles[pos.x, pos.y];
             return obj?.CanStepOn(pos) ?? true;
         }
