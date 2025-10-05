@@ -79,17 +79,7 @@ namespace LD58.World
                             if (boneType == null)
                                 throw new System.Exception($"Unknown bone type '{GetBoneTypeName(b)}'!");
                             else
-                            {
-                                WorldObject obj = (WorldObject)AddComponent(boneType);
-                                foreach (Vector2i pos in obj.OccupiedTiles())
-                                    if (occupied.ContainsKey(pos))
-                                        throw new System.Exception($"Tile {{{pos.x}, {pos.y}}} is already occupied!");
-                                    else
-                                    {
-                                        occupied[pos] = obj;
-                                        size = size.Max(pos);
-                                    }
-                            }
+                                AddComponent(boneType, CreateParameters.Create(b));
                         }
                 }
         }
