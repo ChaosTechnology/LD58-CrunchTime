@@ -47,7 +47,7 @@ namespace LD58
                 new Vector3f(0, 1, 0),
                 0.5f,
                 1.5f,
-                PI_QUART / 2,
+                PI_QUART,
                 screenRatio: game.graphics.ratio
                 );
 

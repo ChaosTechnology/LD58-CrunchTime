@@ -91,7 +91,7 @@ namespace LD58.World.Player
 
         void UpdateView()
         {
-            Vector3f target = new Vector3f(visualPosition.x, 1, visualPosition.y);
+            Vector3f target = new Vector3f(visualPosition.x + 0.5f, 1, visualPosition.y + 0.5f);
             Vector3f direction = new Vector3f(0, -1, 0);
             Vector3f pos = target - direction * 10;
             scene.view.Update(pos, direction, new Vector3f(0, 0, 1));

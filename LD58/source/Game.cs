@@ -49,6 +49,8 @@ namespace LD58
         {
             System.Windows.Forms.Cursor.Hide();
             window.Cursor.Dispose();
+            window.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            window.Bounds = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
 
             settings = new Settings();
             bool settingsExist = System.IO.File.Exists(Settings.FILE);

@@ -14,7 +14,7 @@ namespace LD58.World.Interaction.Steps
     public class DialogLine
         : InteractionStep
     {
-        const float CHAR_SIZE = 0.04f;
+        const float CHAR_SIZE = 0.08f;
         const float PADDING = 0.75f;
 
         readonly ShaderContainer.Entry shader;
@@ -38,17 +38,24 @@ namespace LD58.World.Interaction.Steps
             this.text.UpdateText(interactor.parent.scene.game.textFont, text, layout ?? LayoutInfo.TOP_LEFT);
 
             boxBounds = this.text.geometry.textBounds;
-            Matrix toBottom = Matrix.Translation(0, -0.3f + boxBounds.height * CHAR_SIZE * 0.5f, 0);
-            this.text.transform = Matrix.Translation((boxBounds.topLeft - boxBounds.bottomRight) / 2, 0)
+
+            boxBounds.low -= PADDING;
+            boxBounds.high += PADDING;
+
+            float screenToBoxDistance = 0.1f;
+            Matrix toBottom = Matrix.Translation(0, -1.0f + boxBounds.height * CHAR_SIZE * 0.5f + screenToBoxDistance, 0);
+
+            this.text.transform = Matrix.Translation(
+                                    -boxBounds.center.x,
+                                    -boxBounds.center.y + 0.25f /* arbitrary offset to make it LOOK centered */,
+                                    0
+                                )
                                 * Matrix.Scaling(CHAR_SIZE, CHAR_SIZE, 1)
                                 * toBottom
                                 ;
             this.text.color = Rgba.OPAQUE_WHITE;
-
-            boxBounds.low -= PADDING;
-            boxBounds.high += PADDING;
             boxTransform = Matrix.Scaling(boxBounds.width * CHAR_SIZE * 0.5f, boxBounds.height * CHAR_SIZE * 0.5f, 1)
-                         *  toBottom
+                         * toBottom
                          ;
             invBoxTransform = Matrix.Invert(boxTransform);
         }

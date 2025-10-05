@@ -1,14 +1,14 @@
-using ChaosFramework.Collections;
 using ChaosFramework.Components;
+using ChaosFramework.Graphics.Colors;
 using ChaosFramework.Graphics.OpenGl.Text;
+using ChaosFramework.Graphics.Text;
+using ChaosFramework.Math;
 using ChaosUtil.Primitives;
 using SysCol = System.Collections.Generic;
 
 namespace LD58.World.Player
 {
     using Inventory;
-    using System;
-    using System.Collections;
 
     public class PlayerInventory
         : StrictComponent<Player>
@@ -23,6 +23,11 @@ namespace LD58.World.Player
         protected override void Create(CreateParameters cparams)
         {
             text = new Text(parent.scene.game.textRenderer, 4096);
+            text.color = Rgba.OPAQUE_WHITE;
+            float tan = parent.scene.fullScreenView.tan;
+            text.transform = Matrix.Scaling(0.1f)
+                           * Matrix.Translation(parent.scene.fullScreenView.screenRatio * -tan, tan, 0)
+                           ;
         }
 
         public void AddItem(Item item)
@@ -50,11 +55,22 @@ namespace LD58.World.Player
         void UpdateText()
         {
             System.Text.StringBuilder bldr = new System.Text.StringBuilder();
+            foreach (SysCol.KeyValuePair<Item, Wrapper<int>> i in inventory)
+                bldr.AppendLine($"{i.Key.displayName} x{i.Value.value}");
+
+            text.UpdateText(parent.scene.game.textFont, bldr.ToString(), LayoutInfo.TOP_LEFT);
         }
 
         public override void SetDrawCalls()
         {
             base.SetDrawCalls();
+            scene.drawLayers[(int)DrawLayers.Text].Add(AddText);
+        }
+
+        void AddText()
+        {
+            if (text.geometry != null)
+                parent.scene.game.textBuffer.Add(text);
         }
     }
 }
