@@ -1,8 +1,17 @@
 import ChaosGraphics.Sprite;
 
-void fs_box(out vec4 outColor : COLOR0)
-{
-	outColor = vec4(0.0, 0.0, 0.0, 1.0);
+vec2 dimensions;
+
+void fs_box(
+	vec2 inTex : TEXCOORD0,
+	out vec4 outColor : COLOR0
+) {
+	inTex = (inTex - vec2(0.5)) * 2;
+	vec2 delta = vec2(1.0) - abs(inTex);
+	delta *= dimensions;
+	
+	float value = all(greaterThan(delta, vec2(0.1))) && any(lessThan(delta, vec2(0.2))) ? 1.0 : 0.0;
+	outColor = vec4(value, value, value, 1.0);
 }
 
 Pass Dialog {
