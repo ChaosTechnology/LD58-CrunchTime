@@ -74,10 +74,16 @@ namespace LD58
 
             sounds = new SoundPool(audio, samples);
 
-            scenes.Add(new Stage(this, assetSource, "office"));
+            scenes.Add(new Stage(this, assetSource, "home"));
 
             window.BackgroundImage.Dispose();
             window.BackgroundImage = null;
+        }
+
+        public void SwitchStage(string newStage)
+        {
+            scenes.Add(new Stage(this, assetSource, newStage));
+            this.GetScene<Stage>()?.Dispose();
         }
 
         protected override void Update()
