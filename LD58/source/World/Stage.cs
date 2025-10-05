@@ -30,6 +30,9 @@ namespace LD58.World
         public readonly Vector2i size;
         readonly WorldObject[,] tiles;
 
+        public WorldObject this[Vector2i pos]
+            => OutOfBounds(pos) ? null : tiles[pos.x, pos.y];
+
         public Stage(Game game, StreamSource source, string name)
             : base(game)
         {
@@ -84,13 +87,10 @@ namespace LD58.World
                 }
         }
 
-        public bool CanEnter(Vector2i pos)
-        {
-            if (!pos.GreaterEquals(0) || !pos.LessEquals(size))
-                return false;
+        public bool OutOfBounds(Vector2i pos)
+            => !pos.GreaterEquals(0) || !pos.LessEquals(size);
 
-            WorldObject obj = tiles[pos.x, pos.y];
-            return obj?.CanStepOn(pos) ?? true;
-        }
+        public bool CanEnter(Vector2i pos)
+            => !OutOfBounds(pos) && (tiles[pos.x, pos.y]?.CanStepOn(pos) ?? true);
     }
 }

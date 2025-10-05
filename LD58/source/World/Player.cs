@@ -80,6 +80,7 @@ namespace LD58.World
                 case Keyboard.Keys.A: return StartWalking(Direction.Left);
                 case Keyboard.Keys.S: return StartWalking(Direction.Down);
                 case Keyboard.Keys.D: return StartWalking(Direction.Right);
+                case Keyboard.Keys.Space: return Interact();
                 default: return false;
             }
         }
@@ -118,6 +119,9 @@ namespace LD58.World
         {
             this.direction = MapDirection(direction);
         }
+
+        bool Interact()
+            => (scene[position + direction] as Interactible)?.Interact(this) ?? false;
 
         void Move()
         {
