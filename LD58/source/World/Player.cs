@@ -50,6 +50,8 @@ namespace LD58.World
             }
         }
 
+        public Interaction.Interactor interactor { get; private set; }
+
         public Vector2i position;
         public Vector2i direction;
 
@@ -67,6 +69,7 @@ namespace LD58.World
             position = OccupiedTiles().First();
             direction = new Vector2i(bone.GetDirection().xz);
             visualPosition = position;
+            interactor = AddComponent<Interaction.Interactor>();
         }
 
         public override bool CanStepOn(Vector2i pos)
@@ -93,27 +96,31 @@ namespace LD58.World
 
         bool KeyDown(InputPushEvent<Keyboard.Key> e)
         {
-            switch (e.axis.key)
-            {
-                case Keyboard.Keys.W: return StartWalking(Direction.Up);
-                case Keyboard.Keys.A: return StartWalking(Direction.Left);
-                case Keyboard.Keys.S: return StartWalking(Direction.Down);
-                case Keyboard.Keys.D: return StartWalking(Direction.Right);
-                case Keyboard.Keys.Space: return Interact();
-                default: return false;
-            }
+            if (!interactor.busy)
+                switch (e.axis.key)
+                {
+                    case Keyboard.Keys.W: return StartWalking(Direction.Up);
+                    case Keyboard.Keys.A: return StartWalking(Direction.Left);
+                    case Keyboard.Keys.S: return StartWalking(Direction.Down);
+                    case Keyboard.Keys.D: return StartWalking(Direction.Right);
+                    case Keyboard.Keys.Space: return Interact();
+                }
+
+            return false;
         }
 
         bool KeyUp(InputReleaseEvent<Keyboard.Key> e)
         {
-            switch (e.axis.key)
-            {
-                case Keyboard.Keys.W: return StopWalking(Direction.Up);
-                case Keyboard.Keys.A: return StopWalking(Direction.Left);
-                case Keyboard.Keys.S: return StopWalking(Direction.Down);
-                case Keyboard.Keys.D: return StopWalking(Direction.Right);
-                default: return false;
-            }
+            if (!interactor.busy)
+                switch (e.axis.key)
+                {
+                    case Keyboard.Keys.W: return StopWalking(Direction.Up);
+                    case Keyboard.Keys.A: return StopWalking(Direction.Left);
+                    case Keyboard.Keys.S: return StopWalking(Direction.Down);
+                    case Keyboard.Keys.D: return StopWalking(Direction.Right);
+                }
+
+            return false;
         }
 
         bool StartWalking(Direction direction)
@@ -153,7 +160,7 @@ namespace LD58.World
         }
 
         bool Interact()
-            => (scene[position + direction] as Interactible)?.Interact(this) ?? false;
+            => (scene[position + direction] as Interactible)?.Interact(interactor) ?? false;
 
         void Move()
         {
