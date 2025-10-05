@@ -38,6 +38,18 @@ namespace LD58.World
             }
         }
 
+        static bool AreOpposite(Direction a, Direction b)
+        {
+            switch (a)
+            {
+                case Direction.Up: return b == Direction.Down;
+                case Direction.Down: return b == Direction.Up;
+                case Direction.Left: return b == Direction.Right;
+                case Direction.Right: return b == Direction.Left;
+                default: return false;
+            }
+        }
+
         public Vector2i position;
         public Vector2i direction;
 
@@ -159,9 +171,16 @@ namespace LD58.World
         void Step()
         {
             if (!TryStep(facing))
+            {
                 foreach (Direction dir in inputs)
-                    if (TryStep(dir))
+                    if (dir == facing)
+                        continue;
+                    else if (!AreOpposite(facing, dir))
+                    {
+                        TryStep(dir);
                         return;
+                    }
+            }
         }
 
         bool TryStep(Direction d)
