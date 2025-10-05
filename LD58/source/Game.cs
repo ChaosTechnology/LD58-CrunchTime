@@ -74,7 +74,7 @@ namespace LD58
 
             sounds = new SoundPool(audio, samples);
 
-            scenes.Add(new Stage(this, assetSource, "home"));
+            scenes.Add(new Stage(this, assetSource, "office"));
 
             window.BackgroundImage.Dispose();
             window.BackgroundImage = null;
