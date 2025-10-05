@@ -14,7 +14,7 @@ namespace LD58.World.Objects
     {
         protected Rig.Bone bone { get; private set; }
 
-        public void GiveMeInstances(InstancingAttribute[] instancers)
+        public virtual void GiveMeInstances(InstancingAttribute[] instancers)
         {
             instancers[0].informer.AddInstance(bone.GetBoneTransform());
         }
