@@ -7,6 +7,8 @@ namespace LD58.World.Objects.WorldObjects
     class Window
         : WorldObject
     {
+        public Window() : base(3, 1) { }
+
         public override void GiveMeInstances(InstancingAttribute[] instancers)
         {
             base.GiveMeInstances(instancers);
