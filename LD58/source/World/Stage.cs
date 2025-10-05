@@ -32,6 +32,8 @@ namespace LD58.World
         public Stage(Game game, StreamSource source, string name)
             : base(game)
         {
+            view.Update(new Vector3f(10, 20, -4), new Vector3f(0, -2, 1), new Vector3f(0, 1, 0));
+
             Vector2i size = 0;
             SysCol.Dictionary<Vector2i, WorldObject> occupied = new SysCol.Dictionary<Vector2i, WorldObject>();
 

@@ -2,6 +2,7 @@ using ChaosFramework.Components;
 using ChaosFramework.Graphics;
 using ChaosFramework.Graphics.Colors;
 using ChaosFramework.Graphics.OpenGl;
+using ChaosFramework.Graphics.OpenGl.Instancing;
 using ChaosFramework.Graphics.OpenGl.Lights;
 using ChaosFramework.Graphics.OpenGl.Lights.Intrinsic;
 using ChaosFramework.Graphics.OpenGl.PostProcessors;
@@ -21,6 +22,7 @@ namespace LD58
         public readonly DeferredShader shader;
 
         Light theFamousInsideSun;
+        public readonly InstancingManagerContainer<WorldScene> instancers;
 
         public WorldScene(Game game)
             : base(game, typeof(UpdateLayers), typeof(DrawLayers))
@@ -63,6 +65,9 @@ namespace LD58
                 game.settings.transparencyLayers
                 );
 
+            instancers = new InstancingManagerContainer<WorldScene>(this, game.graphics);
+            instancers.CreateInstancers(_ => true);
+
             antiEdger = new AntiAliasing();
 
             lights.Add(theFamousInsideSun);
@@ -74,6 +79,7 @@ namespace LD58
         {
             base.SetDrawCalls();
             drawLayers[(int)DrawLayers.UpdateView].Add(UpdateView);
+            instancers.SetDrawCalls(drawLayers[(int)DrawLayers.ResetInstancers], drawLayers[(int)DrawLayers.FillInstancers]);
             drawLayers[(int)DrawLayers.BeginWorld].Add(shader.BeginWorld);
             drawLayers[(int)DrawLayers.BeginMaterial].Add(shader.BeginMaterial);
             drawLayers[(int)DrawLayers.RenderDeferredShader].Add(shader.Render);
