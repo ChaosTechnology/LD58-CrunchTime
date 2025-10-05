@@ -12,8 +12,12 @@ namespace LD58.World.Interaction.Steps
     public class DialogLine
         : InteractionStep
     {
+        const float CHAR_SIZE = 0.04f;
+        const float PADDING = 0.75f;
+
         readonly ShaderContainer.Entry shader;
         readonly Matrix boxTransform, invBoxTransform;
+        readonly Bounds2f boxBounds;
 
         protected readonly Text text;
 
@@ -31,15 +35,19 @@ namespace LD58.World.Interaction.Steps
             this.text = new Text(interactor.parent.scene.game.textRenderer, text.Length);
             this.text.UpdateText(interactor.parent.scene.game.textFont, text, layout ?? LayoutInfo.TOP_LEFT);
 
-            Bounds2f bounds = this.text.geometry.textBounds;
-            this.text.transform = Matrix.Translation((bounds.topLeft - bounds.bottomRight) / 2, 0)
-                                * Matrix.Scaling(0.05f, 0.05f, 1)
+            boxBounds = this.text.geometry.textBounds;
+            Matrix toBottom = Matrix.Translation(0, -0.3f + boxBounds.height * CHAR_SIZE * 0.5f, 0);
+            this.text.transform = Matrix.Translation((boxBounds.topLeft - boxBounds.bottomRight) / 2, 0)
+                                * Matrix.Scaling(CHAR_SIZE, CHAR_SIZE, 1)
+                                * toBottom
                                 ;
             this.text.color = Rgba.OPAQUE_WHITE;
 
-            boxTransform = Matrix.Translation(1, -1, 0)
-                         * Matrix.Scaling(0.5f * bounds.size, 1)
-                         * this.text.transform;
+            boxBounds.low -= PADDING;
+            boxBounds.high += PADDING;
+            boxTransform = Matrix.Scaling(boxBounds.width * CHAR_SIZE * 0.5f, boxBounds.height * CHAR_SIZE * 0.5f, 1)
+                         *  toBottom
+                         ;
             invBoxTransform = Matrix.Invert(boxTransform);
         }
 
@@ -71,6 +79,7 @@ namespace LD58.World.Interaction.Steps
         void DrawBox()
         {
             interactor.parent.scene.fullScreenView.SetValues(shader, boxTransform, invBoxTransform);
+            shader.SetValue("dimensions", boxBounds.size * CHAR_SIZE * 18);
             shader.BeginPass("Dialog");
             Sprite.DrawPositionOnly(graphics);
             shader.EndPass();
