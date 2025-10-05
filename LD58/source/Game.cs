@@ -1,6 +1,9 @@
 using ChaosFramework.Components;
+using ChaosFramework.Core;
 using ChaosFramework.Graphics.OpenGl;
 using ChaosFramework.Graphics.OpenGl.AssetContainers;
+using ChaosFramework.Input;
+using ChaosFramework.Input.RawInput;
 using ChaosFramework.IO.Streams;
 using ChaosFramework.Sound;
 using ChaosFramework.Sound.OpenAL;
@@ -14,12 +17,16 @@ namespace LD58
 
     public class Game : BaseGame
     {
+        const float UPDATE_INPUT_DEVICE_INTERVAL = 3;
+
         public readonly Settings settings;
 
         public StreamSource assetSource { get; private set; }
 
         public Graphics graphics { get; private set; }
         public Audio audio { get; private set; }
+        public InputContext input { get; private set; }
+        public SoundPool sounds { get; private set; }
 
         public AnimationContainer animations { get; private set; }
         public MaterialContainer materials { get; private set; }
@@ -29,6 +36,8 @@ namespace LD58
         public SoundDataContainer samples { get; private set; }
         public MeshContainer meshes { get; private set; }
         public FontContainer fonts { get; private set; }
+
+        float updateInputDeviceTimer;
 
         public Game() : base()
         {
@@ -52,6 +61,7 @@ namespace LD58
 
             audio = new Audio();
             samples = new SoundDataContainer(assetSource, false);
+            input = new InputContext(typeof(InputLayers), context => new RawInputDeviceHost(context));
 
             graphics = new Graphics(panel, 3, 3);
             fonts = new FontContainer(assetSource, graphics, false);
@@ -61,6 +71,9 @@ namespace LD58
             shaderCode = new ShaderCodeContainer(new StreamSourceCollection(StreamSources.shaderCode, assetSource));
             shaders = new ShaderContainer(assetSource, graphics, shaderCode);
             animations = new AnimationContainer(assetSource, false);
+
+            sounds = new SoundPool(audio, samples);
+
             scenes.Add(new Stage(this, assetSource, "home"));
 
             window.BackgroundImage.Dispose();
@@ -77,6 +90,17 @@ namespace LD58
                         window.Location.X + window.Width / 2,
                         window.Location.Y + window.Height / 2
                         );
+
+            Dispatcher.dispatcher.ExecuteDispatchers(10);
+            sounds.Update();
+            updateInputDeviceTimer -= time.time.frameTime;
+            if (updateInputDeviceTimer < 0)
+            {
+                input.UpdateDeviceList();
+                updateInputDeviceTimer = UPDATE_INPUT_DEVICE_INTERVAL;
+            }
+
+            input.UpdateInputConsumption();
         }
 
         protected override void Draw()
@@ -92,16 +116,18 @@ namespace LD58
         protected override void DoDispose()
         {
             base.DoDispose();
+            input?.Dispose();
             textures?.Dispose();
             materials?.Dispose();
             meshes?.Dispose();
             fonts?.Dispose();
-            graphics?.Dispose();
-            audio.Dispose();
-            samples.Dispose();
             shaders?.Dispose();
             shaderCode?.Dispose();
             animations?.Dispose();
+            graphics?.Dispose();
+            sounds?.Dispose();
+            samples.Dispose();
+            audio.Dispose();
         }
     }
 }

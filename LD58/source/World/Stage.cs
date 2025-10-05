@@ -84,19 +84,10 @@ namespace LD58.World
                 }
         }
 
-        public override void SetUpdateCalls()
+        public bool CanEnter(Vector2i pos)
         {
-            base.SetUpdateCalls();
-            updateLayers[(int)UpdateLayers.UpdateCamera].Add(DebugSpinCamera);
-        }
-
-        void DebugSpinCamera()
-        {
-            Vector3f target = new Vector3f(13, 0, 8);
-            float sin = Sin(ftime.totalTime) * 15;
-            float cos = Cos(ftime.totalTime) * 15;
-            Vector3f pos = new Vector3f(target.x + cos, 20, target.z + sin);
-            view.Update(pos, target - pos, new Vector3f(0, 1, 0));
+            WorldObject obj = tiles[pos.x, pos.y];
+            return obj?.CanStepOn(pos) ?? true;
         }
     }
 }
