@@ -5,6 +5,7 @@ using ChaosUtil.Reflection;
 using ChaosFramework.Components;
 using System.IO;
 using SysCol = System.Collections.Generic;
+using static ChaosFramework.Math.Trigonometry;
 
 namespace LD58.World
 {
@@ -32,7 +33,6 @@ namespace LD58.World
         public Stage(Game game, StreamSource source, string name)
             : base(game)
         {
-            view.Update(new Vector3f(10, 20, -4), new Vector3f(0, -2, 1), new Vector3f(0, 1, 0));
 
             Vector2i size = 0;
             SysCol.Dictionary<Vector2i, WorldObject> occupied = new SysCol.Dictionary<Vector2i, WorldObject>();
@@ -92,6 +92,21 @@ namespace LD58.World
                             }
                         }
                 }
+        }
+
+        public override void SetUpdateCalls()
+        {
+            base.SetUpdateCalls();
+            updateLayers[(int)UpdateLayers.UpdateCamera].Add(DebugSpinCamera);
+        }
+
+        void DebugSpinCamera()
+        {
+            Vector3f target = new Vector3f(13, 0, 8);
+            float sin = Sin(ftime.totalTime) * 15;
+            float cos = Cos(ftime.totalTime) * 15;
+            Vector3f pos = new Vector3f(target.x + cos, 20, target.z + sin);
+            view.Update(pos, target - pos, new Vector3f(0, 1, 0));
         }
     }
 }
