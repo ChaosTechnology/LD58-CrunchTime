@@ -2,6 +2,7 @@ namespace LD58.World.Objects.WorldObjects
 {
     using Interaction;
     using Interaction.Steps;
+    using Player;
 
     [DefaultInstancer(64, "objects/Toilet.gmdl", "objects/Bathroom.mat")]
     class Toilet
@@ -16,8 +17,8 @@ namespace LD58.World.Objects.WorldObjects
                 new DialogLine(interactor, "Well, this world sucks..."),
                 new DialogLine(interactor, "Goodbye, cruel world."),
                 new Choice(interactor, "Act accordingly?",
-                    new System.Tuple<string, InteractionStep>("Meh.", null),
-                    new System.Tuple<string, InteractionStep>("Suicide...", new Suicide(interactor))
+                    new System.Tuple<string, InteractionStep[]>("Meh.", null),
+                    new System.Tuple<string, InteractionStep[]>("Suicide...", new InteractionStep[] { new Suicide(interactor) })
                     )
                 );
             return true;

@@ -2,7 +2,7 @@ using ChaosFramework.Math.Vectors;
 
 namespace LD58.World.Objects.WorldObjects
 {
-    using Interaction;
+    using Player;
 
     [DefaultInstancer(64, "objects/Coat Rack.gmdl", "objects/Kitchen.mat")]
     class CoatRack

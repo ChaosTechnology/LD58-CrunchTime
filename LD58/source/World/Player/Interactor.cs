@@ -1,8 +1,10 @@
 using ChaosFramework.Components;
 using SysCol = System.Collections.Generic;
 
-namespace LD58.World.Interaction
+namespace LD58.World.Player
 {
+    using Interaction;
+
     public class Interactor
         : StrictComponent<Player>
     {
@@ -20,12 +22,13 @@ namespace LD58.World.Interaction
 
         public void AddInteraction(SysCol.IEnumerable<InteractionStep> steps)
         {
-            foreach (InteractionStep step in steps)
-                if (step != null)
-                    if (step.interactor == this)
-                        queued.Enqueue(step);
-                    else
-                        throw new System.InvalidOperationException();
+            if (steps != null)
+                foreach (InteractionStep step in steps)
+                    if (step != null)
+                        if (step.interactor == this)
+                            queued.Enqueue(step);
+                        else
+                            throw new System.InvalidOperationException();
         }
 
         public override void SetUpdateCalls()

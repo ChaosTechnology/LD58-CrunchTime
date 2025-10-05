@@ -9,6 +9,8 @@ using ChaosFramework.Math;
 
 namespace LD58.World.Interaction.Steps
 {
+    using Player;
+
     public class DialogLine
         : InteractionStep
     {

@@ -10,11 +10,7 @@ namespace LD58.World.Objects
     {
         public readonly uint width, height;
 
-        public WorldObject()
-            : this(1, 1)
-        { }
-
-            public WorldObject(uint width, uint height)
+        public WorldObject(uint width = 1, uint height = 1)
         {
             this.width = width;
             this.height = height;

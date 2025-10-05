@@ -1,11 +1,12 @@
-﻿using ChaosFramework.Input.InputEvents;
+using ChaosFramework.Input.InputEvents;
 using ChaosFramework.Input.RawInput;
 using System;
 using System.Text;
 
 namespace LD58.World.Interaction.Steps
 {
-    using Option = Tuple<string, InteractionStep>;
+    using Player;
+    using Option = Tuple<string, InteractionStep[]>;
 
     public class Choice
         : DialogLine
@@ -51,6 +52,7 @@ namespace LD58.World.Interaction.Steps
             {
                 case Keyboard.Keys.Space:
                     interactor.AddInteraction(options[selection].Item2);
+                    options[selection] = null; // it is now the interactor's responsibility to discard these
                     chosen = true;
                     return true;
 
@@ -82,7 +84,9 @@ namespace LD58.World.Interaction.Steps
         {
             base.DoDispose();
             foreach (Option option in options)
-                option.Item2?.Dispose();
+                if (option?.Item2 != null)
+                    foreach (InteractionStep step in option.Item2)
+                        step?.Dispose();
         }
     }
 }

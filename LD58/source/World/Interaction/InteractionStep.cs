@@ -2,6 +2,8 @@ using ChaosFramework.Core;
 
 namespace LD58.World.Interaction
 {
+    using Player;
+
     public abstract class InteractionStep
         : Disposable
     {

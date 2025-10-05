@@ -8,7 +8,7 @@ using ChaosFramework.Math.Vectors;
 using System.Linq;
 using static ChaosFramework.Math.Exponentials;
 
-namespace LD58.World
+namespace LD58.World.Player
 {
     using Objects;
 
@@ -50,7 +50,8 @@ namespace LD58.World
             }
         }
 
-        public Interaction.Interactor interactor { get; private set; }
+        public Interactor interactor { get; private set; }
+        public PlayerInventory inventory { get; private set; }
 
         public Vector2i position;
         public Vector2i direction;
@@ -69,7 +70,9 @@ namespace LD58.World
             position = OccupiedTiles().First();
             direction = new Vector2i(bone.GetDirection().xz);
             visualPosition = position;
-            interactor = AddComponent<Interaction.Interactor>();
+
+            interactor = AddComponent<Interactor>();
+            inventory = AddComponent<PlayerInventory>();
         }
 
         public override bool CanStepOn(Vector2i pos)
