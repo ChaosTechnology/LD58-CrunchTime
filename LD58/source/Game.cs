@@ -6,6 +6,8 @@ using ChaosFramework.Input;
 using ChaosFramework.Input.RawInput;
 using ChaosFramework.IO.Streams;
 using ChaosFramework.Sound;
+using ChaosFramework.Graphics.Text;
+using ChaosFramework.Graphics.OpenGl.Text;
 using ChaosFramework.Sound.OpenAL;
 using ChaosUtil.Platform.Windows.WinAPI.winuser;
 using ChaosUtil.Serialization.Text;
@@ -27,6 +29,8 @@ namespace LD58
         public Audio audio { get; private set; }
         public InputContext input { get; private set; }
         public SoundPool sounds { get; private set; }
+        public TextRenderer textRenderer { get; private set; }
+        public TextRenderer.TextBuffer textBuffer { get; private set; }
 
         public AnimationContainer animations { get; private set; }
         public MaterialContainer materials { get; private set; }
@@ -36,6 +40,8 @@ namespace LD58
         public SoundDataContainer samples { get; private set; }
         public MeshContainer meshes { get; private set; }
         public FontContainer fonts { get; private set; }
+
+        public FontContainer.Entry textFont { get; private set; }
 
         float updateInputDeviceTimer;
 
@@ -73,6 +79,10 @@ namespace LD58
             animations = new AnimationContainer(assetSource, false);
 
             sounds = new SoundPool(audio, samples);
+
+            textFont = fonts.Load("fonts/text.chf2", this);
+            textRenderer = TextRenderer.Create(graphics, 1000, 10000, 1000, false, textFont);
+            textBuffer = textRenderer.CreateRenderContext();
 
             scenes.Add(new Stage(this, assetSource, "home"));
 
@@ -117,6 +127,8 @@ namespace LD58
         {
             base.DoDispose();
             input?.Dispose();
+            textRenderer?.Dispose();
+            textBuffer?.Dispose();
             textures?.Dispose();
             materials?.Dispose();
             meshes?.Dispose();

@@ -28,6 +28,8 @@
     <Compile Include="source\**\*.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
 
+    <None Include="assets\**" />
+
     <None Include="packages.config" />
     <None Include="OpenTK.dll.config" />
 

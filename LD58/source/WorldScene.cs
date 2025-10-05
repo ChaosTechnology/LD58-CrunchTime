@@ -1,4 +1,5 @@
 using ChaosFramework.Components;
+using ChaosFramework.Math;
 using ChaosFramework.Graphics;
 using ChaosFramework.Graphics.Colors;
 using ChaosFramework.Graphics.OpenGl;
@@ -17,7 +18,7 @@ namespace LD58
         protected AntiAliasing antiEdger = new AntiAliasing();
         public TransparencyRenderer transparencyRenderer;
 
-        public readonly Camera view;
+        public readonly Camera view, fullScreenView;
         public readonly LightSet lights;
         public readonly DeferredShader shader;
 
@@ -28,13 +29,23 @@ namespace LD58
             : base(game, typeof(UpdateLayers), typeof(DrawLayers))
         {
             view = new Camera();
-
             view.Update(
                 new Vector3f(0, 0, -3),
                 new Vector3f(0, 0, 1),
                 new Vector3f(0, 1, 0),
                 float.NaN,
                 float.NaN,
+                PI_QUART / 2,
+                screenRatio: game.graphics.ratio
+                );
+
+            fullScreenView = new Camera();
+            fullScreenView.Update(
+                new Vector3f(0, 0, -1),
+                new Vector3f(0, 0, 1),
+                new Vector3f(0, 1, 0),
+                0.5f,
+                1.5f,
                 PI_QUART / 2,
                 screenRatio: game.graphics.ratio
                 );
@@ -80,12 +91,14 @@ namespace LD58
             base.SetDrawCalls();
             drawLayers[(int)DrawLayers.UpdateView].Add(UpdateView);
             instancers.SetDrawCalls(drawLayers[(int)DrawLayers.ResetInstancers], drawLayers[(int)DrawLayers.FillInstancers]);
+            drawLayers[(int)DrawLayers.ResetInstancers].Add(game.textBuffer.Clear);
             drawLayers[(int)DrawLayers.BeginWorld].Add(shader.BeginWorld);
             drawLayers[(int)DrawLayers.BeginMaterial].Add(shader.BeginMaterial);
             drawLayers[(int)DrawLayers.RenderDeferredShader].Add(shader.Render);
             drawLayers[(int)DrawLayers.PrepareBackground].Add(PrepareBackground);
             drawLayers[(int)DrawLayers.Transparents].Add(RenderTransparents);
             drawLayers[(int)DrawLayers.Postprocessing].Add(AntiEdgy);
+            drawLayers[(int)DrawLayers.Text].Add(DrawText);
         }
 
         void RenderTransparents()
@@ -111,6 +124,13 @@ namespace LD58
             antiEdger.normalFactor = 6f;
             antiEdger.positionFactor = .6f;
             antiEdger.Apply(shader);
+        }
+
+        void DrawText()
+        {
+            fullScreenView.SetValues(game.graphics.shaders.managedText, Matrix.IDENTITY);
+            game.textBuffer.Flush();
+            game.textRenderer.DrawTexts(game.graphics.shaders.managedText, "HUD", game.textBuffer);
         }
 
         protected override void DoDispose()
