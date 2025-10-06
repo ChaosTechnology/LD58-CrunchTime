@@ -5,13 +5,12 @@ using ChaosUtil.Reflection;
 using ChaosFramework.Components;
 using System.IO;
 using SysCol = System.Collections.Generic;
-using static ChaosFramework.Math.Trigonometry;
+using static ChaosFramework.Math.Clamping;
 
 namespace LD58.World
 {
     using System.Linq;
     using Objects;
-    using Player;
 
     public class Stage
         : WorldScene
@@ -21,8 +20,11 @@ namespace LD58.World
 
         static string GetBoneTypeName(Rig.Bone bone)
         {
+            int parenIndex = bone.name.IndexOf('(');
             int dotIndex = bone.name.IndexOf('.');
-            return dotIndex > 0 ? bone.name.Substring(0, dotIndex) : bone.name;
+            int splitIndex = parenIndex > 0 ? (dotIndex > 0 ? Min(parenIndex, dotIndex) : parenIndex) : dotIndex;
+
+            return splitIndex > 0 ? bone.name.Substring(0, splitIndex) : bone.name;
         }
 
         static System.Type GetBoneType(Rig.Bone b)

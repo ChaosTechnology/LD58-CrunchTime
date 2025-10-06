@@ -11,12 +11,18 @@ namespace LD58.World.Objects.WorldObjects
         static readonly Vector2i[] DOOR_MAT_POSITIONS = new[] { new Vector2i(0, -1), new Vector2i(1, -1) };
         static readonly Vector2i[] FRAME_POSITIONS = new[] { new Vector2i(0, 0), new Vector2i(1, 0) };
 
-        bool locked = false;
+        bool locked;
 
         protected override IEnumerable<Vector2i> RelativeOffsetsForOccupiedTiles()
             => DOOR_MAT_POSITIONS.Concat(FRAME_POSITIONS);
 
         public override bool CanStepOn(Vector2i pos)
-            => !locked || TransformRelativeTilePositions(DOOR_MAT_POSITIONS).Any(x => x == pos);
+        {
+            bool doorMatTile = TransformRelativeTilePositions(DOOR_MAT_POSITIONS).Any(x => x == pos);
+            if (doorMatTile && name == "Bathroom")
+                locked = true;
+
+            return !locked || doorMatTile;
+        }
     }
 }
