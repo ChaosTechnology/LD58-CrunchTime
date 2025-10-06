@@ -13,9 +13,10 @@ namespace LD58.World.Interaction.Steps
 
         public override bool interactionDone => false;
 
-        public override void SetDrawCalls() { }
-
-        public override void SetUpdateCalls()
-            => Process.GetCurrentProcess().Kill();
+        public override void Activate()
+        {
+            base.Activate();
+            Process.GetCurrentProcess().Kill();
+        }
     }
 }
