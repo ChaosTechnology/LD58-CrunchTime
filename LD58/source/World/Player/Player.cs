@@ -104,7 +104,7 @@ namespace LD58.World.Player
             if (visualPosition.y < cameraTarget.y - CAMERA_LAG_DISTANCE)
                 cameraTarget.y = visualPosition.y + CAMERA_LAG_DISTANCE;
 
-            Vector3f target = new Vector3f(cameraTarget.x, 1, cameraTarget.y);
+            Vector3f target = new Vector3f(cameraTarget.x + 0.5f, 1, cameraTarget.y + 0.5f);
             Vector3f direction = new Vector3f(0, -1, 0);
             Vector3f pos = target - direction * 10;
             scene.view.Update(pos, direction, new Vector3f(0, 0, 1));

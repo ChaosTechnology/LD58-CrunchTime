@@ -1,9 +1,11 @@
+using ChaosFramework.Graphics.OpenGl.Instancing;
+using ChaosFramework.Math;
+
 namespace LD58.World.Objects.WorldObjects
 {
-    using ChaosFramework.Graphics.OpenGl.Instancing;
-    using ChaosFramework.Math;
     using Interaction;
     using Interaction.Steps;
+    using Player;
 
     [DefaultInstancer(64, "objects/Toilet.gmdl", "objects/Bathroom.mat")]
     class DoubleToilet
@@ -14,8 +16,8 @@ namespace LD58.World.Objects.WorldObjects
             interactor.AddInteraction(
                 new DialogLine(interactor, "What the fuck!"),
                 new Choice(interactor, "Try it out?",
-                    new System.Tuple<string, InteractionStep>("How???", null),
-                    new System.Tuple<string, InteractionStep>("...", new Suicide(interactor))
+                    new System.Tuple<string, InteractionStep[]>("How???", null),
+                    new System.Tuple<string, InteractionStep[]>("...", new[] { new Suicide(interactor) })
                     )
                 );
             return true;
