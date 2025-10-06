@@ -37,7 +37,13 @@ namespace LD58.World.Interaction.Steps
         protected void UpdateText(string text, LayoutInfo layout = null)
         {
             float screenToBoxDistance = 0.1f;
-            textBox.Update(text, layout ?? LayoutInfo.TOP_LEFT, new Vector2f(0, -1 + screenToBoxDistance), new Vector2f(0, -1), CHAR_SIZE);
+            textBox.Update(
+                text,
+                layout ?? new LayoutInfo(ChaosFramework.Graphics.Align.TopLeft, enableEscapeSequences: true),
+                new Vector2f(0, -1 + screenToBoxDistance),
+                new Vector2f(0, -1),
+                CHAR_SIZE
+                );
         }
 
         public override void SetUpdateCalls()
