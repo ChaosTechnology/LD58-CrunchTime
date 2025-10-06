@@ -14,7 +14,6 @@ namespace LD58.World.Objects.WorldObjects
     class Fridge
         : StockedInteractible
     {
-
         bool collectedEssenceOfDarkness = false;
 
         public Fridge()
@@ -26,6 +25,8 @@ namespace LD58.World.Objects.WorldObjects
             for (int i = 0; i < 3; ++i) yield return KnownItems.EXTRA_MOLDY_CHEESE;
             for (int i = 0; i < 4; ++i) yield return KnownItems.BEER;
             for (int i = 0; i < 2; ++i) yield return KnownItems.BLACK_SUBSTANCE;
+            for (int i = 0; i < 2; ++i) yield return KnownItems.EGG;
+            for (int i = 0; i < 1; ++i) yield return KnownItems.BACON;
         }
 
         public override bool Interact(Interactor interactor, Vector2i interactAt)

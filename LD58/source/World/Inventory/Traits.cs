@@ -15,5 +15,6 @@ namespace LD58.World.Inventory
         ClothingTop = 1 << 8,
         ClothingBottom = 1 << 9,
         ClothingFeet = 1 << 10,
+        Incredient = 1 << 11,
     }
 }
