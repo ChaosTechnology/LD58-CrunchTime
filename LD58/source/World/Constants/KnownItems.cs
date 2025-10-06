@@ -35,5 +35,9 @@ namespace LD58.World.Constants
         public static readonly Item FUR_SUIT = new Item("Fur suit", Traits.ClothingFeet | Traits.ClothingBottom | Traits.ClothingTop | Traits.Weird);
         public static readonly Item GARBAGE_BAG = new Item("Garbage bag", Traits.ClothingTop | Traits.ClothingBottom | Traits.Weird);
 
+        // Get to work
+        public static readonly Item CROWBAR = new Item("Crowbar", Traits.OpensApartmentDoor);
+        public static readonly Item SHORTWIRE = new Item("Shortwier", Traits.StartsCar);
+
     }
 }
