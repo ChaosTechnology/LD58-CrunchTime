@@ -1,3 +1,4 @@
+using ChaosFramework.Components;
 using ChaosFramework.Math.Vectors;
 using LD58.World.Player;
 using System.Collections.Generic;
@@ -13,6 +14,12 @@ namespace LD58.World.Objects.WorldObjects
         static readonly Vector2i[] FRAME_POSITIONS = new[] { new Vector2i(0, 0), new Vector2i(1, 0) };
 
         bool locked;
+
+        protected override void Create(CreateParameters args)
+        {
+            base.Create(args);
+            locked = name == "Apartment Door";
+        }
 
         protected override IEnumerable<Vector2i> RelativeOffsetsForOccupiedTiles()
             => DOOR_MAT_POSITIONS.Concat(FRAME_POSITIONS);
