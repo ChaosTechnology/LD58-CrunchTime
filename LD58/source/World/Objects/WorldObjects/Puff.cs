@@ -1,3 +1,5 @@
+using ChaosFramework.Math.Vectors;
+
 namespace LD58.World.Objects.WorldObjects
 {
     using Interaction.Steps;
@@ -14,7 +16,7 @@ namespace LD58.World.Objects.WorldObjects
             : base(2, 2)
         { }
 
-        public override bool Interact(Interactor interactor)
+        public override bool Interact(Interactor interactor, Vector2i interactAt)
         {
             if (danced)
                 interactor.AddInteraction(

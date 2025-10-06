@@ -1,6 +1,6 @@
-using System;
 using ChaosFramework.Collections;
 using ChaosFramework.Graphics.OpenGl.Instancing;
+using ChaosFramework.Math.Vectors;
 using LD58.World.Constants;
 using LD58.World.Interaction;
 using LD58.World.Interaction.Steps;
@@ -29,7 +29,7 @@ namespace LD58.World.Objects.WorldObjects
             instancers[1].informer.AddInstance(bone.GetBoneTransform());
         }
 
-        public override bool Interact(Interactor interactor)
+        public override bool Interact(Interactor interactor, Vector2i interactAt)
         {
             LinkedList<InteractionStep> steps = new LinkedList<InteractionStep>();
 

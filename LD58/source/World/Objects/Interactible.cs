@@ -1,3 +1,5 @@
+using ChaosFramework.Math.Vectors;
+
 namespace LD58.World.Objects
 {
     using Player;
@@ -9,6 +11,6 @@ namespace LD58.World.Objects
             : base(width, height)
         { }
 
-        public abstract bool Interact(Interactor interactor);
+        public abstract bool Interact(Interactor interactor, Vector2i interactAt);
     }
 }

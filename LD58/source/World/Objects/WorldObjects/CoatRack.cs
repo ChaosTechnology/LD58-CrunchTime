@@ -8,7 +8,7 @@ namespace LD58.World.Objects.WorldObjects
     class CoatRack
         : Interactible
     {
-        public override bool Interact(Interactor interactor)
+        public override bool Interact(Interactor interactor, Vector2i interactAt)
         {
             bool facing = Vector2f.Dot(interactor.parent.direction, bone.GetDirection().xz) < 0;
             if (facing)

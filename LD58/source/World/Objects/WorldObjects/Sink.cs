@@ -1,17 +1,18 @@
 using ChaosFramework.Collections;
+using ChaosFramework.Math.Vectors;
 
 namespace LD58.World.Objects.WorldObjects
 {
+    using Constants;
     using Interaction;
-    using LD58.World.Constants;
-    using LD58.World.Interaction.Steps;
+    using Interaction.Steps;
     using Player;
 
     [DefaultInstancer(64, "objects/Sink.gmdl", "objects/Bathroom.mat")]
     class Sink
         : Interactible
     {
-        public override bool Interact(Interactor interactor)
+        public override bool Interact(Interactor interactor, Vector2i interactAt)
         {
             LinkedList<InteractionStep> steps = new LinkedList<InteractionStep>();
 
