@@ -4,6 +4,7 @@ namespace LD58.World.Inventory
     public enum Traits
         : ushort
     {
+        None = 0,
         Invisible = 1,
         Weird = 1 << 1,
         Distressing = 1 << 2,
