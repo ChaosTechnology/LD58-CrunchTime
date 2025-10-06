@@ -37,7 +37,8 @@ namespace LD58.World.Objects.WorldObjects
             };
 
             if (!stock.Contains(KnownItems.BLACK_SUBSTANCE) && !collectedEssenceOfDarkness)
-                choices.Add(new Choice.Option(
+                choices.Add(
+                    new Choice.Option(
                         KnownItems.ESSENCE_OF_DARKNESS.displayName,
                         new InteractionStep[] {
                             new AddItem(interactor, KnownItems.ESSENCE_OF_DARKNESS),

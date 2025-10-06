@@ -12,9 +12,13 @@ namespace LD58.World.Inventory
         RESERVED_EMOTION_4 = 1 << 5,
         Food = 1 << 6,
         Beverage = 1 << 7,
-        ClothingTop = 1 << 8,
-        ClothingBottom = 1 << 9,
-        ClothingFeet = 1 << 10,
-        Incredient = 1 << 11,
+        Clothing = 1 << 8,
+        CoversTop = 1 << 9,
+        CoversBottom = 1 << 10,
+        CoversFeet = 1 << 11,
+        ClothingTop = Clothing | CoversTop,
+        ClothingBottom = Clothing | CoversBottom,
+        ClothingFeet = Clothing | CoversFeet,
+        Incredient = 1 << 12,
     }
 }
