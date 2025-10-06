@@ -6,6 +6,7 @@ using ChaosFramework.Graphics.Text.Formatting;
 using ChaosFramework.Input.InputEvents;
 using ChaosFramework.Input.RawInput;
 using SysCol = System.Collections.Generic;
+using static ChaosFramework.Math.Clamping;
 
 namespace LD58.World.Interaction.Steps
 {
@@ -30,15 +31,13 @@ namespace LD58.World.Interaction.Steps
 
         public delegate void SuccessCallback(SysCol.Dictionary<Item, int> selectedItems);
 
-        const string CURSOR_SELECT = "[x]\t";
-        const string CURSOR_BLANK = "[ ]\t";
-
         int cursor = 0;
         bool done = false;
 
         readonly LinkedList<System.Tuple<Item, int>> available;
         readonly Requirement[] requirements;
         readonly ItemBag selection;
+        readonly SuccessCallback callback;
 
         readonly string prompt;
         readonly string acceptText;
@@ -47,14 +46,17 @@ namespace LD58.World.Interaction.Steps
             Interactor interactor,
             string prompt,
             string acceptText,
-            Requirement[] requirements
+            Requirement[] requirements,
+            SuccessCallback callback
             )
             : base(interactor, "" /* initialized on activation */)
         {
             this.prompt = prompt;
             this.acceptText = acceptText;
             this.requirements = requirements;
-            this.selection = new ItemBag();
+            this.callback = callback;
+
+            selection = new ItemBag();
 
             Traits selectionFilter = Traits.None;
             foreach (Requirement requirement in requirements)
@@ -87,6 +89,12 @@ namespace LD58.World.Interaction.Steps
                     if (cursor == available.length + 1)
                         done = true;
 
+                    if (cursor == available.length && GetFailedRequirement() == null)
+                    {
+                        done = true;
+                        callback(selection.ToDictionary(x => x.Item1, x => x.Item2));
+                    }
+
                     return true;
 
                 case Keyboard.Keys.W:
@@ -104,7 +112,7 @@ namespace LD58.World.Interaction.Steps
 
 
                 case Keyboard.Keys.D:
-                    DeltaCount(-1);
+                    DeltaCount(1);
                     return true;
 
                 default:
@@ -127,11 +135,14 @@ namespace LD58.World.Interaction.Steps
             System.Tuple<Item, int> a = available[cursor];
             System.Tuple<Item, int> s = selection.FirstOrDefault(x => x.Item1 == a.Item1);
             int? availableCount = s?.Item2;
-            while (delta-- > 0 && a.Item2 > s.Item2)
-                selection.Add(a.Item1);
+            delta = Clamp(-s?.Item2 ?? 0, a.Item2, delta);
 
-            while (delta++ < 0 && s.Item2 > 0)
-                selection.Remove(a.Item1);
+            if (delta > 0)
+                while (--delta >= 0 && a.Item2 > (s?.Item2 ?? 0))
+                    selection.Add(a.Item1);
+            else
+                while (++delta <= 0 && s?.Item2 > 0)
+                    selection.Remove(a.Item1);
 
             EnforceRequirements();
         }
@@ -139,13 +150,25 @@ namespace LD58.World.Interaction.Steps
         void EnforceRequirements()
         {
             StringBuilder bldr = new StringBuilder(prompt);
+            bldr.AppendLine();
 
+            SysCol.Dictionary<Item, int> itemCounts = selection.ToDictionary(x => x.Item1, x => x.Item2);
             int i = 0;
             foreach (System.Tuple<Item, int> available in available)
             {
                 bldr.AppendLine();
+                int selectedCount;
+                itemCounts.TryGetValue(available.Item1, out selectedCount);
                 using (new ColoredTextScope(bldr, i++ == cursor ? new Rgba(1, 1, 0, 1) : Rgba.OPAQUE_WHITE))
+                {
+                    if (selectedCount > 0)
+                    {
+                        bldr.Append(selectedCount);
+                        bldr.Append("x");
+                    }
+                    bldr.Append('\t');
                     bldr.Append(available.Item1.displayName);
+                }
             }
 
             if (i == 0)
@@ -155,34 +178,36 @@ namespace LD58.World.Interaction.Steps
                     bldr.Append("No suitable items collected.");
             }
 
-            string failedRequirement = null;
-            SysCol.Dictionary<Traits, int> traitCounts = selection.CountTraits().ToDictionary(x => x.Item1, x => x.Item2);
+            bldr.AppendLine();
+            bldr.AppendLine();
+            if (cursor == i)
+                bldr.Append('>');
 
+            string failedRequirement = GetFailedRequirement();
+            if (failedRequirement != null)
+                using (new ColoredTextScope(bldr, new Rgba(0.5f, 0.5f, 0.5f)))
+                    bldr.AppendLine(failedRequirement);
+            else
+                bldr.AppendLine(acceptText);
+
+            if (cursor == i + 1)
+                bldr.Append('>');
+            bldr.AppendLine("Leave");
+
+            UpdateText(bldr.ToString());
+        }
+
+        string GetFailedRequirement()
+        {
+            SysCol.Dictionary<Traits, int> traitCounts = selection.CountTraits().ToDictionary(x => x.Item1, x => x.Item2);
             foreach (Requirement req in requirements)
             {
                 int count;
                 if (!traitCounts.TryGetValue(req.trait, out count))
-                {
-                    failedRequirement = req.failureText;
-                    break;
-                }
+                    return req.failureText;
             }
 
-            bldr.AppendLine();
-            if (cursor == i)
-            {
-                if (failedRequirement != null)
-                    cursor++;
-                else
-                    bldr.Append('>');
-            }
-            bldr.AppendLine(failedRequirement ?? acceptText);
-
-            if (cursor == i + 1)
-                bldr.Append('>');
-            bldr.AppendLine("Go on about life...");
-
-            UpdateText(bldr.ToString());
+            return null;
         }
     }
 }
