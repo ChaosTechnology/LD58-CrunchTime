@@ -25,6 +25,7 @@ namespace LD58.World
         }
 
         const float WALKING_INTERVAL = 0.1f;
+        const float CAMERA_LAG_DISTANCE = 1.5f;
 
         static Vector2i MapDirection(Direction direction)
         {
@@ -59,6 +60,8 @@ namespace LD58.World
         float walkingHowLong = float.NaN;
         Vector2f visualPosition;
 
+        Vector2f cameraTarget;
+
         // TODO: Capture actual input instead of just direction,
         //       to support multiple keys (or keyboards) for the same action
         LinkedList<Direction> inputs = new LinkedList<Direction>();
@@ -88,7 +91,17 @@ namespace LD58.World
 
         void UpdateView()
         {
-            Vector3f target = new Vector3f(visualPosition.x, 1, visualPosition.y);
+            if (visualPosition.x > cameraTarget.x + CAMERA_LAG_DISTANCE)
+                cameraTarget.x = visualPosition.x - CAMERA_LAG_DISTANCE;
+            if (visualPosition.x < cameraTarget.x - CAMERA_LAG_DISTANCE)
+                cameraTarget.x = visualPosition.x + CAMERA_LAG_DISTANCE;
+
+            if (visualPosition.y > cameraTarget.y + CAMERA_LAG_DISTANCE)
+                cameraTarget.y = visualPosition.y - CAMERA_LAG_DISTANCE;
+            if (visualPosition.y < cameraTarget.y - CAMERA_LAG_DISTANCE)
+                cameraTarget.y = visualPosition.y + CAMERA_LAG_DISTANCE;
+
+            Vector3f target = new Vector3f(cameraTarget.x, 1, cameraTarget.y);
             Vector3f direction = new Vector3f(0, -1, 0);
             Vector3f pos = target - direction * 10;
             scene.view.Update(pos, direction, new Vector3f(0, 0, 1));
