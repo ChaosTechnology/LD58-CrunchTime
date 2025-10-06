@@ -7,7 +7,7 @@ namespace LD58.World.Interaction.Steps
     {
         readonly System.Action action;
 
-        bool done = false;
+        public override bool interactionDone => true;
 
         public CustomAction(Interactor interactor, System.Action action)
             : base(interactor)
@@ -15,17 +15,10 @@ namespace LD58.World.Interaction.Steps
             this.action = action;
         }
 
-        public override bool interactionDone => done;
-
-        public override void SetDrawCalls() { }
-
-        public override void SetUpdateCalls()
-            => interactor.scene.updateLayers[(int)UpdateLayers.PrepareInteraction].Add(Perform);
-
-        void Perform()
+        public override void Activate()
         {
+            base.Activate();
             action();
-            done = true;
         }
     }
 }

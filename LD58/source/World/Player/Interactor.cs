@@ -14,8 +14,7 @@ namespace LD58.World.Player
         public bool busy => current != null || queued.Count > 0;
 
         protected override void Create(CreateParameters cparams)
-        {
-        }
+        { }
 
         public void AddInteraction(params InteractionStep[] steps)
             => AddInteraction((SysCol.IEnumerable<InteractionStep>)steps);
@@ -46,6 +45,7 @@ namespace LD58.World.Player
 
         void UpdateInteraction()
         {
+        again:
             if (current != null && current.interactionDone)
             {
                 current.Dispose();
@@ -53,7 +53,11 @@ namespace LD58.World.Player
             }
 
             if (current == null && queued.Count > 0)
+            {
                 current = queued.Dequeue();
+                current.Activate();
+                goto again;
+            }
         }
     }
 }

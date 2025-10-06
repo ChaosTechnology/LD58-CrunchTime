@@ -6,7 +6,9 @@ using ChaosUtil.Platform.Paths;
 
 namespace LD58
 {
-    class GlassInstancer : InstancingAttribute, Transparent
+    class GlassInstancer
+        : InstancingAttribute
+        , Transparent
     {
         protected WorldScene scene { get; private set; }
 

@@ -11,6 +11,7 @@ namespace LD58.World
 {
     using System.Linq;
     using Objects;
+    using Player;
 
     public class Stage
         : WorldScene
@@ -30,13 +31,14 @@ namespace LD58.World
         public readonly Vector2i size;
         readonly WorldObject[,] tiles;
 
+        public Objective objective { get; protected set; }
+
         public WorldObject this[Vector2i pos]
             => OutOfBounds(pos) ? null : tiles[pos.x, pos.y];
 
         public Stage(Game game, StreamSource source, string name)
             : base(game)
         {
-
             Vector2i size = 0;
             SysCol.Dictionary<Vector2i, WorldObject> occupied = new SysCol.Dictionary<Vector2i, WorldObject>();
 
@@ -92,5 +94,12 @@ namespace LD58.World
 
         public bool CanEnter(Vector2i pos)
             => !OutOfBounds(pos) && (tiles[pos.x, pos.y]?.CanStepOn(pos) ?? true);
+
+        public void SetObjective<Objective>()
+            where Objective : World.Objective
+        {
+            objective?.Dispose();
+            objective = AddComponent<Objective>();
+        }
     }
 }

@@ -2,12 +2,11 @@ using ChaosFramework.Components;
 using ChaosFramework.Core;
 using ChaosFramework.Graphics.OpenGl;
 using ChaosFramework.Graphics.OpenGl.AssetContainers;
+using ChaosFramework.Graphics.OpenGl.Text;
 using ChaosFramework.Input;
 using ChaosFramework.Input.RawInput;
 using ChaosFramework.IO.Streams;
 using ChaosFramework.Sound;
-using ChaosFramework.Graphics.Text;
-using ChaosFramework.Graphics.OpenGl.Text;
 using ChaosFramework.Sound.OpenAL;
 using ChaosUtil.Platform.Windows.WinAPI.winuser;
 using ChaosUtil.Serialization.Text;
@@ -83,10 +82,12 @@ namespace LD58
             sounds = new SoundPool(audio, samples);
 
             textFont = fonts.Load("fonts/text.chf2", this);
-            textRenderer = TextRenderer.Create(graphics, 1000, 10000, 1000, false, textFont);
+            textRenderer = TextRenderer.Create(graphics, 1000, 200000, 10000, false, textFont);
             textBuffer = textRenderer.CreateRenderContext();
 
-            scenes.Add(new Stage(this, assetSource, "home"));
+            Stage home = new Stage(this, assetSource, "home");
+            home.SetObjective<World.Objectives.Hygiene>();
+            scenes.Add(home);
 
             window.BackgroundImage.Dispose();
             window.BackgroundImage = null;

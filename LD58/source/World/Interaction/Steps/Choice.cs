@@ -40,21 +40,24 @@ namespace LD58.World.Interaction.Steps
 
         Option[] options;
         bool chosen;
-        string baseText;
+        string prompt;
 
         int selection = 0;
 
-        public Choice(Interactor interactor, string text, params Option[] options)
-            : base(interactor, CreateText(text, options, 0))
+        public Choice(Interactor interactor, string prompt, params Option[] options)
+            : base(interactor, CreateText(prompt, options, 0))
         {
-            this.baseText = text;
+            this.prompt = prompt;
             this.options = options;
         }
 
         public override bool interactionDone => chosen;
 
         public override void SetUpdateCalls()
-            => interactor.parent.scene.game.input.AddHandler<InputPushEvent<Keyboard.Key>, Keyboard.Key>(InputLayers.Interaction, KeyDown);
+        {
+            base.SetUpdateCalls();
+            interactor.parent.scene.game.input.AddHandler<InputPushEvent<Keyboard.Key>, Keyboard.Key>(InputLayers.Interaction, KeyDown);
+        }
 
         bool KeyDown(InputPushEvent<Keyboard.Key> e)
         {
@@ -83,11 +86,7 @@ namespace LD58.World.Interaction.Steps
         void DeltaChoice(int delta)
         {
             selection = ChaosFramework.Math.Modulus.Mod(selection + delta, options.Length);
-            text.UpdateText(
-                interactor.parent.scene.game.textFont,
-                CreateText(baseText, options, selection),
-                text.geometry.args.layout
-                );
+            UpdateText(CreateText(prompt, options, selection));
         }
 
         protected override void DoDispose()

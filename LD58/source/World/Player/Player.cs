@@ -170,7 +170,7 @@ namespace LD58.World.Player
             return false;
         }
 
-        void FullStop()
+        public void FullStop()
         {
             inputs.Clear();
             walkingHowLong = float.NaN;
@@ -184,7 +184,8 @@ namespace LD58.World.Player
 
         bool Interact()
         {
-            if ((scene[position + direction] as Interactible)?.Interact(interactor) ?? false)
+            Interactible interactible = scene[position + direction] as Interactible;
+            if (interactible != null && scene.objective.Interact(interactor, interactible))
             {
                 FullStop();
                 return true;

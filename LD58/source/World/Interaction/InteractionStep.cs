@@ -14,10 +14,12 @@ namespace LD58.World.Interaction
             this.interactor = interactor;
         }
 
+        public virtual void Activate() { }
+
         public abstract bool interactionDone { get; }
 
-        public abstract void SetUpdateCalls();
+        public virtual void SetUpdateCalls() { }
 
-        public abstract void SetDrawCalls();
+        public virtual void SetDrawCalls() { }
     }
 }
