@@ -26,7 +26,7 @@ namespace LD58.World
 
         protected abstract string GetText();
 
-        public bool Interact(Interactor interactor, Interactible interactible)
+        public virtual bool Interact(Interactor interactor, Interactible interactible)
             => interactible.Interact(interactor);
     }
 }
