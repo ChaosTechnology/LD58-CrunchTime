@@ -37,7 +37,8 @@ namespace LD58.World.Constants
 
         // Get to work
         public static readonly Item CROWBAR = new Item("Crowbar", Traits.OpensApartmentDoor);
-        public static readonly Item SHORTWIRE = new Item("Shortwier", Traits.StartsCar);
+        public static readonly Item SHORTWIRE = new Item("Shortwire", Traits.StartsCar);
+        public static readonly Item KEY_CHAIN = new Item("Key chain", Traits.OpensApartmentDoor | Traits.StartsCar);
 
     }
 }
