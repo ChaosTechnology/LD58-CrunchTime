@@ -1,9 +1,29 @@
+using ChaosUtil.Primitives;
+using SysCol = System.Collections.Generic;
+
 namespace LD58.World.Objects.WorldObjects
 {
+    using Constants;
+    using Inventory;
     [DefaultInstancer(64, "objects/Long Counter.gmdl", "objects/Kitchen.mat")]
     class LongCounter
-        : WorldObject
+        : StockedInteractible
     {
         public LongCounter() : base(4, 1) { }
+
+        protected override string displayName => "this unnecessarily long counter";
+
+        static readonly SysCol.Dictionary<string, Item[]> stocksByName = new SysCol.Dictionary<string, Item[]>()
+        {
+            ["Apartment"] = new[] {
+                KnownItems.SHORTWIRE,
+            },
+        };
+
+        protected override SysCol.IEnumerable<Item> GetInitialStock()
+        {
+            Item[] a;
+            return stocksByName.TryGetValue(name ?? "", out a) ? a : Array<Item>.empty;
+        }
     }
 }
