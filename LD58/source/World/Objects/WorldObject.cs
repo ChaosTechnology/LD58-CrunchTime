@@ -14,7 +14,7 @@ namespace LD58.World.Objects
             : this(1, 1)
         { }
 
-            public WorldObject(uint width, uint height)
+        public WorldObject(uint width, uint height)
         {
             this.width = width;
             this.height = height;
@@ -47,16 +47,22 @@ namespace LD58.World.Objects
             Vector2f dirf = bone.GetDirection().xz;
             Vector2i dir = new Vector2i((int)System.Math.Round(dirf.y), (int)System.Math.Round(-dirf.x));
 
+            foreach (Vector2i relative in RelativeOffsetsForOccupiedTiles())
+            {
+                Vector2i offset = relative * 2 + 1;
+                offset = new Vector2i(
+                    offset.x * dir.x - offset.y * dir.y,
+                    offset.x * dir.y + offset.y * dir.x
+                    );
+                yield return pos + (offset - 1) / 2;
+            }
+        }
+
+        protected virtual SysCol.IEnumerable<Vector2i> RelativeOffsetsForOccupiedTiles()
+        {
             for (int y = 0; y < height; y++)
                 for (int x = 0; x < width; x++)
-                {
-                    Vector2i offset = new Vector2i(x, y) * 2 + 1;
-                    offset = new Vector2i(
-                        offset.x * dir.x - offset.y * dir.y,
-                        offset.x * dir.y + offset.y * dir.x
-                        );
-                    yield return pos + (offset - 1) / 2;
-                }
+                    yield return new Vector2i(x, y);
         }
     }
 }
