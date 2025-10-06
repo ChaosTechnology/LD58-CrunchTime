@@ -65,15 +65,21 @@ namespace LD58
         }
 
         void AddTexts()
-            => scene.game.textBuffer.Add(text);
+        {
+            if (text.geometry != null)
+                scene.game.textBuffer.Add(text);
+        }
 
         void DrawBox()
         {
-            scene.fullScreenView.SetValues(shader, boxTransform, invBoxTransform);
-            shader.SetValue("dimensions", boxBounds.size * charSize * 18);
-            shader.BeginPass("Dialog");
-            Sprite.DrawPositionOnly(shader.content.graphics);
-            shader.EndPass();
+            if (text.geometry != null)
+            {
+                scene.fullScreenView.SetValues(shader, boxTransform, invBoxTransform);
+                shader.SetValue("dimensions", boxBounds.size * charSize * 18);
+                shader.BeginPass("Dialog");
+                Sprite.DrawPositionOnly(shader.content.graphics);
+                shader.EndPass();
+            }
         }
 
         protected override void DoDispose()

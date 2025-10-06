@@ -27,7 +27,7 @@ namespace LD58.World.Objects.WorldObjects
             => false;
 
         public bool OnDoorMat(Vector2i pos)
-            => TransformRelativeTilePositions(DOOR_MAT_POSITIONS).Any(x => x == pos);
+            => TransformRelativeTilePositions(DOOR_MAT_POSITIONS).Contains(pos);
 
         public void Lock()
             => locked = true;

@@ -10,9 +10,6 @@ namespace LD58.World.Objects
     {
         public readonly uint width, height;
 
-        [BoneParameter]
-        protected string name;
-
         public WorldObject(uint width = 1, uint height = 1)
         {
             this.width = width;
@@ -41,6 +38,9 @@ namespace LD58.World.Objects
         /// <returns> The set of tiles this object occupies. </returns>
         public SysCol.IEnumerable<Vector2i> OccupiedTiles()
             => TransformRelativeTilePositions(RelativeOffsetsForOccupiedTiles());
+
+        protected SysCol.IEnumerable<Vector2i> TransformRelativeTilePositions(params Vector2i[] relativeOffsets)
+            => TransformRelativeTilePositions((SysCol.IEnumerable<Vector2i>)relativeOffsets);
 
         protected SysCol.IEnumerable<Vector2i> TransformRelativeTilePositions(SysCol.IEnumerable<Vector2i> relativeOffsets)
         {

@@ -20,5 +20,6 @@ namespace LD58.World.Inventory
         ClothingTop = Clothing | CoversTop,
         ClothingBottom = Clothing | CoversBottom,
         ClothingFeet = Clothing | CoversFeet,
+        Incredient = 1 << 12,
     }
 }

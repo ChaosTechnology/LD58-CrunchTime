@@ -93,14 +93,10 @@ namespace LD58
             window.BackgroundImage = null;
         }
 
-        public void SwitchStage(string newStage)
-        {
-            scenes.Add(new Stage(this, assetSource, newStage));
-            this.GetScene<Stage>()?.Dispose();
-        }
-
         protected override void Update()
         {
+            StageSwitch();
+
             base.Update();
 
             if (GetActiveWindow.Invoke() == window.Handle)
@@ -120,6 +116,27 @@ namespace LD58
             }
 
             input.UpdateInputConsumption();
+        }
+
+        void StageSwitch()
+        {
+            Stage lastStage = null;
+            foreach (Scene scene in scenes)
+            {
+                Stage stage = scene as Stage;
+                if (stage != null)
+                    lastStage = stage;
+            }
+
+            if (lastStage != GetScene<Stage>())
+            {
+                foreach (Scene s in scenes)
+                    if (s is Stage && s != lastStage)
+                        s.Dispose();
+
+                lastStage.doUpdate = true;
+                lastStage.doDraw = true;
+            }
         }
 
         protected override void Draw()

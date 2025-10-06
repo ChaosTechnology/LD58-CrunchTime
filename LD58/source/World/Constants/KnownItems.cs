@@ -16,7 +16,12 @@ namespace LD58.World.Constants
         public static readonly Item EXTRA_MOLDY_CHEESE = new Item("Extra moldy cheese", Traits.Weird | Traits.Food);
         public static readonly Item BLACK_SUBSTANCE = new Item("Unidentifiable black substance", Traits.Weird | Traits.Food | Traits.ClothingBottom);
 
-        public static readonly Item ESSENCE_OF_DARKNESS = new Item("Essence of darkness", Traits.Weird | Traits.Beverage);
+        public static readonly Item EGG = new Item("Egg", Traits.Incredient);
+        public static readonly Item BACON = new Item("Bacon", Traits.Incredient);
+
+        public static readonly Item ESSENCE_OF_DARKNESS = new Item("Essence of darkness", Traits.Weird | Traits.Beverage | Traits.Incredient);
+
+        public static readonly Item ETERNAL_DARKNESS = new Item("Eternal darkness", Traits.Weird | Traits.Beverage | Traits.Food);
 
         // Clothing
         public static readonly Item PANTS = new Item("Pants", Traits.ClothingBottom);
