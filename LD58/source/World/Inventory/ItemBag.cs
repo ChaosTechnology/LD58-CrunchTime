@@ -59,7 +59,8 @@ namespace LD58.World.Inventory
                     return;
                 }
 
-            throw new InvalidOperationException("Can't remove items that we don't have.");
+            if (!all)
+                throw new InvalidOperationException("Can't remove items that we don't have.");
         }
 
         public bool Contains(Item item)
