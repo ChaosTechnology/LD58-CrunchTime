@@ -1,16 +1,26 @@
 using ChaosFramework.Input.InputEvents;
 using ChaosFramework.Input.RawInput;
-using System;
 using System.Text;
 
 namespace LD58.World.Interaction.Steps
 {
     using Player;
-    using Option = Tuple<string, InteractionStep[]>;
 
     public class Choice
         : DialogLine
     {
+        public class Option
+        {
+            public readonly string text;
+            public readonly InteractionStep[] steps;
+
+            public Option(string text, params InteractionStep[] steps)
+            {
+                this.text = text;
+                this.steps = steps;
+            }
+        }
+
         const char CURSOR_SELECT = '>';
         const char CURSOR_BLANK = ' ';
 
@@ -23,7 +33,7 @@ namespace LD58.World.Interaction.Steps
                 bldr.AppendLine();
                 bldr.Append("  ");
                 bldr.Append(i++ == selection ? CURSOR_SELECT : CURSOR_BLANK);
-                bldr.Append(option.Item1);
+                bldr.Append(option.text);
             }
             return bldr.ToString();
         }
@@ -54,7 +64,7 @@ namespace LD58.World.Interaction.Steps
             switch (e.axis.key)
             {
                 case Keyboard.Keys.Space:
-                    interactor.AddInteraction(options[selection].Item2);
+                    interactor.AddInteraction(options[selection].steps);
                     options[selection] = null; // it is now the interactor's responsibility to discard these
                     chosen = true;
                     return true;
@@ -83,8 +93,8 @@ namespace LD58.World.Interaction.Steps
         {
             base.DoDispose();
             foreach (Option option in options)
-                if (option?.Item2 != null)
-                    foreach (InteractionStep step in option.Item2)
+                if (option?.steps != null)
+                    foreach (InteractionStep step in option.steps)
                         step?.Dispose();
         }
     }

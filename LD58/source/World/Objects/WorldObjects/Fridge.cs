@@ -30,11 +30,11 @@ namespace LD58.World.Objects.WorldObjects
 
         public override bool Interact(Interactor interactor)
         {
-            LinkedList<System.Tuple<string, InteractionStep[]>> choices = new LinkedList<System.Tuple<string, InteractionStep[]>>();
+            LinkedList<Choice.Option> choices = new LinkedList<Choice.Option>();
             foreach (System.Tuple<Item, int> _i in stock)
             {
                 System.Tuple<Item, int> i = _i;
-                choices.Add(new System.Tuple<string, InteractionStep[]>(
+                choices.Add(new Choice.Option(
                     $"{i.Item1.displayName} x{i.Item2}",
                     new InteractionStep[] {
                         new AddItem(interactor, i.Item1),
@@ -46,7 +46,7 @@ namespace LD58.World.Objects.WorldObjects
 
             if (!stock.Contains(BLACK_SUBSTANCE) && !collectedEssenceOfDarkness)
                 choices.Add(
-                    new System.Tuple<string, InteractionStep[]>(
+                    new Choice.Option(
                         ESSENCE_OF_DARKNESS.displayName,
                         new InteractionStep[] {
                             new AddItem(interactor, ESSENCE_OF_DARKNESS),

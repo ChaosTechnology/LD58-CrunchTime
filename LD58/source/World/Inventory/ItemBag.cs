@@ -48,18 +48,19 @@ namespace LD58.World.Inventory
             items.Add(new Node(item));
         }
 
-        public void Remove(Item item)
+        public void Remove(Item item, bool all = false)
         {
             foreach (Node n in items)
                 if (n.item.Equals(item))
                 {
-                    if (n.Discard())
+                    if (all || n.Discard())
                         items.RemoveCurrent();
 
                     return;
                 }
 
-            throw new InvalidOperationException("Can't remove items that we don't have.");
+            if (!all)
+                throw new InvalidOperationException("Can't remove items that we don't have.");
         }
 
         public bool Contains(Item item)
