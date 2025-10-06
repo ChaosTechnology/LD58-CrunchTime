@@ -15,10 +15,13 @@ namespace LD58.World.Player
     {
         // TODO: be fancy and smoothly reorder lines in graphical display
 
-        readonly SysCol.Dictionary<Item, Wrapper<int>> inventory
-            = new SysCol.Dictionary<Item, Wrapper<int>>();
+        readonly ItemBag itemBag = new ItemBag();
 
         Text text;
+
+#if DEBUG
+        Text traits;
+#endif
 
         protected override void Create(CreateParameters cparams)
         {
@@ -28,37 +31,42 @@ namespace LD58.World.Player
             text.transform = Matrix.Scaling(0.1f)
                            * Matrix.Translation(parent.scene.fullScreenView.screenRatio * -tan, tan, 0)
                            ;
+#if DEBUG
+            traits = new Text(parent.scene.game.textRenderer, 4096);
+            traits.color = Rgba.OPAQUE_WHITE;
+            traits.transform = Matrix.Scaling(0.1f)
+                             * Matrix.Translation(parent.scene.fullScreenView.screenRatio * tan, tan, 0)
+                             ;
+#endif
         }
 
         public void AddItem(Item item)
         {
-            Wrapper<int> count;
-            if (!inventory.TryGetValue(item, out count))
-                inventory[item] = new Wrapper<int>(1);
-            else
-                count.value++;
-
+            itemBag.Add(item);
             UpdateText();
         }
 
         public void Remove(Item item)
         {
-            Wrapper<int> count;
-            if (!inventory.TryGetValue(item, out count))
-                throw new System.Exception();
-            else if (--count.value <= 0)
-                inventory.Remove(item);
-
+            itemBag.Remove(item);
             UpdateText();
         }
 
         void UpdateText()
         {
             System.Text.StringBuilder bldr = new System.Text.StringBuilder();
-            foreach (SysCol.KeyValuePair<Item, Wrapper<int>> i in inventory)
-                bldr.AppendLine($"{i.Key.displayName} x{i.Value.value}");
+            foreach (System.Tuple<Item, int> i in itemBag)
+                bldr.AppendLine($"{i.Item1.displayName} x{i.Item2}");
 
             text.UpdateText(parent.scene.game.textFont, bldr.ToString(), LayoutInfo.TOP_LEFT);
+
+#if DEBUG
+            bldr.Clear();
+            foreach (System.Tuple<Traits, int> i in itemBag.CountTraits())
+                bldr.AppendLine($"{i.Item1} x{i.Item2}");
+
+            traits.UpdateText(parent.scene.game.textFont, bldr.ToString(), LayoutInfo.TOP_RIGHT);
+#endif
         }
 
         public override void SetDrawCalls()
@@ -71,6 +79,20 @@ namespace LD58.World.Player
         {
             if (text.geometry != null)
                 parent.scene.game.textBuffer.Add(text);
+
+#if DEBUG
+            if (text.geometry != null)
+                parent.scene.game.textBuffer.Add(traits);
+#endif
+        }
+
+        protected override void DoDispose()
+        {
+            base.DoDispose();
+            text.Dispose();
+#if DEBUG
+            traits.Dispose();
+#endif
         }
     }
 }

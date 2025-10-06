@@ -82,5 +82,18 @@ namespace LD58.World.Inventory
             foreach (Node n in items)
                 yield return new Tuple<Item, int>(n.item, n.count);
         }
+
+        public SysCol.IEnumerable<Tuple<Traits, int>> CountTraits()
+        {
+            int[] traits = new int[64];
+            foreach (Tuple<Item, int> item in this)
+                for (int i = 0; i < 64; i++)
+                    if (((ulong)item.Item1.traits & (1ul << i)) != 0)
+                        traits[i] += item.Item2;
+
+            for (int i = 0; i < 64; i++)
+                if (traits[i] > 0)
+                    yield return new Tuple<Traits, int>((Traits)(1ul << i), traits[i]);
+        }
     }
 }
