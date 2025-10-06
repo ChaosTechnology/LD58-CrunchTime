@@ -23,7 +23,7 @@ namespace LD58.World.Objects.WorldObjects
         protected override SysCol.IEnumerable<Item> GetInitialStock()
         {
             Item[] a;
-            return stocksByName.TryGetValue(name, out a) ? a : Array<Item>.empty;
+            return stocksByName.TryGetValue(name ?? "", out a) ? a : Array<Item>.empty;
         }
     }
 }

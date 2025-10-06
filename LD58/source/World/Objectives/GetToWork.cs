@@ -1,12 +1,14 @@
 using ChaosFramework.Math.Vectors;
-using LD58.World.Interaction.Steps;
-using LD58.World.Inventory;
-using LD58.World.Objects.WorldObjects;
-using LD58.World.Objects;
-using LD58.World.Player;
+using SysCol = System.Collections.Generic;
 
 namespace LD58.World.Objectives
 {
+    using Interaction.Steps;
+    using Inventory;
+    using Objects.WorldObjects;
+    using Objects;
+    using Player;
+
     class GetToWork
         : Objective
     {
@@ -26,7 +28,7 @@ namespace LD58.World.Objectives
                     interactor,
                     "I guess I'll leave for work now... let's check my inventory:",
                     "Get going already!",
-                    requirements, _ => interactor.parent.scene.SetObjective<PrepareBreakfast>()
+                    requirements, Complete
                     ));
 
                 return true;
@@ -37,5 +39,14 @@ namespace LD58.World.Objectives
 
         protected override string GetText()
             => "Get out to work.";
+
+        void Complete(SysCol.Dictionary<Item, int> selectedItems)
+        {
+            Stage stage = new Stage(scene.game, scene.game.assetSource, "office");
+            stage.doUpdate = false;
+            stage.doDraw = false;
+            stage.SetObjective<FindWorkspace>();
+            scene.game.scenes.Add(stage);
+        }
     }
 }
