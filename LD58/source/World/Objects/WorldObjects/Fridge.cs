@@ -4,7 +4,6 @@ using SysCol = System.Collections.Generic;
 
 namespace LD58.World.Objects.WorldObjects
 {
-    using System.Net.Security;
     using Constants;
     using Interaction;
     using Interaction.Steps;
@@ -38,7 +37,7 @@ namespace LD58.World.Objects.WorldObjects
 
             if (!stock.Contains(KnownItems.BLACK_SUBSTANCE) && !collectedEssenceOfDarkness)
                 choices.Add(
-              SslPolicyErrors   ss  ss ss       new Choice.Option(
+                    new Choice.Option(
                         KnownItems.ESSENCE_OF_DARKNESS.displayName,
                         new InteractionStep[] {
                             new AddItem(interactor, KnownItems.ESSENCE_OF_DARKNESS),
