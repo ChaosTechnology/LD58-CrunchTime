@@ -185,7 +185,11 @@ namespace LD58.World.Player
         bool Interact()
         {
             Interactible interactible = scene[position + direction] as Interactible;
-            if (interactible != null && scene.objective.Interact(interactor, interactible))
+            if (interactible != null
+                && (scene.objective?.Interact(interactor, interactible)
+                    ?? interactible.Interact(interactor)
+                    )
+                )
             {
                 FullStop();
                 return true;

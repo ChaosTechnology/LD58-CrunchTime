@@ -24,9 +24,6 @@ namespace LD58.World.Player
 
         protected override void Create(CreateParameters cparams)
         {
-            foreach (Item item in InitialInventory.INITIAL_INVENTORY)
-                itemBag.Add(item);
-
             text = new Text(parent.scene.game.textRenderer, 4096);
             text.color = Rgba.OPAQUE_WHITE;
             float tan = parent.scene.fullScreenView.tan;
@@ -40,6 +37,11 @@ namespace LD58.World.Player
                              * Matrix.Translation(parent.scene.fullScreenView.screenRatio * tan, tan, 0)
                              ;
 #endif
+
+            foreach (Item item in InitialInventory.INITIAL_INVENTORY)
+                itemBag.Add(item);
+
+            UpdateText();
         }
 
         public void AddItem(Item item)
@@ -61,7 +63,16 @@ namespace LD58.World.Player
         {
             System.Text.StringBuilder bldr = new System.Text.StringBuilder();
             foreach (System.Tuple<Item, int> i in itemBag)
-                bldr.AppendLine($"{i.Item1.displayName} x{i.Item2}");
+                if (!i.Item1.traits.HasFlag(Traits.Invisible))
+                    bldr.AppendLine($"{i.Item1.displayName} x{i.Item2}");
+
+#if DEBUG
+            bldr.AppendLine();
+            bldr.AppendLine("Hidden:");
+            foreach (System.Tuple<Item, int> i in itemBag)
+                if (i.Item1.traits.HasFlag(Traits.Invisible))
+                    bldr.AppendLine($"{i.Item1.displayName} x{i.Item2}");
+#endif
 
             text.UpdateText(parent.scene.game.textFont, bldr.ToString(), LayoutInfo.TOP_LEFT);
 
