@@ -5,7 +5,7 @@ using SysCol = System.Collections.Generic;
 
 namespace LD58.World.Inventory
 {
-    class ItemBag
+    public class ItemBag
         : SysCol.IEnumerable<Tuple<Item, int>>
     {
         class Node
