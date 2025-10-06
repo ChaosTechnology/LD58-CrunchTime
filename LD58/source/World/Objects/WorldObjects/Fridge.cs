@@ -1,56 +1,47 @@
 using ChaosFramework.Collections;
 using ChaosFramework.Math.Vectors;
-using LD58.World.Player;
+using SysCol = System.Collections.Generic;
 
 namespace LD58.World.Objects.WorldObjects
 {
+    using System.Net.Security;
+    using Constants;
     using Interaction;
     using Interaction.Steps;
     using Inventory;
+    using Player;
 
     [DefaultInstancer(64, "objects/Fridge.gmdl", "objects/Kitchen.mat")]
     class Fridge
-        : Interactible
+        : StockedInteractible
     {
-        static readonly Item BEER = new Item("Beer", Traits.Beverage);
-        static readonly Item EXTRA_MOLDY_CHEESE = new Item("Extra moldy cheese", Traits.Weird | Traits.Food);
-        static readonly Item BLACK_SUBSTANCE = new Item("Unidentifiable black substance", Traits.Weird | Traits.Food | Traits.ClothingBottom);
-
-        static readonly Item ESSENCE_OF_DARKNESS = new Item("Essence of darkness", Traits.Weird | Traits.Beverage);
 
         bool collectedEssenceOfDarkness = false;
-        ItemBag stock = new ItemBag();
 
         public Fridge()
             : base(2, 1)
+        { }
+
+        protected override SysCol.IEnumerable<Item> GetInitialStock()
         {
-            for (int i = 0; i < 3; ++i) stock.Add(EXTRA_MOLDY_CHEESE);
-            for (int i = 0; i < 4; ++i) stock.Add(BEER);
-            for (int i = 0; i < 2; ++i) stock.Add(BLACK_SUBSTANCE);
+            for (int i = 0; i < 3; ++i) yield return KnownItems.EXTRA_MOLDY_CHEESE;
+            for (int i = 0; i < 4; ++i) yield return KnownItems.BEER;
+            for (int i = 0; i < 2; ++i) yield return KnownItems.BLACK_SUBSTANCE;
         }
 
         public override bool Interact(Interactor interactor, Vector2i interactAt)
         {
-            LinkedList<Choice.Option> choices = new LinkedList<Choice.Option>();
-            foreach (System.Tuple<Item, int> _i in stock)
+            LinkedList<Choice.Option> choices = new LinkedList<Choice.Option>
             {
-                System.Tuple<Item, int> i = _i;
-                choices.Add(new Choice.Option(
-                    $"{i.Item1.displayName} x{i.Item2}",
-                    new InteractionStep[] {
-                        new AddItem(interactor, i.Item1),
-                        new CustomAction(interactor, () => stock.Remove(i.Item1))
-                        }
-                    )
-                );
-            }
+                EnumerateStockOptions(interactor)
+            };
 
-            if (!stock.Contains(BLACK_SUBSTANCE) && !collectedEssenceOfDarkness)
+            if (!stock.Contains(KnownItems.BLACK_SUBSTANCE) && !collectedEssenceOfDarkness)
                 choices.Add(
-                    new Choice.Option(
-                        ESSENCE_OF_DARKNESS.displayName,
+              SslPolicyErrors   ss  ss ss       new Choice.Option(
+                        KnownItems.ESSENCE_OF_DARKNESS.displayName,
                         new InteractionStep[] {
-                            new AddItem(interactor, ESSENCE_OF_DARKNESS),
+                            new AddItem(interactor, KnownItems.ESSENCE_OF_DARKNESS),
                             new CustomAction(interactor, CollectEssenceOfDarkness)
                             }
                         )
@@ -64,7 +55,7 @@ namespace LD58.World.Objects.WorldObjects
             if (choices.empty)
                 interactions.Clear();
 
-            if (!stock.Contains(BEER))
+            if (!stock.Contains(KnownItems.BEER))
                 interactions.Insert(0, new DialogLine(interactor, "Where has all the beer gone?"));
 
             interactor.AddInteraction(interactions);

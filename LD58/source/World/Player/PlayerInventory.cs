@@ -3,6 +3,7 @@ using ChaosFramework.Graphics.Colors;
 using ChaosFramework.Graphics.OpenGl.Text;
 using ChaosFramework.Graphics.Text;
 using ChaosFramework.Math;
+using SysCol = System.Collections.Generic;
 
 namespace LD58.World.Player
 {
@@ -11,6 +12,7 @@ namespace LD58.World.Player
 
     public class PlayerInventory
         : StrictComponent<Player>
+        , SysCol.IEnumerable<System.Tuple<Item, int>>
     {
         // TODO: be fancy and smoothly reorder lines in graphical display
 
@@ -110,5 +112,11 @@ namespace LD58.World.Player
             traits.Dispose();
 #endif
         }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+            => GetEnumerator();
+
+        public SysCol.IEnumerator<System.Tuple<Item, int>> GetEnumerator()
+            => itemBag.GetEnumerator();
     }
 }
