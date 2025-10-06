@@ -16,8 +16,8 @@ namespace LD58.World.Objects.WorldObjects
             interactor.AddInteraction(
                 new DialogLine(interactor, "What the fuck!"),
                 new Choice(interactor, "Try it out?",
-                    new System.Tuple<string, InteractionStep[]>("How???", null),
-                    new System.Tuple<string, InteractionStep[]>("...", new[] { new Suicide(interactor) })
+                    new Choice.Option("How???", null),
+                    new Choice.Option("...", new[] { new Suicide(interactor) })
                     )
                 );
             return true;

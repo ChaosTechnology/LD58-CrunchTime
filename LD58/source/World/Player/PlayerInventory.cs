@@ -3,12 +3,12 @@ using ChaosFramework.Graphics.Colors;
 using ChaosFramework.Graphics.OpenGl.Text;
 using ChaosFramework.Graphics.Text;
 using ChaosFramework.Math;
-using ChaosUtil.Primitives;
 using SysCol = System.Collections.Generic;
 
 namespace LD58.World.Player
 {
     using Inventory;
+    using LD58.source.World.Constants;
 
     public class PlayerInventory
         : StrictComponent<Player>
@@ -25,6 +25,9 @@ namespace LD58.World.Player
 
         protected override void Create(CreateParameters cparams)
         {
+            foreach (Item item in InitialInventory.INITIAL_INVENTORY)
+                itemBag.Add(item);
+
             text = new Text(parent.scene.game.textRenderer, 4096);
             text.color = Rgba.OPAQUE_WHITE;
             float tan = parent.scene.fullScreenView.tan;
@@ -51,6 +54,9 @@ namespace LD58.World.Player
             itemBag.Remove(item);
             UpdateText();
         }
+
+        public bool Contains(Item item)
+            => itemBag.Contains(item);
 
         void UpdateText()
         {
