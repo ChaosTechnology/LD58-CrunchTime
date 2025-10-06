@@ -1,6 +1,6 @@
 namespace LD58.World.Objects.WorldObjects
 {
-    [DefaultInstancer(64, "objects/Puff.gmdl", "objects/Sofa.mat")]
+    [DefaultInstancer(64, "objects/Puff.gmdl", "objects/Office.mat")]
     public class Puff
         : WorldObject
     {
