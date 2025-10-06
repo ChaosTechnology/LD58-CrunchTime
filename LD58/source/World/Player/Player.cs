@@ -159,14 +159,21 @@ namespace LD58.World.Player
 
         bool StopWalking(Direction direction)
         {
-            inputs.Remove(direction);
-
-            if (inputs.empty)
-                walkingHowLong = float.NaN;
-            else
-                TurnTo(inputs.first);
+            if (inputs.Remove(direction))
+            {
+                if (inputs.empty)
+                    walkingHowLong = float.NaN;
+                else
+                    TurnTo(inputs.first);
+            }
 
             return false;
+        }
+
+        void FullStop()
+        {
+            inputs.Clear();
+            walkingHowLong = float.NaN;
         }
 
         void TurnTo(Direction direction)
@@ -176,7 +183,15 @@ namespace LD58.World.Player
         }
 
         bool Interact()
-            => (scene[position + direction] as Interactible)?.Interact(interactor) ?? false;
+        {
+            if ((scene[position + direction] as Interactible)?.Interact(interactor) ?? false)
+            {
+                FullStop();
+                return true;
+            }
+            else
+                return false;
+        }
 
         void Move()
         {
