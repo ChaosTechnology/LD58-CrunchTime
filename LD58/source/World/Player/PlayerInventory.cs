@@ -49,9 +49,9 @@ namespace LD58.World.Player
             UpdateText();
         }
 
-        public void Remove(Item item)
+        public void Remove(Item item, bool all = false)
         {
-            itemBag.Remove(item);
+            itemBag.Remove(item, all);
             UpdateText();
         }
 

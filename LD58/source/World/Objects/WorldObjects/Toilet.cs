@@ -57,6 +57,7 @@ namespace LD58.World.Objects.WorldObjects
                     new CustomAction(interactor, () =>
                     {
                         playerInventory.Remove(KnownItems.HELD_IN_POOP);
+                        playerInventory.AddItem(KnownItems.DIRTY_HANDS);
                         userInteractionState.hasUsed = true;
                         hasContent = true;
                         clean = false;
@@ -87,6 +88,7 @@ namespace LD58.World.Objects.WorldObjects
                             new CustomAction(interactor, () =>
                             {
                                 playerInventory.AddItem(KnownItems.POOP);
+                                playerInventory.AddItem(KnownItems.DIRTY_HANDS);
                                 hasContent = false;
                             }),
                             new DialogLine(interactor, "Can't let it go to waste...")
@@ -99,11 +101,12 @@ namespace LD58.World.Objects.WorldObjects
                     new DialogLine(interactor, "What a chore.")
                     ));
 
-                steps.Add(
-                    options.empty
-                    ? new DialogLine(interactor, "I don't need this right now.")
-                    : new Choice(interactor, "What to do?", options.ToArray())
-                    );
+            options.Add(new Choice.Option("Leave", null));
+            steps.Add(
+                options.length == 1
+                ? new DialogLine(interactor, "I don't need this right now.")
+                : new Choice(interactor, "What to do?", options.ToArray())
+                );
 
 
             interactor.AddInteraction(steps);

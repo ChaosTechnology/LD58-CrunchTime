@@ -48,12 +48,12 @@ namespace LD58.World.Inventory
             items.Add(new Node(item));
         }
 
-        public void Remove(Item item)
+        public void Remove(Item item, bool all = false)
         {
             foreach (Node n in items)
                 if (n.item.Equals(item))
                 {
-                    if (n.Discard())
+                    if (all || n.Discard())
                         items.RemoveCurrent();
 
                     return;

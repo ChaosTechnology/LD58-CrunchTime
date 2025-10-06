@@ -7,6 +7,7 @@ namespace LD58.source.World.Constants
     {
         public static readonly Item[] INITIAL_INVENTORY = new Item[] {
             KnownItems.HELD_IN_POOP,
+            KnownItems.BODY_GREASE,
         };
     }
 }
