@@ -35,6 +35,12 @@ namespace LD58.World.Objects.WorldObjects
         public Wardrobe() : base(2, 1) { }
 
         protected override IEnumerable<Item> GetInitialStock()
-            => stocksByName[name];
+        {
+            Item[] stock;
+            if (!string.IsNullOrEmpty(name) && stocksByName.TryGetValue(name, out stock))
+                return stock;
+            else
+                return ChaosUtil.Primitives.Array<Item>.empty;
+        }
     }
 }
