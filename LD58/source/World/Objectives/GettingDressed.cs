@@ -25,11 +25,19 @@ namespace LD58.World.Objectives
             Wardrobe wardrobe = interactible as Wardrobe;
             if (wardrobe != null)
             {
-                interactor.AddInteraction(new RequiredItemsSelection(
-                    interactor,
-                    "Choose clothes to wear:",
-                    "Wear this!",
-                    requirements, _ => interactor.parent.scene.SetObjective<Hygiene>()
+                interactor.AddInteraction(new Choice(interactor, "I can get dressed here...",
+                    new Choice.Option("Choose clothes...", new CustomAction(interactor, () =>
+                        interactor.AddInteraction(new RequiredItemsSelection(
+                            interactor,
+                            "Choose clothes to wear:",
+                            "Wear this!",
+                            requirements, _ => interactor.parent.scene.SetObjective<Hygiene>()
+                            ))
+                        )),
+                    new Choice.Option("Rummage through this wardrobe...",
+                        new CustomAction(interactor, () => interactible.Interact(interactor, interactAt))
+                        ),
+                    new Choice.Option("Leave")
                     ));
                 return true;
             }

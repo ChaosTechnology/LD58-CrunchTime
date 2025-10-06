@@ -27,6 +27,9 @@ namespace LD58.World.Objects.WorldObjects
 
             ["Hallway"] = new[] {
                 KnownItems.DENIM_TROUSERS,
+                KnownItems.DENIM_TROUSERS,
+                KnownItems.DENIM_TROUSERS,
+                KnownItems.TSHIRT,
             }
         };
 
