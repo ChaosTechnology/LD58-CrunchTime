@@ -1,9 +1,9 @@
 using ChaosFramework.Graphics.OpenGl.Instancing;
 using ChaosFramework.Math;
+using ChaosFramework.Math.Vectors;
 
 namespace LD58.World.Objects.WorldObjects
 {
-    using Interaction;
     using Interaction.Steps;
     using Player;
 
@@ -11,7 +11,7 @@ namespace LD58.World.Objects.WorldObjects
     class DoubleToilet
         : Toilet
     {
-        public override bool Interact(Interactor interactor)
+        public override bool Interact(Interactor interactor, Vector2i interactAt)
         {
             interactor.AddInteraction(
                 new DialogLine(interactor, "What the fuck!"),

@@ -1,5 +1,6 @@
-using LD58.World.Player;
 using ChaosFramework.Collections;
+using ChaosFramework.Math.Vectors;
+using LD58.World.Player;
 
 namespace LD58.World.Objects.WorldObjects
 {
@@ -28,7 +29,7 @@ namespace LD58.World.Objects.WorldObjects
             for (int i = 0; i < 2; ++i) stock.Add(BLACK_SUBSTANCE);
         }
 
-        public override bool Interact(Interactor interactor)
+        public override bool Interact(Interactor interactor, Vector2i interactAt)
         {
             LinkedList<Choice.Option> choices = new LinkedList<Choice.Option>();
             foreach (System.Tuple<Item, int> _i in stock)

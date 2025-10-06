@@ -26,7 +26,10 @@ namespace LD58.World
 
         protected abstract string GetText();
 
-        public bool Interact(Interactor interactor, Interactible interactible)
-            => interactible.Interact(interactor);
+        public virtual bool Interact(Interactor interactor, Interactible interactible, Vector2i interactAt)
+            => interactible.Interact(interactor, interactAt);
+
+        public virtual void Step(Interactor interactor, WorldObject steppedOn)
+        { }
     }
 }

@@ -1,4 +1,5 @@
 using ChaosFramework.Collections;
+using ChaosFramework.Math.Vectors;
 using SysCol = System.Collections.Generic;
 
 namespace LD58.World.Objects.WorldObjects
@@ -24,7 +25,7 @@ namespace LD58.World.Objects.WorldObjects
 
         SysCol.Dictionary<Interactor, UserInteractionState> users = new SysCol.Dictionary<Interactor, UserInteractionState>();
 
-        public override bool Interact(Interactor interactor)
+        public override bool Interact(Interactor interactor, Vector2i interactAt)
         {
             LinkedList<InteractionStep> steps = new LinkedList<InteractionStep>();
 

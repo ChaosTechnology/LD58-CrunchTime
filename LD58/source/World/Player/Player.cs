@@ -184,10 +184,11 @@ namespace LD58.World.Player
 
         bool Interact()
         {
-            Interactible interactible = scene[position + direction] as Interactible;
+            Vector2i interactAt = position + direction;
+            Interactible interactible = scene[interactAt] as Interactible;
             if (interactible != null
-                && (scene.objective?.Interact(interactor, interactible)
-                    ?? interactible.Interact(interactor)
+                && (scene.objective?.Interact(interactor, interactible, interactAt)
+                    ?? interactible.Interact(interactor, interactAt)
                     )
                 )
             {
@@ -232,6 +233,11 @@ namespace LD58.World.Player
             if (scene.CanEnter(desiredPos))
             {
                 position = desiredPos;
+
+                WorldObject steppedOn = scene[position];
+                if (steppedOn != null)
+                    scene.objective?.Step(interactor, steppedOn);
+
                 return true;
             }
             else
