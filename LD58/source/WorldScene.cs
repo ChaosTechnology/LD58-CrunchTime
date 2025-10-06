@@ -60,8 +60,14 @@ namespace LD58
                     (game.settings.deferredShaderResolution.y <= 0) ? game.panel.Height : game.settings.deferredShaderResolution.y
                     ),
                 lights,
-                new DeferredShaderIntrinsicLights[] { new DirectionalLightIntrinsics(1) },
-                new LightInstancerBase[] { new PointLightInstancer(game.graphics, 128) }
+                new DeferredShaderIntrinsicLights[] {
+                    new DirectionalLightIntrinsics(1),
+                    new SpotLightIntrinsics(11)
+                },
+                new LightInstancerBase[] {
+                    new PointLightInstancer(game.graphics, 128),
+                    new SpotLightInstancer(game.graphics, 11)
+                    }
                 );
 
             theFamousInsideSun = new DirectionalLight(

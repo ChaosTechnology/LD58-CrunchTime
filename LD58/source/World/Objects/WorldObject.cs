@@ -10,9 +10,6 @@ namespace LD58.World.Objects
     {
         public readonly uint width, height;
 
-        [BoneParameter]
-        protected string name;
-
         public WorldObject(uint width = 1, uint height = 1)
         {
             this.width = width;
