@@ -6,7 +6,7 @@
     />
 
   <PropertyGroup>
-    <AssemblyName>LD58</AssemblyName>
+    <AssemblyName>LD58 - Crunch Time</AssemblyName>
     <RootNamespace>LD58</RootNamespace>
     <ProjectGuid>{ADFC01E7-7D26-4518-8403-C1164AD3B0EF}</ProjectGuid>
 
@@ -27,8 +27,25 @@
   <ItemGroup>
     <Compile Include="source\**\*.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+
+    <None Include="assets\**" />
+
+    <None Include="packages.config" />
+    <None Include="OpenTK.dll.config" />
+
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
+  <!-- References -->
   <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosUtil.Debug.targets" />
   <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosUtil.Platform.targets" />
   <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosUtil.Platform.Windows.targets" />
@@ -47,14 +64,25 @@
   <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosFramework.Sound.targets" />
   <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosFramework.Sound.OpenAL.targets" />
   <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+
     <Reference Include="ChaosFramework.Graphics">
       <HintPath>..\libs\ChaosFramework.Graphics\ChaosFramework.Graphics.dll</HintPath>
     </Reference>
     <Reference Include="ChaosFramework.Graphics.OpenGL">
       <HintPath>..\libs\ChaosFramework.Graphics.OpenGL\ChaosFramework.Graphics.OpenGL.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Windows.Forms" />
+
+    <Reference Include="OpenTK, Version=3.0.1.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\OpenTK.3.0.1\lib\net20\OpenTK.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="OpenTK.GLControl, Version=3.0.1.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\OpenTK.GLControl.3.0.1\lib\net20\OpenTK.GLControl.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
 
   <!-- Analyzers -->
@@ -62,6 +90,23 @@
 
   <!-- Cleanup Task -->
   <Import Project="$(ChaosPresets_References)/BuildTasks/ChaosBuild.CodeFormatter.Tasks.ChangedProjectFiles.targets" />
+
+  <UsingTask
+    TaskName="ChaosArchive"
+    AssemblyFile="$(SolutionDir)/submodules/ChaosFrameworkBuild.ArchiveCreator/build/bin/ChaosFrameworkBuild.ArchiveCreator.dll"
+    />
+
+  <Target
+    Name="CreateArchive"
+    BeforeTargets="BeforeBuild"
+    >
+    <ChaosArchive
+      SourceFolder="assets"
+      TargetFile="Assets.cha"
+      OutputPath="$(OutputPath)"
+      IntermediateOutputPath="$(IntermediateOutputPath)"
+      />
+  </Target>
 
   <!-- Default Targets for Building CSharp Projects -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
