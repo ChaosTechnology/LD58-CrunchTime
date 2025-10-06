@@ -31,7 +31,7 @@ namespace LD58.World.Objectives
                             interactor,
                             "Choose clothes to wear:",
                             "Wear this!",
-                            requirements, _ => interactor.parent.scene.SetObjective<Hygiene>()
+                            requirements, _ => interactor.parent.scene.SetObjective<PrepareBreakfast>()
                             ))
                         )),
                     new Choice.Option("Rummage through this wardrobe...",

@@ -21,7 +21,8 @@ namespace LD58.World.Inventory
         ClothingBottom = Clothing | CoversBottom,
         ClothingFeet = Clothing | CoversFeet,
         Incredient = 1 << 12,
-        StartsCar = 1 << 13,
-        OpensApartmentDoor = 1 << 14,
+        Dish = 1 << 13,
+        StartsCar = 1 << 14,
+        OpensApartmentDoor = 1 << 15,
     }
 }
