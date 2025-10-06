@@ -3,7 +3,6 @@ using ChaosFramework.Graphics.Colors;
 using ChaosFramework.Graphics.OpenGl.Text;
 using ChaosFramework.Graphics.Text;
 using ChaosFramework.Math;
-using SysCol = System.Collections.Generic;
 
 namespace LD58.World.Player
 {

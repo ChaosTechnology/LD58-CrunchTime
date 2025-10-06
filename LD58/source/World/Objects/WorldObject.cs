@@ -40,6 +40,9 @@ namespace LD58.World.Objects
         /// </summary>
         /// <returns> The set of tiles this object occupies. </returns>
         public SysCol.IEnumerable<Vector2i> OccupiedTiles()
+            => TransformRelativeTilePositions(RelativeOffsetsForOccupiedTiles());
+
+        protected SysCol.IEnumerable<Vector2i> TransformRelativeTilePositions(SysCol.IEnumerable<Vector2i> relativeOffsets)
         {
             Vector2f posf = bone.GetPosition().xz;
             Vector2i pos = new Vector2i((int)System.Math.Round(posf.x), (int)System.Math.Round(posf.y));
@@ -49,9 +52,9 @@ namespace LD58.World.Objects
             Vector2f dirf = bone.GetDirection().xz;
             Vector2i dir = new Vector2i((int)System.Math.Round(dirf.y), (int)System.Math.Round(-dirf.x));
 
-            foreach (Vector2i relative in RelativeOffsetsForOccupiedTiles())
+            foreach (Vector2i x in relativeOffsets)
             {
-                Vector2i offset = relative * 2 + 1;
+                Vector2i offset = x * 2 + 1;
                 offset = new Vector2i(
                     offset.x * dir.x - offset.y * dir.y,
                     offset.x * dir.y + offset.y * dir.x

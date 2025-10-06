@@ -1,4 +1,3 @@
-using LD58.World.Constants;
 using LD58.World.Inventory;
 
 namespace LD58.World.Constants
