@@ -15,7 +15,7 @@ namespace LD58.World.Objects.WorldObjects
         class UserInteractionState
         {
             public int numTimesInteractedBeforeFlush;
-            public bool inspected;
+            public int inspected;
             public bool hasUsed;
         }
 
@@ -76,13 +76,23 @@ namespace LD58.World.Objects.WorldObjects
                         }),
                         new DialogLine(interactor, "That's better.")
                         ));
-                if (!userInteractionState.inspected)
-                    options.Add(new Choice.Option(
-                            "Inspect",
-                            new CustomAction(interactor, () => userInteractionState.inspected = true),
-                            new DialogLine(interactor, "It stinks quite bad.")
-                            ));
-                else
+                switch (userInteractionState.inspected)
+                {
+                    case 0:
+                        options.Add(new Choice.Option(
+                                "Inspect",
+                                new CustomAction(interactor, () => userInteractionState.inspected++),
+                                new DialogLine(interactor, "It stinks quite bad.")
+                                ));
+                        break;
+                    case 1:
+                        options.Add(new Choice.Option(
+                                "Inspect...",
+                                new CustomAction(interactor, () => userInteractionState.inspected++),
+                                new DialogLine(interactor, "I kinda like it though...")
+                                ));
+                        break;
+                    default:
                     options.Add(new Choice.Option(
                             "Collect",
                             new CustomAction(interactor, () =>
@@ -93,6 +103,8 @@ namespace LD58.World.Objects.WorldObjects
                             }),
                             new DialogLine(interactor, "Can't let it go to waste...")
                             ));
+                        break;
+                }
             }
             else if (!clean)
                 options.Add(new Choice.Option(
