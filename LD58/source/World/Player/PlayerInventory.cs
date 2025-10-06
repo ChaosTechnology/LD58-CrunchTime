@@ -3,6 +3,8 @@ using ChaosFramework.Graphics.Colors;
 using ChaosFramework.Graphics.OpenGl.Text;
 using ChaosFramework.Graphics.Text;
 using ChaosFramework.Math;
+using System;
+using System.Collections;
 using SysCol = System.Collections.Generic;
 
 namespace LD58.World.Player
@@ -113,10 +115,13 @@ namespace LD58.World.Player
 #endif
         }
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        SysCol.IEnumerator<Tuple<Item, int>> SysCol.IEnumerable<Tuple<Item, int>>.GetEnumerator()
             => GetEnumerator();
 
-        public SysCol.IEnumerator<System.Tuple<Item, int>> GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
+            => GetEnumerator();
+
+        public SysCol.IEnumerator<Tuple<Item, int>> GetEnumerator()
             => itemBag.GetEnumerator();
     }
 }
