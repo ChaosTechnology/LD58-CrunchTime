@@ -15,9 +15,9 @@ namespace LD58.World.Objectives
         static readonly RequiredItemsSelection.Requirement[] requirements
             = new RequiredItemsSelection.Requirement[]
         {
-            new RequiredItemsSelection.Requirement(Traits.ClothingBottom, 1, "Need some bottom clothing piece."),
-            new RequiredItemsSelection.Requirement(Traits.ClothingTop, 1, "Can't go topless"),
-            new RequiredItemsSelection.Requirement(Traits.ClothingFeet, 1, "I still need something for the feet."),
+            new RequiredItemsSelection.Requirement(Traits.CoversBottom, 1, "Need some bottom clothing piece."),
+            new RequiredItemsSelection.Requirement(Traits.CoversTop, 1, "Can't go topless"),
+            new RequiredItemsSelection.Requirement(Traits.CoversFeet, 1, "I still need something for the feet."),
         };
 
         public override bool Interact(Interactor interactor, Interactible interactible, Vector2i interactAt)
@@ -25,7 +25,12 @@ namespace LD58.World.Objectives
             Wardrobe wardrobe = interactible as Wardrobe;
             if (wardrobe != null)
             {
-                interactor.AddInteraction(new RequiredItemsSelection(interactor, "Choose clothes to wear:", "Put on clothes", requirements));
+                interactor.AddInteraction(new RequiredItemsSelection(
+                    interactor,
+                    "Choose clothes to wear:",
+                    "Wear this!",
+                    requirements, _ => interactor.parent.scene.SetObjective<Hygiene>()
+                    ));
                 return true;
             }
 
