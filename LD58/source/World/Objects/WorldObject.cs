@@ -10,11 +10,17 @@ namespace LD58.World.Objects
     {
         public readonly uint width, height;
 
+        [BoneParameter]
+        protected string name;
+
         public WorldObject(uint width = 1, uint height = 1)
         {
             this.width = width;
             this.height = height;
         }
+
+        public string GetName()
+            => name;
 
         /// <summary>
         ///     Determine whether the player can occupy the same space
