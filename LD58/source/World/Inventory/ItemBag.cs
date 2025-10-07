@@ -72,6 +72,15 @@ namespace LD58.World.Inventory
             return false;
         }
 
+        public bool Contains(Traits trait)
+        {
+            foreach (Node n in items)
+                if (n.item.traits.HasFlag(trait))
+                    return true;
+
+            return false;
+        }
+
         IEnumerator IEnumerable.GetEnumerator()
             => GetEnumerator();
 

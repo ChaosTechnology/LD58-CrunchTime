@@ -42,7 +42,8 @@ namespace LD58.World.Constants
 
         public static readonly Item CLEAN_PLATE = new Item("Plate", Traits.Dish);
         public static readonly Item CLEAN_BOWL = new Item("Bowl", Traits.Dish);
-        public static readonly Item CLEAN_CUP = new Item("Cup", Traits.Dish);
+        public static readonly Item CLEAN_CUP = new Item("Cup", Traits.LiquidContainer);
+        public static readonly Item CLEAN_GLASS = new Item("Glass", Traits.LiquidContainer);
 
         // Do work
         public static readonly Item WORK_ITEM = new Item("Work item", Traits.Invisible | Traits.Satisfying);

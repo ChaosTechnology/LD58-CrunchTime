@@ -1,16 +1,16 @@
-using ChaosFramework.Math;
+using ChaosFramework.Graphics.OpenGl.Instancing;
 using ChaosFramework.Math.Vectors;
 using System.Collections.Generic;
-using ChaosFramework.Graphics.OpenGl.Instancing;
 using System.Linq;
 
 namespace LD58.World.Objects.WorldObjects
 {
-    using Player;
-    using Inventory;
     using Interaction.Steps;
+    using Inventory;
+    using Player;
 
     [DefaultInstancer(64, "objects/Door Frame.gmdl", "objects/Kitchen.mat")]
+    [DefaultInstancer(64, "objects/Door.gmdl", "objects/Kitchen.mat")]
     class DoorFrame
         : Interactible
     {
@@ -33,8 +33,7 @@ namespace LD58.World.Objects.WorldObjects
         {
             base.GiveMeInstances(instancers);
             if (locked)
-                for (float f = 0.8f; f > 0; f -= 0.2f)
-                    instancers[0].informer.AddInstance(Matrix.Scaling(f) * bone.GetBoneTransform());
+                instancers[1].informer.AddInstance(bone.GetBoneTransform());
         }
 
         public override bool Interact(Interactor interactor, Vector2i interactAt)
@@ -43,7 +42,7 @@ namespace LD58.World.Objects.WorldObjects
             {
                 interactor.AddInteraction(new DialogLine(interactor, "It's locked"));
 
-                Key key = (Key)interactor.parent.inventory.Where(CorrectKey).FirstOrDefault().Item1;
+                Key key = (Key)interactor.parent.inventory.Where(CorrectKey).FirstOrDefault()?.Item1;
                 if (key != null)
                 {
                     interactor.AddInteraction(

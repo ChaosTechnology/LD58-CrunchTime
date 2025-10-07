@@ -3,6 +3,7 @@ using ChaosFramework.Math.Vectors;
 namespace LD58.World.Objects.WorldObjects
 {
     [DefaultInstancer(64, "objects/Door Frame Small.gmdl", "objects/Kitchen.mat")]
+    [DefaultInstancer(64, "objects/Door Small.gmdl", "objects/Kitchen.mat")]
     class DoorFrameSmall
         : DoorFrame
     {

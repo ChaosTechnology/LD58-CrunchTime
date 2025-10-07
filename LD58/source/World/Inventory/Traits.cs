@@ -25,6 +25,7 @@ namespace LD58.World.Inventory
         Wearing = 1 << 17,
         Caffeine = 1 << 18,
         Alcohol = 1 << 19,
+        LiquidContainer = 1 << 20,
 
         ClothingTop = Clothing | CoversTop,
         ClothingBottom = Clothing | CoversBottom,
