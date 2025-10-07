@@ -2,7 +2,7 @@ namespace LD58.World.Inventory
 {
     [System.Flags]
     public enum Traits
-        : ushort
+        : uint
     {
         None = 0,
         Invisible = 1,
@@ -24,5 +24,7 @@ namespace LD58.World.Inventory
         Dish = 1 << 13,
         StartsCar = 1 << 14,
         OpensApartmentDoor = 1 << 15,
+        Consumed = 1 << 16,
+        Wearing = 1 << 17
     }
 }
