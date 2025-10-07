@@ -74,7 +74,8 @@ namespace LD58.World.Objectives
 
         int progress;
 
-        DoorFrame breakRoomDoor, bossOfficeDoor;
+        DoorFrame bossOfficeDoor;
+        SysCol.HashSet<DoorFrame> breakRoomDoors = new SysCol.HashSet<DoorFrame>();
 
         protected override string GetText()
             => $"Do work!\n[{new string('=', progress)}{new string(' ', Max(0, REQUIRED_WORK_ITEMS - progress))}{new string('\b', Max(0, progress - REQUIRED_WORK_ITEMS))}]";
@@ -90,7 +91,7 @@ namespace LD58.World.Objectives
 
                 DoorFrame door = obj as DoorFrame;
                 if (door?.GetName() == "Break Room")
-                    breakRoomDoor = door;
+                    breakRoomDoors.Add(door);
                 else if (door?.GetName() == "Boss Office")
                     bossOfficeDoor = door;
             }
@@ -98,7 +99,8 @@ namespace LD58.World.Objectives
             newWorkTimer = 2;
             speed = 1;
 
-            breakRoomDoor.Lock();
+            foreach (DoorFrame door in breakRoomDoors)
+                door.Lock();
         }
 
         public override void SetUpdateCalls()
@@ -135,7 +137,7 @@ namespace LD58.World.Objectives
                 return true;
             }
 
-            if (interactible == breakRoomDoor)
+            if (breakRoomDoors.Contains(interactible))
             {
                 if (progress == 0)
                 {
@@ -222,9 +224,11 @@ namespace LD58.World.Objectives
             }
         }
 
-        void Complete()
+        void Complete(Interactor _)
         {
-            breakRoomDoor.Unlock();
+            foreach (var door in breakRoomDoors)
+                door.Unlock();
+
             bossOfficeDoor.Unlock();
             foreach (WorkItem workItem in scene.EnumerateChildren<WorkItem>(true))
                 workItem.Complete();
