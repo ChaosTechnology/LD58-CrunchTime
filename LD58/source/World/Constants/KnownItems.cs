@@ -44,6 +44,10 @@ namespace LD58.World.Constants
         public static readonly Item CLEAN_BOWL = new Item("Bowl", Traits.Dish);
         public static readonly Item CLEAN_CUP = new Item("Cup", Traits.Dish);
 
+        // Do work
+        public static readonly Item WORK_ITEM = new Item("Work item", Traits.Invisible | Traits.Satisfying);
+        public static readonly Item URGENT_WORK_ITEM = new Item("Urgent work item", Traits.Invisible | Traits.Satisfying | Traits.Distressing);
+
         // Lunch break
         public static readonly Item DONUT = new Item("Donut", Traits.Food);
         public static readonly Item COFFEE_BEANS = new Item("Coffee Beans", Traits.Incredient | Traits.Food | Traits.Caffeine);

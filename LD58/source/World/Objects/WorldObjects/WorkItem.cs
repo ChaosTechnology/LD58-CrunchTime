@@ -37,6 +37,7 @@ namespace LD58.World.Objects.WorldObjects
         Rgba currentColor;
 
         public bool Urgent() => timeRemaining < 2;
+        public bool Done() => !float.IsNaN(completionFadeout);
 
         protected override void Create(CreateParameters args)
         {

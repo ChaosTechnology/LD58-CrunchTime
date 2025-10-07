@@ -10,6 +10,7 @@ namespace LD58.World.Objectives
 {
     using Interaction;
     using Interaction.Steps;
+    using Constants;
     using Objects;
     using Objects.WorldObjects;
     using Player;
@@ -156,7 +157,7 @@ namespace LD58.World.Objectives
             if (table != null)
             {
                 WorkItem work = table.EnumerateChildren<WorkItem>(false).SingleOrDefault();
-                if (work != null && table.FacingScreenZero(interactor.parent.direction) ^ work.isRightSide)
+                if (work != null && table.FacingScreenZero(interactor.parent.direction) ^ work.isRightSide && !work.Done())
                 {
                     SysCol.IEnumerable<InteractionStep> dialogLines = work.Urgent()
                         ? URGENT_WORK_TASKS.RandomElement().Select(x => new DialogLine(interactor, x))
@@ -167,6 +168,7 @@ namespace LD58.World.Objectives
                                 interactor, 
                                 (Interactor _) =>
                                 {
+                                    interactor.parent.inventory.AddItem(work.Urgent() ? KnownItems.URGENT_WORK_ITEM : KnownItems.WORK_ITEM);
                                     work.Complete();
                                     progress++;
                                     freeTables.Add(table);
