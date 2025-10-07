@@ -61,8 +61,8 @@
   <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosFramework.IO.targets" />
   <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosFramework.Math.targets" />
   <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosFramework.Shapes.targets" />
-  <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosFramework.Sound.targets" />
-  <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosFramework.Sound.OpenAL.targets" />
+  <!-- <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosFramework.Sound.targets" /> -->
+  <!-- <Import Project="$(ChaosPresets_References)/ProjectReferences/ChaosFramework.Sound.OpenAL.targets" /> -->
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
