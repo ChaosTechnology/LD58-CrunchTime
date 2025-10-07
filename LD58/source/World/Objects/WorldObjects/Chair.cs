@@ -1,10 +1,15 @@
+using ChaosFramework.Collections;
 using ChaosUtil.Primitives;
+using System.Linq;
 using SysCol = System.Collections.Generic;
 
 namespace LD58.World.Objects.WorldObjects
 {
+    using ChaosFramework.Math.Vectors;
     using Constants;
+    using Interaction.Steps;
     using Inventory;
+    using Player;
 
     [DefaultInstancer(64, "objects/Chair.gmdl", "objects/Kitchen.mat")]
     class Chair
@@ -14,7 +19,7 @@ namespace LD58.World.Objects.WorldObjects
 
         static readonly SysCol.Dictionary<string, Item[]> stocksByName = new SysCol.Dictionary<string, Item[]>()
         {
-            ["Bedroom"] = new   [] {
+            ["Bedroom"] = new[] {
                 KnownItems.KEY_CHAIN,
             },
         };
@@ -24,5 +29,9 @@ namespace LD58.World.Objects.WorldObjects
             Item[] a;
             return stocksByName.TryGetValue(name ?? "", out a) ? a : Array<Item>.empty;
         }
+
+        public override bool Interact(Interactor interactor, Vector2i interactAt)
+            => EnumerateStockOptions(interactor).Any(Linq.PredicateTrue<Choice.Option>)
+            && base.Interact(interactor, interactAt);
     }
 }
