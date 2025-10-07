@@ -18,6 +18,7 @@ namespace LD58.World.Objects.WorldObjects
             for (int i = 0; i < 4; ++i) yield return KnownItems.CLEAN_PLATE;
             for (int i = 0; i < 3; ++i) yield return KnownItems.CLEAN_BOWL;
             for (int i = 0; i < 6; ++i) yield return KnownItems.CLEAN_CUP;
+            for (int i = 0; i < 3; ++i) yield return KnownItems.CLEAN_GLASS;
         }
 
         public override bool Interact(Interactor interactor, Vector2i interactAt)

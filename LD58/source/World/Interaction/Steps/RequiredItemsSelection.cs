@@ -203,7 +203,7 @@ namespace LD58.World.Interaction.Steps
             foreach (Requirement req in requirements)
             {
                 int count;
-                if (!traitCounts.TryGetValue(req.trait, out count))
+                if (!traitCounts.TryGetValue(req.trait, out count) || count < req.count)
                     return req.failureText;
             }
 

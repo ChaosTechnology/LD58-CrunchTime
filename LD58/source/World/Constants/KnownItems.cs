@@ -41,7 +41,7 @@ namespace LD58.World.Constants
         public static readonly Item KEY_CHAIN = new Item("Key chain", Traits.OpensDoor | Traits.StartsCar);
 
         public static readonly Item CLEAN_PLATE = new Item("Plate", Traits.Dish);
-        public static readonly Item CLEAN_BOWL = new Item("Bowl", Traits.Dish);
+        public static readonly Item CLEAN_BOWL = new Item("Bowl", Traits.Dish | Traits.LiquidContainer);
         public static readonly Item CLEAN_CUP = new Item("Cup", Traits.LiquidContainer);
         public static readonly Item CLEAN_GLASS = new Item("Glass", Traits.LiquidContainer);
 
