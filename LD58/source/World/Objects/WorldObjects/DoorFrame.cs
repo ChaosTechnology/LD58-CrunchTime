@@ -16,7 +16,7 @@ namespace LD58.World.Objects.WorldObjects
         protected virtual Vector2i[] doorFramePositions => new[] { new Vector2i(0, 0), new Vector2i(1, 0) };
 
         [BoneParameter]
-        bool locked = false;
+        protected bool locked = false;
 
         protected override IEnumerable<Vector2i> RelativeOffsetsForOccupiedTiles()
             => doorMatPositions.Concat(doorFramePositions);
