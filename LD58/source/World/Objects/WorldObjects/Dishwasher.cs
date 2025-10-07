@@ -1,5 +1,6 @@
+using ChaosFramework.Collections;
 using ChaosFramework.Math.Vectors;
-using System.Collections.Generic;
+using SysCol = System.Collections.Generic;
 
 namespace LD58.World.Objects.WorldObjects
 {
@@ -12,23 +13,24 @@ namespace LD58.World.Objects.WorldObjects
     class Dishwasher
         : StockedInteractible
     {
-        protected override IEnumerable<Item> GetInitialStock()
+        protected override SysCol.IEnumerable<Item> GetInitialStock()
         {
-            yield return KnownItems.CLEAN_PLATE;
+            for (int i = 0; i < 4; ++i) yield return KnownItems.CLEAN_PLATE;
+            for (int i = 0; i < 3; ++i) yield return KnownItems.CLEAN_BOWL;
+            for (int i = 0; i < 6; ++i) yield return KnownItems.CLEAN_CUP;
         }
 
         public override bool Interact(Interactor interactor, Vector2i interactAt)
         {
+            LinkedList<Choice.Option> options = new LinkedList<Choice.Option>(EnumerateStockOptions(interactor));
+            options.Add(new Choice.Option("Leave."));
+
             if (stock.Contains(KnownItems.CLEAN_PLATE))
                 interactor.AddInteraction(
                     new Choice(
                         interactor,
-                        "Take a plate?",
-                        new Choice.Option("Yes.",
-                            new DialogLine(interactor, "Took plate."),
-                            new AddItem(interactor, KnownItems.CLEAN_PLATE)
-                            ),
-                        new Choice.Option("No")
+                        "Take dishes?",
+                        options.ToArray()
                         )
                     );
             else
