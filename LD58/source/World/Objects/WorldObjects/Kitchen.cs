@@ -41,7 +41,6 @@ namespace LD58.World.Objects.WorldObjects
                 else
                 {
                     LinkedList<Choice.Option> options = new LinkedList<Choice.Option>();
-                    options.Add(new Choice.Option("Nah, I'm good."));
                     foreach (Tuple<Item, Item> _incredient in incredients)
                     {
                         Tuple<Item, Item> incredient = _incredient;
@@ -51,6 +50,7 @@ namespace LD58.World.Objects.WorldObjects
                             new CustomAction(interactor, (Interactor i) => i.parent.inventory.Remove(incredient.Item1))
                             ));
                     }
+                    options.Add(new Choice.Option("Nah, I'm good."));
 
                     interactor.AddInteraction(new Choice(interactor, "Cook something?", options.ToArray()));
                 }

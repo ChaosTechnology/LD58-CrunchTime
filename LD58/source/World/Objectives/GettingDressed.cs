@@ -26,6 +26,9 @@ namespace LD58.World.Objectives
             if (wardrobe != null)
             {
                 interactor.AddInteraction(new Choice(interactor, "I can get dressed here...",
+                    new Choice.Option("Rummage through this wardrobe...",
+                        new CustomAction(interactor, (Interactor i) => interactible.Interact(interactor, interactAt))
+                        ),
                     new Choice.Option("Choose clothes...", new CustomAction(interactor, (Interactor i) =>
                         i.AddInteraction(new RequiredItemsSelection(
                             i,
@@ -35,9 +38,6 @@ namespace LD58.World.Objectives
                             Complete
                             ))
                         )),
-                    new Choice.Option("Rummage through this wardrobe...",
-                        new CustomAction(interactor, (Interactor i) => interactible.Interact(interactor, interactAt))
-                        ),
                     new Choice.Option("Leave")
                     ));
                 return true;
