@@ -26,7 +26,7 @@ namespace LD58.World.Objects.WorldObjects
             LinkedList<Choice.Option> options = new LinkedList<Choice.Option>(EnumerateStockOptions(interactor));
             options.Add(new Choice.Option("Leave."));
 
-            if (stock.Contains(KnownItems.CLEAN_PLATE))
+            if (!stock.Empty())
                 interactor.AddInteraction(
                     new Choice(
                         interactor,
