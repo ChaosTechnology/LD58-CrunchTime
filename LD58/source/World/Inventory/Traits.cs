@@ -8,7 +8,7 @@ namespace LD58.World.Inventory
         Invisible = 1,
         Weird = 1 << 1,
         Distressing = 1 << 2,
-        RESERVED_EMOTION_2 = 1 << 3,
+        Satisfying = 1 << 3,
         RESERVED_EMOTION_3 = 1 << 4,
         RESERVED_EMOTION_4 = 1 << 5,
         Food = 1 << 6,
