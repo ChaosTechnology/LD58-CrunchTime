@@ -1,13 +1,14 @@
 using System.Linq;
+using ChaosFramework.Collections;
 using ChaosFramework.Components;
 using ChaosFramework.Math.Vectors;
 using ChaosUtil.Primitives;
-using SysCol = System.Collections.Generic;
 using static ChaosFramework.Math.Clamping;
+using SysCol = System.Collections.Generic;
 
 namespace LD58.World.Objectives
 {
-    using ChaosFramework.Collections;
+    using Interaction;
     using Interaction.Steps;
     using Objects;
     using Objects.WorldObjects;
@@ -64,13 +65,51 @@ namespace LD58.World.Objectives
 
         static readonly string SUPER_DONE_THOUGHT = "Wowiee, I have done, like, the work for five whole days just now!\nI really need a break...";
 
+        static readonly string[] NORMAL_WORK_TASKS = new[]
+        {
+            "Yet another off-by-one error.\nHow boring...",
+            "Seems like this document is malformed.\nWho wrote this parser anyways?",
+            "This code looks like it was written by a smashed pavian!",
+            "I'm just gonna delete this...\nHopefully no one uses this feature.",
+            "Soooo much spaghetti code...",
+            "This bug fix probably introduces 5 new bugs in the process!",
+        };
+
+        static readonly string[][] URGENT_WORK_TASKS = new[]
+        {
+            new[]
+            {
+                "WHAT THE HECK IS THIS?!",
+                "They just put a DELETE statement there?!?\nThat's hundreds of data sets DESTROYED!",
+                "That'll do some serious damage to our reputation!",
+            },
+            new[]
+            {
+                "WHO IS RESPONSIBLE FOR THIS PILE OF GARBAGE?!",
+                "A toddler could write better code than this just by screaming around!",
+                "The cleanup for this will take forever!",
+            },
+            new[]
+            {
+                "IDIOTS! IDIOTS! IDIOTS!!!",
+                "Learn the damn difference between a set and a list!\nThey're different things for a reason!",
+                "Now I have to write ANOTHER duplicate elimination routine\nthat'll waste CPU for absolutely no gain!",
+            },
+            new[]
+            {
+                "WHYYYYYYYYYYYYY???",
+                "Who thought it was a good idea to connect to the database...\nFOR EVERY SINGLE ITEM!",
+                "No wonder that we need to restock on hardware every other month!",
+            }
+        };
+
         const int REQUIRED_WORK_ITEMS = 15;
 
         SysCol.Dictionary<Interactor, UserInteractionStatus> interactionStatus = new SysCol.Dictionary<Interactor, UserInteractionStatus>();
 
         SysCol.HashSet<OfficeTable> freeTables = new SysCol.HashSet<OfficeTable>();
         float newWorkTimer, speed;
-        bool finished;
+        bool failure;
 
         int progress;
 
@@ -118,15 +157,23 @@ namespace LD58.World.Objectives
             {
                 WorkItem work = table.EnumerateChildren<WorkItem>(false).SingleOrDefault();
                 if (work != null && table.FacingScreenZero(interactor.parent.direction) ^ work.isRightSide)
+                {
+                    SysCol.IEnumerable<InteractionStep> dialogLines = work.Urgent()
+                        ? URGENT_WORK_TASKS.RandomElement().Select(x => new DialogLine(interactor, x))
+                        : Util.Yield(new DialogLine(interactor, NORMAL_WORK_TASKS.RandomElement()));
                     interactor.AddInteraction(
-                        new DialogLine(interactor, "Another off by one error."),
-                        new CustomAction(interactor, (Interactor _) =>
-                        {
-                            work.Complete();
-                            progress++;
-                            freeTables.Add(table);
-                        })
+                        dialogLines.Concat(Util.Yield(
+                            new CustomAction(
+                                interactor, 
+                                (Interactor _) =>
+                                {
+                                    work.Complete();
+                                    progress++;
+                                    freeTables.Add(table);
+                                })
+                            ))
                         );
+                }
                 else if (table.FacingAnyScreen(interactor.parent.direction))
                     interactor.AddInteraction(
                         new DialogLine(interactor, "This isn't pretty, but it doesn't need my immediate attention.")
@@ -205,7 +252,7 @@ namespace LD58.World.Objectives
 
                 if (chosen == null) // everything is broken
                 {
-                    if (!finished)
+                    if (!failure)
                         foreach (Interactor interactor in scene.EnumerateChildren<Interactor>(true))
                             interactor.AddInteraction(
                                 new DialogLine(interactor, "Welp, everthing is broken now..."),
@@ -213,7 +260,7 @@ namespace LD58.World.Objectives
                                 new CustomAction(interactor, Complete)
                                 );
 
-                    finished = true;
+                    failure = true;
                 }
                 else
                 {
@@ -226,12 +273,14 @@ namespace LD58.World.Objectives
 
         void Complete(Interactor _)
         {
-            foreach (var door in breakRoomDoors)
+            foreach (DoorFrame door in breakRoomDoors)
                 door.Unlock();
 
             bossOfficeDoor.Unlock();
-            foreach (WorkItem workItem in scene.EnumerateChildren<WorkItem>(true))
-                workItem.Complete();
+
+            if (!failure)
+                foreach (WorkItem workItem in scene.EnumerateChildren<WorkItem>(true))
+                    workItem.Complete();
 
             scene.SetObjective<LunchBreak>();
         }
