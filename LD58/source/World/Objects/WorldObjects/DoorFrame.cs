@@ -1,8 +1,5 @@
-using ChaosFramework.Components;
-using ChaosFramework.Math.Vectors;
 using ChaosFramework.Math;
-using ChaosFramework.Graphics.OpenGl;
-using ChaosFramework.Graphics;
+using ChaosFramework.Math.Vectors;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,18 +12,14 @@ namespace LD58.World.Objects.WorldObjects
     class DoorFrame
         : Interactible
     {
-        static readonly Vector2i[] DOOR_MAT_POSITIONS = new[] { new Vector2i(0, -1), new Vector2i(1, -1) };
-        static readonly Vector2i[] FRAME_POSITIONS = new[] { new Vector2i(0, 0), new Vector2i(1, 0) };
+        protected virtual Vector2i[] doorMatPositions => new[] { new Vector2i(0, -1), new Vector2i(1, -1) };
+        protected virtual Vector2i[] doorFramePositions => new[] { new Vector2i(0, 0), new Vector2i(1, 0) };
 
+        [BoneParameter]
         bool locked = false;
 
-        protected override void Create(CreateParameters args)
-        {
-            base.Create(args);
-        }
-
         protected override IEnumerable<Vector2i> RelativeOffsetsForOccupiedTiles()
-            => DOOR_MAT_POSITIONS.Concat(FRAME_POSITIONS);
+            => doorMatPositions.Concat(doorFramePositions);
 
         public override bool CanStepOn(Vector2i pos)
         {
@@ -46,7 +39,7 @@ namespace LD58.World.Objects.WorldObjects
             => false;
 
         public bool OnDoorMat(Vector2i pos)
-            => TransformRelativeTilePositions(DOOR_MAT_POSITIONS).Contains(pos);
+            => TransformRelativeTilePositions(doorMatPositions).Contains(pos);
 
         public void Lock()
             => locked = true;

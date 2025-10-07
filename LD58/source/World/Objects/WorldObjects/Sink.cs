@@ -23,7 +23,7 @@ namespace LD58.World.Objects.WorldObjects
                     new Choice(interactor, "I can clean my hands here...",
                         new Choice.Option(
                             "Wash hands",
-                            new CustomAction(interactor, () => inventory.Remove(KnownItems.DIRTY_HANDS, all: true))
+                            new CustomAction(interactor, (Interactor _) => inventory.Remove(KnownItems.DIRTY_HANDS, all: true))
                             ),
                         new Choice.Option("Leave")
                         )

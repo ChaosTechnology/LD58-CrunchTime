@@ -52,7 +52,7 @@ namespace LD58.World.Objectives
                 if (work != null && table.FacingScreenZero(interactor.parent.direction) ^ work.isRightSide)
                     interactor.AddInteraction(
                         new DialogLine(interactor, "Another off by one error."),
-                        new CustomAction(interactor, () =>
+                        new CustomAction(interactor, (Interactor _) =>
                         {
                             work.Complete();
                             progress++;
@@ -108,7 +108,7 @@ namespace LD58.World.Objectives
             }
         }
 
-        void Complete()
-            => scene.SetObjective<Hygiene>();
+        void Complete(Interactor interactor)
+            => scene.SetObjective<LunchBreak>();
     }
 }

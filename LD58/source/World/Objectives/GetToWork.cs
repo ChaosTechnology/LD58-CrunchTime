@@ -16,7 +16,7 @@ namespace LD58.World.Objectives
         static readonly RequiredItemsSelection.Requirement[] requirements
             = new RequiredItemsSelection.Requirement[]
         {
-            new RequiredItemsSelection.Requirement(Traits.OpensApartmentDoor, 1, "The door is still locked."),
+            new RequiredItemsSelection.Requirement(Traits.OpensDoor, 1, "The door is still locked."),
             new RequiredItemsSelection.Requirement(Traits.StartsCar, 1, "Yeah, but how do I start my car?"),
         };
 

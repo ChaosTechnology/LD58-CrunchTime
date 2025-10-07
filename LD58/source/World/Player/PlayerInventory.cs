@@ -42,9 +42,6 @@ namespace LD58.World.Player
                              ;
 #endif
 
-            foreach (Item item in InitialInventory.INITIAL_INVENTORY)
-                itemBag.Add(item);
-
             UpdateText();
         }
 

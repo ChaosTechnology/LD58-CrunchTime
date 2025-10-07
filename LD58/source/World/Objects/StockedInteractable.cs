@@ -56,7 +56,7 @@ namespace LD58.World.Objects
                     $"{i.Item1.displayName} x{i.Item2}",
                     new InteractionStep[] {
                         new AddItem(interactor, i.Item1),
-                        new CustomAction(interactor, () => stock.Remove(i.Item1))
+                        new CustomAction(interactor, (Interactor _) => stock.Remove(i.Item1))
                         }
                     );
             }

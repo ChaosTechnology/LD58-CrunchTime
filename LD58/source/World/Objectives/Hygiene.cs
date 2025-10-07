@@ -18,6 +18,12 @@ namespace LD58.World.Objectives
         {
             base.Create(cparams);
             scene.Find<DoorFrame>("Apartment Door").Lock();
+
+            foreach (Player p in scene.EnumerateChildren<Player>(false))
+            {
+                p.inventory.AddItem(KnownItems.HELD_IN_POOP);
+                p.inventory.AddItem(KnownItems.BODY_GREASE);
+            }
         }
 
         protected override string GetText()
@@ -61,7 +67,7 @@ namespace LD58.World.Objectives
             return base.Interact(interactor, interactible, interactAt);
         }
 
-        void Complete()
+        void Complete(Interactor interactor)
         {
             bathroomDoor.Unlock();
             scene.SetObjective<GettingDressed>();

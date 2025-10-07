@@ -36,10 +36,24 @@ namespace LD58.World.Constants
         public static readonly Item GARBAGE_BAG = new Item("Garbage bag", Traits.ClothingTop | Traits.ClothingBottom | Traits.Weird);
 
         // Get to work
-        public static readonly Item CROWBAR = new Item("Crowbar", Traits.OpensApartmentDoor);
+        public static readonly Item CROWBAR = new Item("Crowbar", Traits.OpensDoor);
         public static readonly Item SHORTWIRE = new Item("Shortwire", Traits.StartsCar);
-        public static readonly Item KEY_CHAIN = new Item("Key chain", Traits.OpensApartmentDoor | Traits.StartsCar);
+        public static readonly Item KEY_CHAIN = new Item("Key chain", Traits.OpensDoor | Traits.StartsCar);
 
         public static readonly Item CLEAN_PLATE = new Item("Plate", Traits.Dish);
+
+        // Lunch break
+        public static readonly Item DONUT = new Item("Donut", Traits.Food);
+        public static readonly Item COFFEE_BEANS = new Item("Coffee Beans", Traits.Incredient | Traits.Food | Traits.Caffeine);
+        public static readonly Item COFFEE = new Item("Coffee", Traits.Incredient | Traits.Beverage | Traits.Caffeine);
+        public static readonly Item COLD_COFFEE = new Item("Cold Coffee", Traits.Beverage | Traits.Caffeine);
+        public static readonly Item SOFT_DRINK = new Item("Soft drink", Traits.Beverage);
+        public static readonly Item ENERGY_DRINK = new Item("Energy drink", Traits.Beverage | Traits.Caffeine);
+        public static readonly Item SMOKY_IRISH_WHISKEY = new Item("Smoky Irish Whiskey", Traits.Beverage | Traits.Alcohol);
+        public static readonly Item SCOTCH = new Item("Scotch", Traits.Beverage | Traits.Alcohol);
+        public static readonly Item GIN = new Item("London Dry Gin", Traits.Beverage | Traits.Alcohol);
+        public static readonly Item TONIC_WATER = new Item("Tonic Water", Traits.Beverage);
+        public static readonly Item VODKA = new Item("Vodka", Traits.Beverage | Traits.Alcohol);
+        public static readonly Item SECRET_ROOM_KEY = new Item("Suspicious Key", Traits.OpensDoor);
     }
 }

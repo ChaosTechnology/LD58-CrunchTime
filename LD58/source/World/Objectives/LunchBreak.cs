@@ -1,12 +1,14 @@
-﻿using ChaosFramework.Components;
+using ChaosFramework.Components;
 using ChaosFramework.Math.Vectors;
 
 namespace LD58.World.Objectives
 {
     using Interaction.Steps;
     using Objects;
+    using Inventory;
     using Objects.WorldObjects;
     using Player;
+    using Constants;
 
     class LunchBreak
         : Objective
@@ -17,6 +19,14 @@ namespace LD58.World.Objectives
         {
             base.Create(cparams);
             myDesk = scene.Find<OfficeTable>("MyDesk");
+
+            foreach (Player p in scene.EnumerateChildren<Player>(false))
+            {
+                p.inventory.AddItem(KnownItems.HELD_IN_POOP);
+                foreach (System.Tuple<Item, int> i in p.inventory)
+                    if (i.Item1.traits.HasFlag(Traits.Consumed))
+                        p.inventory.Remove(i.Item1, true);
+            }
         }
 
         protected override string GetText()

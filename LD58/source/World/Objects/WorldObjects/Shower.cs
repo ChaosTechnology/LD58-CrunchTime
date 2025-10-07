@@ -45,7 +45,7 @@ namespace LD58.World.Objects.WorldObjects
                 choiceText = "My hands are dirty...";
                 options.Add(new Choice.Option(
                     "Wash hands",
-                    new CustomAction(interactor, () => inventory.Remove(KnownItems.DIRTY_HANDS, all: true))
+                    new CustomAction(interactor, (Interactor _) => inventory.Remove(KnownItems.DIRTY_HANDS, all: true))
                     ));
             }
 
@@ -54,7 +54,7 @@ namespace LD58.World.Objects.WorldObjects
                 choiceText = "I feel greasy and dirty all over!";
                 options.Add(new Choice.Option(
                     "Take a shower",
-                    new CustomAction(interactor, () =>
+                    new CustomAction(interactor, (Interactor _) =>
                     {
                         inventory.Remove(KnownItems.DIRTY_HANDS, all: true);
                         inventory.Remove(KnownItems.BODY_GREASE, all: true);
