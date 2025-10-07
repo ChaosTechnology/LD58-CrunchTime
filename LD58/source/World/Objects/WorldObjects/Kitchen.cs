@@ -29,7 +29,7 @@ namespace LD58.World.Objects.WorldObjects
                             incredients.Add(new Tuple<Item, Item>(
                                 i.Item1,
                                 new Item(
-                                    $"Fried {i.Item1.displayName}",
+                                    $"Cooked {i.Item1.displayName}",
                                     Traits.Food | i.Item1.traits & ~Traits.Incredient
                                     )
                                 ));
