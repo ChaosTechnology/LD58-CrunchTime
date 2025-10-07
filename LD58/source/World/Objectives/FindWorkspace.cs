@@ -1,6 +1,5 @@
 using ChaosFramework.Components;
 using ChaosFramework.Math.Vectors;
-using ChaosFramework.Shapes.Rigging;
 using System;
 
 namespace LD58.World.Objectives
@@ -25,9 +24,7 @@ namespace LD58.World.Objectives
                             goto ok;
 
             throw new Exception("Workplace not found. Too bad.");
-        ok:
-
-            myDesk.AddComponent<Highlight>(CreateParameters.Create(myDesk.bone));
+        ok:;
         }
 
         protected override string GetText()

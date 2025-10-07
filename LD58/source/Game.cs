@@ -83,8 +83,8 @@ namespace LD58
             textRenderer = TextRenderer.Create(graphics, 1000, 200000, 10000, false, textFont);
             textBuffer = textRenderer.CreateRenderContext();
 
-            Stage home = new Stage(this, assetSource, "home");
-            home.SetObjective<World.Objectives.Hygiene>();
+            Stage home = new Stage(this, assetSource, "office");
+            home.SetObjective<World.Objectives.FindWorkspace>();
             scenes.Add(home);
 
             window.BackgroundImage.Dispose();
