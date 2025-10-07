@@ -5,18 +5,26 @@ using ChaosFramework.Graphics.Text;
 using ChaosFramework.Math;
 using System;
 using System.Collections;
+using System.Linq;
+using L = ChaosFramework.Collections.Linq;
 using SysCol = System.Collections.Generic;
 
 namespace LD58.World.Player
 {
     using Inventory;
-    using LD58.World.Constants;
 
     public class PlayerInventory
         : StrictComponent<Player>
         , SysCol.IEnumerable<System.Tuple<Item, int>>
     {
         // TODO: be fancy and smoothly reorder lines in graphical display
+
+        const float CHAR_SIZE = 0.05f;
+        const float MARGIN_X = 0.025f;
+        const float MARGIN_Y = 0.0125f;
+
+        static bool Hidden(Tuple<Item, int> item)
+            => item.Item1.traits.HasFlag(Traits.Invisible);
 
         readonly ItemBag itemBag = new ItemBag();
 
@@ -31,14 +39,14 @@ namespace LD58.World.Player
             text = new Text(parent.scene.game.textRenderer, 4096);
             text.color = Rgba.OPAQUE_WHITE;
             float tan = parent.scene.fullScreenView.tan;
-            text.transform = Matrix.Scaling(0.1f)
-                           * Matrix.Translation(parent.scene.fullScreenView.screenRatio * -tan, tan, 0)
+            text.transform = Matrix.Scaling(CHAR_SIZE)
+                           * Matrix.Translation(parent.scene.fullScreenView.screenRatio * -tan + MARGIN_X, tan - MARGIN_Y, 0)
                            ;
 #if DEBUG
             traits = new Text(parent.scene.game.textRenderer, 4096);
             traits.color = Rgba.OPAQUE_WHITE;
-            traits.transform = Matrix.Scaling(0.1f)
-                             * Matrix.Translation(parent.scene.fullScreenView.screenRatio * tan, tan, 0)
+            traits.transform = Matrix.Scaling(CHAR_SIZE)
+                             * Matrix.Translation(parent.scene.fullScreenView.screenRatio * tan - MARGIN_X, tan - MARGIN_Y, 0)
                              ;
 #endif
 
@@ -77,11 +85,16 @@ namespace LD58.World.Player
                     bldr.AppendLine($"{i.Item1.displayName} x{i.Item2}");
 
 #if DEBUG
-            bldr.AppendLine();
-            bldr.AppendLine("Hidden:");
-            foreach (System.Tuple<Item, int> i in itemBag)
-                if (i.Item1.traits.HasFlag(Traits.Invisible))
+            SysCol.IEnumerable<Tuple<Item, int>> invisible = itemBag.Where(Hidden);
+            if (invisible.Any(L.PredicateTrue))
+            {
+                if (bldr.Length > 0)
+                    bldr.AppendLine();
+
+                bldr.AppendLine("Hidden:");
+                foreach (Tuple<Item, int> i in invisible)
                     bldr.AppendLine($"{i.Item1.displayName} x{i.Item2}");
+            }
 #endif
 
             text.UpdateText(parent.scene.game.textFont, bldr.ToString(), LayoutInfo.TOP_LEFT);
