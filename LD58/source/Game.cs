@@ -6,8 +6,6 @@ using ChaosFramework.Graphics.OpenGl.Text;
 using ChaosFramework.Input;
 using ChaosFramework.Input.RawInput;
 using ChaosFramework.IO.Streams;
-using ChaosFramework.Sound;
-using ChaosFramework.Sound.OpenAL;
 using ChaosUtil.Platform.Windows.WinAPI.winuser;
 using ChaosUtil.Serialization.Text;
 using OpenTK.Graphics.OpenGL;
@@ -25,9 +23,9 @@ namespace LD58
         public StreamSource assetSource { get; private set; }
 
         public Graphics graphics { get; private set; }
-        public Audio audio { get; private set; }
+        // public Audio audio { get; private set; }
         public InputContext input { get; private set; }
-        public SoundPool sounds { get; private set; }
+        // public SoundPool sounds { get; private set; }
         public TextRenderer textRenderer { get; private set; }
         public TextRenderer.TextBuffer textBuffer { get; private set; }
 
@@ -36,7 +34,7 @@ namespace LD58
         public TextureContainer textures { get; private set; }
         public ShaderContainer shaders { get; private set; }
         public ShaderCodeContainer shaderCode { get; private set; }
-        public SoundDataContainer samples { get; private set; }
+        // public SoundDataContainer samples { get; private set; }
         public MeshContainer meshes { get; private set; }
         public FontContainer fonts { get; private set; }
 
@@ -66,8 +64,8 @@ namespace LD58
 
             assetSource = new ChaosFramework.IO.ChaosArchive(new System.IO.FileInfo("assets.cha"), false);
 
-            audio = new Audio();
-            samples = new SoundDataContainer(assetSource, false);
+            // audio = new Audio();
+            // samples = new SoundDataContainer(assetSource, false);
             input = new InputContext(typeof(InputLayers), context => new RawInputDeviceHost(context));
 
             graphics = new Graphics(panel, 3, 3);
@@ -79,7 +77,7 @@ namespace LD58
             shaders = new ShaderContainer(assetSource, graphics, shaderCode);
             animations = new AnimationContainer(assetSource, false);
 
-            sounds = new SoundPool(audio, samples);
+            // sounds = new SoundPool(audio, samples);
 
             textFont = fonts.Load("fonts/text.chf2", this);
             textRenderer = TextRenderer.Create(graphics, 1000, 200000, 10000, false, textFont);
@@ -107,7 +105,7 @@ namespace LD58
                         );
 
             Dispatcher.dispatcher.ExecuteDispatchers(10);
-            sounds.Update();
+            // sounds.Update();
             updateInputDeviceTimer -= time.time.frameTime;
             if (updateInputDeviceTimer < 0)
             {
@@ -163,9 +161,9 @@ namespace LD58
             shaderCode?.Dispose();
             animations?.Dispose();
             graphics?.Dispose();
-            sounds?.Dispose();
-            samples.Dispose();
-            audio.Dispose();
+            // sounds?.Dispose();
+            // samples.Dispose();
+            // audio.Dispose();
         }
     }
 }
