@@ -56,6 +56,6 @@ namespace LD58.World.Constants
         public static readonly Item GIN = new Item("London Dry Gin", Traits.Beverage | Traits.Alcohol);
         public static readonly Item TONIC_WATER = new Item("Tonic Water", Traits.Beverage);
         public static readonly Item VODKA = new Item("Vodka", Traits.Beverage | Traits.Alcohol);
-        public static readonly Item SECRET_ROOM_KEY = new Item("Suspicious Key", Traits.OpensDoor);
+        public static readonly Item SECRET_ROOM_KEY = new Key("Suspicious Key", "Secret Room");
     }
 }

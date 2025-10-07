@@ -1,12 +1,14 @@
 using ChaosFramework.Math;
 using ChaosFramework.Math.Vectors;
 using System.Collections.Generic;
+using ChaosFramework.Graphics.OpenGl.Instancing;
 using System.Linq;
 
 namespace LD58.World.Objects.WorldObjects
 {
-    using ChaosFramework.Graphics.OpenGl.Instancing;
     using Player;
+    using Inventory;
+    using Interaction.Steps;
 
     [DefaultInstancer(64, "objects/Door Frame.gmdl", "objects/Kitchen.mat")]
     class DoorFrame
@@ -36,7 +38,39 @@ namespace LD58.World.Objects.WorldObjects
         }
 
         public override bool Interact(Interactor interactor, Vector2i interactAt)
-            => false;
+        {
+            if (locked && TransformRelativeTilePositions(doorFramePositions).Contains(interactAt))
+            {
+                interactor.AddInteraction(new DialogLine(interactor, "It's locked"));
+
+                Key key = (Key)interactor.parent.inventory.Where(CorrectKey).FirstOrDefault().Item1;
+                if (key != null)
+                {
+                    interactor.AddInteraction(
+                        new Choice(interactor,
+                            "Unlock?",
+                            new Choice.Option(
+                                "yes",
+                                new CustomAction(
+                                    interactor,
+                                    i =>
+                                    {
+                                        Unlock();
+                                        i.parent.inventory.Remove(key);
+                                    })
+                                ),
+                            new Choice.Option("no")
+                            )
+                       );
+                }
+
+                return true;
+            }
+            else return false;
+        }
+
+        bool CorrectKey(System.Tuple<Item, int> key)
+            => (key.Item1 as Key)?.doorName == name;
 
         public bool OnDoorMat(Vector2i pos)
             => TransformRelativeTilePositions(doorMatPositions).Contains(pos);

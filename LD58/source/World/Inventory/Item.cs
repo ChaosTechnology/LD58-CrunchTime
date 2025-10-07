@@ -15,15 +15,15 @@ namespace LD58.World.Inventory
             => displayName.GetHashCode();
 
         public static bool operator ==(Item a, Item b)
-            => a.displayName == b.displayName && a.traits == b.traits;
+            => a?.Equals(b) ?? (object)b == null;
 
         public static bool operator !=(Item a, Item b)
             => !(a == b);
 
-        public override bool Equals(object obj)
+        public override sealed bool Equals(object obj)
             => Equals(obj as Item);
 
-        public bool Equals(Item item)
-            => this == item;
+        public virtual bool Equals(Item item)
+            => (object)item != null && displayName == item.displayName && traits == item.traits;
     }
 }
