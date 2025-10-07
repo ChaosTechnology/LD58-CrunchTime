@@ -48,6 +48,12 @@ namespace LD58.World.Player
             UpdateText();
         }
 
+        public void CarryOver(PlayerInventory source)
+        {
+            itemBag.Transfer(source.itemBag);
+            UpdateText();
+        }
+
         public void AddItem(Item item)
         {
             itemBag.Add(item);

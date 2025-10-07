@@ -96,5 +96,8 @@ namespace LD58.World.Inventory
                 if (traits[i] > 0)
                     yield return new Tuple<Traits, int>((Traits)(1ul << i), traits[i]);
         }
+
+        public void Transfer(ItemBag other)
+            => items = new AdvancedLinkedList<Node>(other.items);
     }
 }

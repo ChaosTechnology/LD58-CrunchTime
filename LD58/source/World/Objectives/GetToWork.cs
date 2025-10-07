@@ -46,6 +46,18 @@ namespace LD58.World.Objectives
             stage.doUpdate = false;
             stage.doDraw = false;
             stage.SetObjective<FindWorkspace>();
+
+
+            Player oldPlayer = null;
+            foreach (Player s in scene.EnumerateChildren<Player>(false))
+                oldPlayer = s;
+
+            Player player = null;
+            foreach (Player s in stage.EnumerateChildren<Player>(false))
+                player = s;
+
+            player.inventory.CarryOver(oldPlayer.inventory);
+
             scene.game.scenes.Add(stage);
         }
     }
