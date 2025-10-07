@@ -22,7 +22,7 @@ namespace LD58.World.Objects.WorldObjects
             {
                 LinkedList<Tuple<Item, Item>> incredients = new LinkedList<Tuple<Item, Item>>();
                 foreach (Tuple<Item, int> i in interactor.parent.inventory)
-                    if (i.Item1.traits.HasFlag(Traits.Incredient))
+                    if (i.Item1.traits.HasFlag(Traits.Incredient) && !i.Item1.traits.HasFlag(Traits.Invisible))
                         if (i.Item1 == KnownItems.ESSENCE_OF_DARKNESS)
                             incredients.Add(new Tuple<Item, Item>(i.Item1, KnownItems.ETERNAL_DARKNESS));
                         else

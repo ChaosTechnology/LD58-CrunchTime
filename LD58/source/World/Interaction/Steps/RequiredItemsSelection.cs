@@ -63,7 +63,9 @@ namespace LD58.World.Interaction.Steps
                 selectionFilter |= requirement.trait;
 
             available = new LinkedList<System.Tuple<Item, int>>(
-                interactor.parent.inventory.Where(x => (x.Item1.traits & selectionFilter) != Traits.None)
+                interactor.parent.inventory
+                    .Where(x => (x.Item1.traits & selectionFilter) != Traits.None)
+                    .Where(x => !x.Item1.traits.HasFlag(Traits.Invisible))
                 );
         }
 

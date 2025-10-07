@@ -48,6 +48,17 @@ namespace LD58.World.Player
             traits.transform = Matrix.Scaling(CHAR_SIZE)
                              * Matrix.Translation(parent.scene.fullScreenView.screenRatio * tan - MARGIN_X, tan - MARGIN_Y, 0)
                              ;
+
+            foreach (Item item in new[] {
+                Constants.KnownItems.PANTS,
+                Constants.KnownItems.BACON,
+                Constants.KnownItems.BEER,
+                Constants.KnownItems.EGG,
+                Constants.KnownItems.CANDY_UNDIES,
+                Constants.KnownItems.BLACK_SUBSTANCE,
+                Constants.KnownItems.ESSENCE_OF_DARKNESS,
+                })
+                itemBag.Add(new Item($"Hidden Debug {item.displayName}", item.traits | Traits.Invisible));
 #endif
 
             UpdateText();
