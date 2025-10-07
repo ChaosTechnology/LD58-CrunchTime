@@ -28,6 +28,12 @@ namespace LD58.World.Objects.WorldObjects
                 KnownItems.TONIC_WATER,
                 KnownItems.GIN,
             },
+            ["Kitchen"] = new[] {
+                KnownItems.INSTANT_RAMEN,
+                KnownItems.BAG_OF_CHIPS,
+                KnownItems.BRADS_BENTO,
+                KnownItems.DEAD_RAT,
+            },
         };
 
         protected override SysCol.IEnumerable<Item> GetInitialStock()

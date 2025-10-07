@@ -30,6 +30,37 @@ namespace LD58.World.Objects.WorldObjects
                 KnownItems.DENIM_TROUSERS,
                 KnownItems.DENIM_TROUSERS,
                 KnownItems.TSHIRT,
+            },
+
+            ["Secret Room A"] = new[] {
+                KnownItems.SHOT_GLASS,
+                KnownItems.SHOT_GLASS,
+                KnownItems.SHOT_GLASS,
+                KnownItems.SHOT_GLASS,
+                KnownItems.SHOT_GLASS,
+                KnownItems.SHOT_GLASS,
+                KnownItems.SHOT_GLASS,
+                KnownItems.BEER_JAR,
+                KnownItems.BEER_JAR,
+                KnownItems.BEER_JAR,
+                KnownItems.BEER_JAR,
+                KnownItems.BEER_JAR,
+                KnownItems.STALE_BEER,
+                KnownItems.BAG_OF_CHIPS,
+                KnownItems.BAG_OF_CHIPS,
+                KnownItems.MOLTEN_ICE_CUBES,
+                KnownItems.MOLTEN_ICE_CUBES,
+                KnownItems.MOLTEN_ICE_CUBES,
+            },
+
+            ["Secret Room B"] = new[] {
+                KnownItems.DILDO,
+                KnownItems.LUBE,
+                KnownItems.LUBE,
+                KnownItems.NIPPLE_CLAMPS,
+                KnownItems.CANDY_UNDIES,
+                KnownItems.CANDY_UNDIES,
+                KnownItems.CANDY_UNDIES,
             }
         };
 

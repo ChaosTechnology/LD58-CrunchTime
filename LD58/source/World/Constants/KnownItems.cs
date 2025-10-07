@@ -12,7 +12,7 @@ namespace LD58.World.Constants
         public static readonly Item POOP = new Item("Poop", Traits.Weird | Traits.Food);
 
         // Kitchen
-        public static readonly Item BEER = new Item("Beer", Traits.Beverage);
+        public static readonly Item BEER = new Item("Beer", Traits.Beverage | Traits.Alcohol);
         public static readonly Item EXTRA_MOLDY_CHEESE = new Item("Extra moldy cheese", Traits.Weird | Traits.Food);
         public static readonly Item BLACK_SUBSTANCE = new Item("Unidentifiable black substance", Traits.Weird | Traits.Food | Traits.ClothingBottom);
 
@@ -62,5 +62,17 @@ namespace LD58.World.Constants
         public static readonly Item TONIC_WATER = new Item("Tonic Water", Traits.Beverage);
         public static readonly Item VODKA = new Item("Vodka", Traits.Beverage | Traits.Alcohol);
         public static readonly Item SECRET_ROOM_KEY = new Key("Suspicious Key", "Secret Room");
+        public static readonly Item BEER_JAR = new Item("Beer jar", Traits.LiquidContainer);
+        public static readonly Item MOLTEN_ICE_CUBES = new Item("Molten ice cubes", Traits.Beverage);
+        public static readonly Item SHOT_GLASS = new Item("Shot glass", Traits.LiquidContainer);
+        public static readonly Item STALE_BEER = new Item("Stale Beer", Traits.Beverage | Traits.LiquidContainer);
+        public static readonly Item CANDY_UNDIES = new Item("Candy undies", Traits.Food | Traits.Erotic | Traits.ClothingBottom);
+        public static readonly Item DILDO = new Item("Dildo", Traits.Satisfying | Traits.Erotic);
+        public static readonly Item LUBE = new Item("Lube", Traits.Beverage | Traits.Erotic | Traits.Weird);
+        public static readonly Item NIPPLE_CLAMPS = new Item("Nipple clamps", Traits.ClothingTop | Traits.Erotic | Traits.Weird);
+        public static readonly Item INSTANT_RAMEN = new Item("Instant ramen", Traits.Incredient);
+        public static readonly Item BAG_OF_CHIPS = new Item("Bag of chips", Traits.Food);
+        public static readonly Item BRADS_BENTO = new Item("Brad's bento", Traits.Food | Traits.Weird);
+        public static readonly Item DEAD_RAT = new Item("Dead rat", Traits.Food | Traits.Incredient | Traits.Weird);
     }
 }
