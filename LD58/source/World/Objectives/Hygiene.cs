@@ -2,6 +2,7 @@ using ChaosFramework.Math.Vectors;
 
 namespace LD58.World.Objectives
 {
+    using ChaosFramework.Components;
     using Constants;
     using Interaction.Steps;
     using Objects;
@@ -12,6 +13,12 @@ namespace LD58.World.Objectives
         : Objective
     {
         DoorFrame bathroomDoor;
+
+        protected override void Create(CreateParameters cparams)
+        {
+            base.Create(cparams);
+            scene.Find<DoorFrame>("Apartment Door").Lock();
+        }
 
         protected override string GetText()
             => "Do morning hygiene.";
