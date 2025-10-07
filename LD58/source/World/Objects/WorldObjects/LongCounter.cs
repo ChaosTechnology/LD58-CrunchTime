@@ -18,6 +18,16 @@ namespace LD58.World.Objects.WorldObjects
             ["Apartment"] = new[] {
                 KnownItems.SHORTWIRE,
             },
+            ["Minibar"] = new[] {
+                KnownItems.VODKA,
+                KnownItems.SMOKY_IRISH_WHISKEY,
+                KnownItems.SMOKY_IRISH_WHISKEY,
+                KnownItems.SCOTCH,
+                KnownItems.TONIC_WATER,
+                KnownItems.TONIC_WATER,
+                KnownItems.TONIC_WATER,
+                KnownItems.GIN,
+            },
         };
 
         protected override SysCol.IEnumerable<Item> GetInitialStock()

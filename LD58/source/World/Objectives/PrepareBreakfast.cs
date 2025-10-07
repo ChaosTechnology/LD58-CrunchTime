@@ -37,7 +37,19 @@ namespace LD58.World.Objectives
             return base.Interact(interactor, interactible, interactAt);
         }
 
-        void Complete(SysCol.Dictionary<Item, int> selectedItems)
-            => scene.SetObjective<GetToWork>();
+        void Complete(Interactor interactor, SysCol.Dictionary<Item, int> selectedItems)
+        {
+            foreach (SysCol.KeyValuePair<Item, int> item in selectedItems)
+                for (int i = 0; i < item.Value; ++i)
+                {
+                    interactor.parent.inventory.Remove(item.Key);
+                    interactor.parent.inventory.AddItem(new Item(
+                        $"Consumed {item.Key.displayName}",
+                        item.Key.traits | Traits.Consumed | Traits.Invisible
+                        ));
+                }
+
+            scene.SetObjective<GetToWork>();
+        }
     }
 }

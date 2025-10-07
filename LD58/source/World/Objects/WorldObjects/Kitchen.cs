@@ -48,7 +48,7 @@ namespace LD58.World.Objects.WorldObjects
                         options.Add(new Choice.Option(
                             incredient.Item1.displayName,
                             new AddItem(interactor, incredient.Item2),
-                            new CustomAction(interactor, () => interactor.parent.inventory.Remove(incredient.Item1))
+                            new CustomAction(interactor, (Interactor i) => i.parent.inventory.Remove(incredient.Item1))
                             ));
                     }
 

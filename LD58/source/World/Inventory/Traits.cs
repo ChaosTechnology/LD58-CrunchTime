@@ -2,7 +2,7 @@ namespace LD58.World.Inventory
 {
     [System.Flags]
     public enum Traits
-        : ushort
+        : uint
     {
         None = 0,
         Invisible = 1,
@@ -17,12 +17,21 @@ namespace LD58.World.Inventory
         CoversTop = 1 << 9,
         CoversBottom = 1 << 10,
         CoversFeet = 1 << 11,
-        ClothingTop = Clothing | CoversTop,
-        ClothingBottom = Clothing | CoversBottom,
-        ClothingFeet = Clothing | CoversFeet,
         Incredient = 1 << 12,
         Dish = 1 << 13,
         StartsCar = 1 << 14,
-        OpensApartmentDoor = 1 << 15,
+        OpensDoor = 1 << 15,
+        Consumed = 1 << 16,
+        Wearing = 1 << 17,
+        Caffeine = 1 << 18,
+        Alcohol = 1 << 19,
+
+        ClothingTop = Clothing | CoversTop,
+        ClothingBottom = Clothing | CoversBottom,
+        ClothingFeet = Clothing | CoversFeet,
+        WellFed = Food | Consumed,
+        Hydrated = Beverage | Consumed,
+        Caffeinated = Caffeine | Consumed,
+        Drunk = Alcohol | Consumed
     }
 }

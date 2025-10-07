@@ -55,7 +55,7 @@ namespace LD58.World.Objects.WorldObjects
             if (canPoop)
                 options.Add(new Choice.Option(
                     "Use",
-                    new CustomAction(interactor, () =>
+                    new CustomAction(interactor, (Interactor _) =>
                     {
                         playerInventory.Remove(KnownItems.HELD_IN_POOP);
                         playerInventory.AddItem(KnownItems.DIRTY_HANDS);
@@ -70,7 +70,7 @@ namespace LD58.World.Objects.WorldObjects
             {
                 options.Add(new Choice.Option(
                         "Flush",
-                        new CustomAction(interactor, () =>
+                        new CustomAction(interactor, (Interactor _) =>
                         {
                             hasContent = false;
                             userInteractionState.numTimesInteractedBeforeFlush = 0;
@@ -82,21 +82,21 @@ namespace LD58.World.Objects.WorldObjects
                     case 0:
                         options.Add(new Choice.Option(
                                 "Inspect",
-                                new CustomAction(interactor, () => userInteractionState.inspected++),
+                                new CustomAction(interactor, (Interactor _) => userInteractionState.inspected++),
                                 new DialogLine(interactor, "It stinks quite bad.")
                                 ));
                         break;
                     case 1:
                         options.Add(new Choice.Option(
                                 "Inspect...",
-                                new CustomAction(interactor, () => userInteractionState.inspected++),
+                                new CustomAction(interactor, (Interactor _) => userInteractionState.inspected++),
                                 new DialogLine(interactor, "I kinda like it though...")
                                 ));
                         break;
                     default:
                     options.Add(new Choice.Option(
                             "Collect",
-                            new CustomAction(interactor, () =>
+                            new CustomAction(interactor, (Interactor _) =>
                             {
                                 playerInventory.AddItem(KnownItems.POOP);
                                 playerInventory.AddItem(KnownItems.DIRTY_HANDS);
@@ -110,7 +110,7 @@ namespace LD58.World.Objects.WorldObjects
             else if (!clean)
                 options.Add(new Choice.Option(
                     "Clean",
-                    new CustomAction(interactor, () => clean = true),
+                    new CustomAction(interactor, (Interactor _) => clean = true),
                     new DialogLine(interactor, "What a chore.")
                     ));
 

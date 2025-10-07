@@ -29,7 +29,7 @@ namespace LD58.World.Interaction.Steps
             }
         }
 
-        public delegate void SuccessCallback(SysCol.Dictionary<Item, int> selectedItems);
+        public delegate void SuccessCallback(Interactor interactor, SysCol.Dictionary<Item, int> selectedItems);
 
         int cursor = 0;
         bool done = false;
@@ -92,7 +92,7 @@ namespace LD58.World.Interaction.Steps
                     if (cursor == available.length && GetFailedRequirement() == null)
                     {
                         done = true;
-                        callback(selection.ToDictionary(x => x.Item1, x => x.Item2));
+                        callback(interactor, selection.ToDictionary(x => x.Item1, x => x.Item2));
                     }
 
                     return true;

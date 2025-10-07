@@ -1,12 +1,13 @@
 using ChaosFramework.Math.Vectors;
+using System.Linq;
 using SysCol = System.Collections.Generic;
 
 namespace LD58.World.Objectives
 {
     using Interaction.Steps;
     using Inventory;
-    using Objects.WorldObjects;
     using Objects;
+    using Objects.WorldObjects;
     using Player;
 
     class GetToWork
@@ -15,7 +16,7 @@ namespace LD58.World.Objectives
         static readonly RequiredItemsSelection.Requirement[] requirements
             = new RequiredItemsSelection.Requirement[]
         {
-            new RequiredItemsSelection.Requirement(Traits.OpensApartmentDoor, 1, "The door is still locked."),
+            new RequiredItemsSelection.Requirement(Traits.OpensDoor, 1, "The door is still locked."),
             new RequiredItemsSelection.Requirement(Traits.StartsCar, 1, "Yeah, but how do I start my car?"),
         };
 
@@ -28,7 +29,8 @@ namespace LD58.World.Objectives
                     interactor,
                     "I guess I'll leave for work now... let's check my inventory:",
                     "Get going already!",
-                    requirements, Complete
+                    requirements,
+                    Complete
                     ));
 
                 return true;
@@ -40,23 +42,15 @@ namespace LD58.World.Objectives
         protected override string GetText()
             => "Get out to work.";
 
-        void Complete(SysCol.Dictionary<Item, int> selectedItems)
+        void Complete(Interactor interactor, SysCol.Dictionary<Item, int> selectedItems)
         {
             Stage stage = new Stage(scene.game, scene.game.assetSource, "office");
             stage.doUpdate = false;
             stage.doDraw = false;
             stage.SetObjective<FindWorkspace>();
 
-
-            Player oldPlayer = null;
-            foreach (Player s in scene.EnumerateChildren<Player>(false))
-                oldPlayer = s;
-
-            Player player = null;
-            foreach (Player s in stage.EnumerateChildren<Player>(false))
-                player = s;
-
-            player.inventory.CarryOver(oldPlayer.inventory);
+            Player newPlayer = stage.EnumerateChildren<Player>(false).Single();
+            newPlayer.inventory.CarryOver(interactor.parent.inventory);
 
             scene.game.scenes.Add(stage);
         }

@@ -26,16 +26,17 @@ namespace LD58.World.Objectives
             if (wardrobe != null)
             {
                 interactor.AddInteraction(new Choice(interactor, "I can get dressed here...",
-                    new Choice.Option("Choose clothes...", new CustomAction(interactor, () =>
-                        interactor.AddInteraction(new RequiredItemsSelection(
-                            interactor,
+                    new Choice.Option("Choose clothes...", new CustomAction(interactor, (Interactor i) =>
+                        i.AddInteraction(new RequiredItemsSelection(
+                            i,
                             "Choose clothes to wear:",
                             "Wear this!",
-                            requirements, _ => interactor.parent.scene.SetObjective<PrepareBreakfast>()
+                            requirements,
+                            Complete
                             ))
                         )),
                     new Choice.Option("Rummage through this wardrobe...",
-                        new CustomAction(interactor, () => interactible.Interact(interactor, interactAt))
+                        new CustomAction(interactor, (Interactor i) => interactible.Interact(interactor, interactAt))
                         ),
                     new Choice.Option("Leave")
                     ));
@@ -43,6 +44,21 @@ namespace LD58.World.Objectives
             }
 
             return interactible.Interact(interactor, interactAt);
+        }
+
+        void Complete(Interactor interactor, SysCol.Dictionary<Item, int> selectedItems)
+        {
+            foreach (SysCol.KeyValuePair<Item, int> item in selectedItems)
+                for (int i = 0; i < item.Value; ++i)
+                {
+                    interactor.parent.inventory.Remove(item.Key);
+                    interactor.parent.inventory.AddItem(new Item(
+                        $"Wearing {item.Key.displayName}",
+                        item.Key.traits | Traits.Wearing | Traits.Invisible
+                        ));
+                }
+
+            interactor.parent.scene.SetObjective<PrepareBreakfast>();
         }
 
         protected override string GetText()

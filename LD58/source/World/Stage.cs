@@ -30,6 +30,7 @@ namespace LD58.World
         static System.Type GetBoneType(Rig.Bone b)
             => boneTypeCache[GetBoneTypeName(b)];
 
+        public readonly string name;
         public readonly Vector2i size;
         readonly WorldObject[,] tiles;
 
@@ -41,6 +42,7 @@ namespace LD58.World
         public Stage(Game game, StreamSource source, string name)
             : base(game)
         {
+            this.name = name;
             Vector2i size = 0;
             SysCol.Dictionary<Vector2i, WorldObject> occupied = new SysCol.Dictionary<Vector2i, WorldObject>();
 

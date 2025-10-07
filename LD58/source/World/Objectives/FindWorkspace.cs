@@ -17,7 +17,9 @@ namespace LD58.World.Objectives
         {
             base.Create(cparams);
             myDesk = scene.Find<OfficeTable>("MyDesk");
-            myDesk.AddComponent<Highlight>(CreateParameters.Create(myDesk.bone));
+            scene.Find<DoorFrame>("Exit").Lock();
+            scene.Find<DoorFrame>("Boss Office").Lock();
+            scene.Find<DoorFrameSmall>("Secret Room").Lock();
         }
 
         protected override string GetText()
@@ -44,7 +46,7 @@ namespace LD58.World.Objectives
                 return base.Interact(interactor, interactible, interactAt);
         }
 
-        void Complete()
+        void Complete(Interactor interactor)
             => scene.SetObjective<DoWork>();
     }
 }
