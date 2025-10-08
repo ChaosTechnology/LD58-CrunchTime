@@ -1,12 +1,12 @@
-using System.Linq;
-using System.Text;
 using ChaosFramework.Collections;
 using ChaosFramework.Graphics.Colors;
 using ChaosFramework.Graphics.Text.Formatting;
 using ChaosFramework.Input.InputEvents;
 using ChaosFramework.Input.RawInput;
-using SysCol = System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using static ChaosFramework.Math.Clamping;
+using SysCol = System.Collections.Generic;
 
 namespace LD58.World.Interaction.Steps
 {
@@ -26,15 +26,17 @@ namespace LD58.World.Interaction.Steps
             public Traits trait;
             public readonly int count;
             public string failureText;
-            public Requirement(Traits traits, int count, string failureText)
+            public Requirement(Traits trait, int count, string failureText)
             {
-                this.trait = traits;
+                this.trait = trait;
                 this.count = count;
                 this.failureText = failureText;
             }
         }
 
         public delegate void SuccessCallback(Interactor interactor, SysCol.Dictionary<Item, int> selectedItems);
+
+        static readonly Rgba CHANGE_AMOUNT_DISABLED_COLOR = new Rgba(new Rgb(0.2f), 1);
 
         int cursor = 0;
         bool done = false;
@@ -168,11 +170,16 @@ namespace LD58.World.Interaction.Steps
                 itemCounts.TryGetValue(available.Item1, out selectedCount);
                 using (new ColoredTextScope(bldr, i++ == cursor ? new Rgba(1, 1, 0, 1) : Rgba.OPAQUE_WHITE))
                 {
-                    if (selectedCount > 0)
-                    {
-                        bldr.Append(selectedCount);
-                        bldr.Append("x");
-                    }
+                    if (selectedCount <= 0) bldr.Append(ColoredTextScope.GetColorCode(CHANGE_AMOUNT_DISABLED_COLOR));
+                    bldr.Append("< ");
+                    if (selectedCount <= 0) bldr.Append(ColoredTextScope.RESET_COLOR_CODE);
+
+                    bldr.Append(selectedCount);
+
+                    if (selectedCount >= available.Item2) bldr.Append(ColoredTextScope.GetColorCode(CHANGE_AMOUNT_DISABLED_COLOR));
+                    bldr.Append(" >");
+                    if (selectedCount >= available.Item2) bldr.Append(ColoredTextScope.RESET_COLOR_CODE);
+
                     bldr.Append('\t');
                     bldr.Append(available.Item1.displayName);
                 }
