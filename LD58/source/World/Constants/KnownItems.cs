@@ -30,10 +30,13 @@ namespace LD58.World.Constants
         public static readonly Item BLACK_SOCKS = new Item("Black Socks", Traits.ClothingFeet);
         public static readonly Item TSHIRT = new Item("T-Shirt", Traits.ClothingTop);
         public static readonly Item PULLOVER = new Item("Pullover", Traits.ClothingTop);
+        public static readonly Item SNEAKERS = new Item("Sneakers", Traits.ClothingFeet);
+        public static readonly Item COMBAT_BOOTS = new Item("Combat Boots", Traits.ClothingFeet);
 
         public static readonly Item PROGRAMMER_SOCKS = new Item("Programmer Socks", Traits.ClothingFeet | Traits.Weird);
         public static readonly Item FUR_SUIT = new Item("Fur suit", Traits.ClothingFeet | Traits.ClothingBottom | Traits.ClothingTop | Traits.Weird);
         public static readonly Item GARBAGE_BAG = new Item("Garbage bag", Traits.ClothingTop | Traits.ClothingBottom | Traits.Weird);
+        public static readonly Item CAT_SLIPPERS = new Item("Cat Slippers", Traits.ClothingFeet | Traits.Weird);
 
         // Get to work
         public static readonly Item CROWBAR = new Item("Crowbar", Traits.OpensDoor);

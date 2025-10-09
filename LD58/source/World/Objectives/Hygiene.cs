@@ -17,6 +17,7 @@ namespace LD58.World.Objectives
         protected override void Create(CreateParameters cparams)
         {
             base.Create(cparams);
+            ChoosePlayerName("Bedroom");
             scene.Find<DoorFrame>("Apartment Door").Lock();
 
             foreach (Player p in scene.EnumerateChildren<Player>(false))
