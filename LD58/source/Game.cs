@@ -9,10 +9,12 @@ using ChaosFramework.IO.Streams;
 using ChaosUtil.Platform.Windows.WinAPI.winuser;
 using ChaosUtil.Serialization.Text;
 using OpenTK.Graphics.OpenGL;
+using System.Linq;
 
 namespace LD58
 {
     using World;
+    using World.Player;
 
     public class Game : BaseGame
     {
@@ -145,6 +147,20 @@ namespace LD58
             Graphics.ThrowErrors();
             base.Draw();
             graphics.graphicsContext.SwapBuffers();
+        }
+
+        public void SwitchScene<T>(Interactor theOnlyOneToKeepTheirStuff, string whereAreWeGoing)
+            where T : Objective
+        {
+            Stage stage = new Stage(this, assetSource, whereAreWeGoing);
+            stage.doUpdate = false;
+            stage.doDraw = false;
+            stage.SetObjective<T>();
+
+            Player newPlayer = stage.EnumerateChildren<Player>(false).Single();
+            newPlayer.inventory.CarryOver(theOnlyOneToKeepTheirStuff.parent.inventory);
+
+            scenes.Add(stage);
         }
 
         protected override void DoDispose()

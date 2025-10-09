@@ -43,16 +43,6 @@ namespace LD58.World.Objectives
             => "Get out to work.";
 
         void Complete(Interactor interactor, SysCol.Dictionary<Item, int> selectedItems)
-        {
-            Stage stage = new Stage(scene.game, scene.game.assetSource, "office");
-            stage.doUpdate = false;
-            stage.doDraw = false;
-            stage.SetObjective<FindWorkspace>();
-
-            Player newPlayer = stage.EnumerateChildren<Player>(false).Single();
-            newPlayer.inventory.CarryOver(interactor.parent.inventory);
-
-            scene.game.scenes.Add(stage);
-        }
+            => scene.game.SwitchScene<FindWorkspace>(interactor, "office");
     }
 }
