@@ -104,21 +104,29 @@ namespace LD58.World.Objectives
             }
         };
 
-        const int REQUIRED_WORK_ITEMS = 15;
+        protected virtual int required => 15;
+        protected virtual string[] superLazyThoughts => SUPER_LAZY_THOUGHTS;
+        protected virtual string[] lazyThoughts => LAZY_THOUGHTS;
+        protected virtual string[] almostDoneThoughts => ALMOST_DONE_THOUGHTS;
+        protected virtual string[] doneThoughts => DONE_THOUGHTS;
+        protected virtual string superDoneThought => SUPER_DONE_THOUGHT;
+        protected virtual string failureThought => "Might as well take a break.";
+        protected virtual string endOption => "Take a break";
+        protected virtual string endThought => "Time to wind down a bit. Let's see...";
 
         SysCol.Dictionary<Interactor, UserInteractionStatus> interactionStatus = new SysCol.Dictionary<Interactor, UserInteractionStatus>();
 
         SysCol.HashSet<OfficeTable> freeTables = new SysCol.HashSet<OfficeTable>();
         float newWorkTimer, speed;
-        bool failure;
+        protected bool failure { get; private set; }
 
         int progress;
 
         DoorFrame bossOfficeDoor;
-        SysCol.HashSet<DoorFrame> breakRoomDoors = new SysCol.HashSet<DoorFrame>();
+        protected readonly SysCol.HashSet<DoorFrame> objectiveEndingDoors = new SysCol.HashSet<DoorFrame>();
 
         protected override string GetText()
-            => $"Do work!\n[{new string('=', progress)}{new string(' ', Max(0, REQUIRED_WORK_ITEMS - progress))}{new string('\b', Max(0, progress - REQUIRED_WORK_ITEMS))}]";
+            => $"Do work!\n[{new string('=', progress)}{new string(' ', Max(0, required - progress))}{new string('\b', Max(0, progress - required))}]";
 
         protected override void Create(CreateParameters cparams)
         {
@@ -131,7 +139,7 @@ namespace LD58.World.Objectives
 
                 DoorFrame door = obj as DoorFrame;
                 if (door?.GetName() == "Break Room")
-                    breakRoomDoors.Add(door);
+                    objectiveEndingDoors.Add(door);
                 else if (door?.GetName() == "Boss Office")
                     bossOfficeDoor = door;
             }
@@ -139,7 +147,7 @@ namespace LD58.World.Objectives
             newWorkTimer = 2;
             speed = 1;
 
-            foreach (DoorFrame door in breakRoomDoors)
+            foreach (DoorFrame door in objectiveEndingDoors)
                 door.Lock();
         }
 
@@ -165,7 +173,7 @@ namespace LD58.World.Objectives
                     interactor.AddInteraction(
                         dialogLines.Concat(Util.Yield(
                             new CustomAction(
-                                interactor, 
+                                interactor,
                                 (Interactor _) =>
                                 {
                                     interactor.parent.inventory.AddItem(work.Urgent() ? KnownItems.URGENT_WORK_ITEM : KnownItems.WORK_ITEM);
@@ -186,40 +194,40 @@ namespace LD58.World.Objectives
                 return true;
             }
 
-            if (breakRoomDoors.Contains(interactible))
+            if (objectiveEndingDoors.Contains(interactible))
             {
                 if (progress == 0)
                 {
-                    if (userStatus.superLazyThought == SUPER_LAZY_THOUGHTS.Length - 1)
+                    if (userStatus.superLazyThought == superLazyThoughts.Length - 1)
                         interactor.AddInteraction(
-                            new DialogLine(interactor, SUPER_LAZY_THOUGHTS[userStatus.superLazyThought]),
+                            new DialogLine(interactor, superLazyThoughts[userStatus.superLazyThought]),
                             new CustomAction(interactor, Complete)
                             );
                     else
-                        interactor.AddInteraction(new DialogLine(interactor, SUPER_LAZY_THOUGHTS[userStatus.superLazyThought++]));
+                        interactor.AddInteraction(new DialogLine(interactor, superLazyThoughts[userStatus.superLazyThought++]));
                 }
-                else if (progress < REQUIRED_WORK_ITEMS / 2)
+                else if (progress < required / 2)
                 {
-                    interactor.AddInteraction(new DialogLine(interactor, LAZY_THOUGHTS[userStatus.lazyThought]));
-                    userStatus.lazyThought = Min(userStatus.lazyThought + 1, LAZY_THOUGHTS.Length - 1);
+                    interactor.AddInteraction(new DialogLine(interactor, lazyThoughts[userStatus.lazyThought]));
+                    userStatus.lazyThought = Min(userStatus.lazyThought + 1, lazyThoughts.Length - 1);
                 }
-                else if (progress < REQUIRED_WORK_ITEMS)
+                else if (progress < required)
                 {
-                    interactor.AddInteraction(new DialogLine(interactor, ALMOST_DONE_THOUGHTS[userStatus.almostDoneThought]));
-                    userStatus.almostDoneThought = Min(userStatus.almostDoneThought + 1, ALMOST_DONE_THOUGHTS.Length - 1);
+                    interactor.AddInteraction(new DialogLine(interactor, almostDoneThoughts[userStatus.almostDoneThought]));
+                    userStatus.almostDoneThought = Min(userStatus.almostDoneThought + 1, almostDoneThoughts.Length - 1);
                 }
-                else if (progress < REQUIRED_WORK_ITEMS * 5)
+                else if (progress < required * 5)
                 {
-                    if (userStatus.doneThought == DONE_THOUGHTS.Length - 1)
+                    if (userStatus.doneThought == doneThoughts.Length - 1)
                         interactor.AddInteraction(
-                            new DialogLine(interactor, DONE_THOUGHTS[userStatus.doneThought]),
+                            new DialogLine(interactor, doneThoughts[userStatus.doneThought]),
                             new CustomAction(interactor, Complete)
                             );
                     else
                         interactor.AddInteraction(
-                        new Choice(interactor, DONE_THOUGHTS[userStatus.doneThought++],
-                        new Choice.Option("Take a break",
-                            new DialogLine(interactor, "Time to wind down a bit. Let's see..."),
+                        new Choice(interactor, doneThoughts[userStatus.doneThought++],
+                        new Choice.Option(endOption,
+                            new DialogLine(interactor, endThought),
                             new CustomAction(interactor, Complete)
                             ),
                         new Choice.Option("Continue work")
@@ -227,7 +235,7 @@ namespace LD58.World.Objectives
                 }
                 else // done way too much work lol
                     interactor.AddInteraction(
-                        new DialogLine(interactor, SUPER_DONE_THOUGHT),
+                        new DialogLine(interactor, superDoneThought),
                         new CustomAction(interactor, Complete)
                         );
 
@@ -258,7 +266,7 @@ namespace LD58.World.Objectives
                         foreach (Interactor interactor in scene.EnumerateChildren<Interactor>(true))
                             interactor.AddInteraction(
                                 new DialogLine(interactor, "Welp, everthing is broken now..."),
-                                new DialogLine(interactor, "Might as well take a break."),
+                                new DialogLine(interactor, failureThought),
                                 new CustomAction(interactor, Complete)
                                 );
 
@@ -273,9 +281,15 @@ namespace LD58.World.Objectives
             }
         }
 
-        void Complete(Interactor _)
+        protected virtual void Complete(Interactor _)
         {
-            foreach (DoorFrame door in breakRoomDoors)
+            ConcludeWork(!failure);
+            scene.SetObjective<LunchBreak>();
+        }
+
+        protected void ConcludeWork(bool completeWorkItems)
+        {
+            foreach (DoorFrame door in objectiveEndingDoors)
                 door.Unlock();
 
             bossOfficeDoor.Unlock();
@@ -283,8 +297,6 @@ namespace LD58.World.Objectives
             if (!failure)
                 foreach (WorkItem workItem in scene.EnumerateChildren<WorkItem>(true))
                     workItem.Complete();
-
-            scene.SetObjective<LunchBreak>();
         }
     }
 }
