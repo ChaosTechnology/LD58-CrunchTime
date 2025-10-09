@@ -22,6 +22,8 @@ namespace LD58.World.Interaction.Steps
         //            Interaction 1: eat egg with plate
         //            Interaction 2: eat bacon (with new plate?) & drink coffee
 
+        // TODO: Add vertical scroll for very full inventories
+
         public struct Requirement
         {
             public Traits trait;
