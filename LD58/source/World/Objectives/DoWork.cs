@@ -131,6 +131,11 @@ namespace LD58.World.Objectives
         protected override void Create(CreateParameters cparams)
         {
             base.Create(cparams);
+            InitWork();
+        }
+
+        protected void InitWork()
+        {
             foreach (WorldObject obj in scene.EnumerateChildren<WorldObject>(false))
             {
                 OfficeTable table = obj as OfficeTable;

@@ -67,14 +67,13 @@ namespace LD58.World.Objectives
 
         protected override void Create(CreateParameters cparams)
         {
-            if (scene.EnumerateChildren<WorkItem>(true).Any())
-            {
-                failedPreviously = true;
-                return;
-            }
-
             base.Create(cparams);
             objectiveEndingDoors.Add(exitDoor = scene.Find<DoorFrame>("Exit"));
+
+            failedPreviously = scene.EnumerateChildren<WorkItem>(true).Any();
+            if (!failedPreviously)
+                InitWork();
+
         }
 
         public override void SetUpdateCalls()
