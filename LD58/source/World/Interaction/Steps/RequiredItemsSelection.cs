@@ -1,5 +1,6 @@
 using ChaosFramework.Collections;
 using ChaosFramework.Graphics.Colors;
+using ChaosFramework.Graphics.Text;
 using ChaosFramework.Graphics.Text.Formatting;
 using ChaosFramework.Input.InputEvents;
 using ChaosFramework.Input.RawInput;
@@ -33,6 +34,9 @@ namespace LD58.World.Interaction.Steps
                 this.failureText = failureText;
             }
         }
+
+        const string NO_STOCK = "No suitable items collected.";
+        const string CANCEL = "Leave";
 
         public delegate void SuccessCallback(Interactor interactor, SysCol.Dictionary<Item, int> selectedItems);
 
@@ -156,10 +160,52 @@ namespace LD58.World.Interaction.Steps
             EnforceRequirements();
         }
 
+        void CalculateLineWidth(string text, ref float minWidth)
+        {
+            TextGeometryDescription args = new TextGeometryDescription(
+                interactor.parent.scene.game.textFont.content,
+                text,
+                layout
+                );
+            TextGeometry geo = new TextGeometry(args);
+            minWidth = Max(minWidth, geo.textBounds.width);
+        }
+
+        void WriteChoiceLine(StringBuilder bldr, System.Tuple<Item, int> available, int selectedCount)
+        {
+            if (selectedCount <= 0) bldr.Append(ColoredTextScope.GetColorCode(CHANGE_AMOUNT_DISABLED_COLOR));
+            bldr.Append("< ");
+            if (selectedCount <= 0) bldr.Append(ColoredTextScope.RESET_COLOR_CODE);
+
+            bldr.Append(selectedCount);
+
+            if (selectedCount >= available.Item2) bldr.Append(ColoredTextScope.GetColorCode(CHANGE_AMOUNT_DISABLED_COLOR));
+            bldr.Append(" >");
+            if (selectedCount >= available.Item2) bldr.Append(ColoredTextScope.RESET_COLOR_CODE);
+
+            bldr.Append('\t');
+            bldr.Append(available.Item1.displayName);
+        }
+
         void EnforceRequirements()
         {
-            StringBuilder bldr = new StringBuilder(prompt);
-            bldr.AppendLine();
+            float minWidth = 0;
+            CalculateLineWidth(prompt, ref minWidth);
+            CalculateLineWidth(NO_STOCK, ref minWidth);
+            CalculateLineWidth($">{CANCEL}", ref minWidth);
+            foreach (Requirement req in requirements)
+                CalculateLineWidth($">{req.failureText}", ref minWidth);
+
+            StringBuilder bldr = new StringBuilder();
+            foreach (System.Tuple<Item, int> choice in available)
+                for (int count = 0; count < choice.Item2; ++count)
+                {
+                    WriteChoiceLine(bldr, choice, count);
+                    CalculateLineWidth(bldr.ToString(), ref minWidth);
+                    bldr.Clear();
+                }
+
+            bldr.AppendLine(prompt);
 
             SysCol.Dictionary<Item, int> itemCounts = selection.ToDictionary(x => x.Item1, x => x.Item2);
             int i = 0;
@@ -169,27 +215,14 @@ namespace LD58.World.Interaction.Steps
                 int selectedCount;
                 itemCounts.TryGetValue(available.Item1, out selectedCount);
                 using (new ColoredTextScope(bldr, i++ == cursor ? new Rgba(1, 1, 0, 1) : Rgba.OPAQUE_WHITE))
-                {
-                    if (selectedCount <= 0) bldr.Append(ColoredTextScope.GetColorCode(CHANGE_AMOUNT_DISABLED_COLOR));
-                    bldr.Append("< ");
-                    if (selectedCount <= 0) bldr.Append(ColoredTextScope.RESET_COLOR_CODE);
-
-                    bldr.Append(selectedCount);
-
-                    if (selectedCount >= available.Item2) bldr.Append(ColoredTextScope.GetColorCode(CHANGE_AMOUNT_DISABLED_COLOR));
-                    bldr.Append(" >");
-                    if (selectedCount >= available.Item2) bldr.Append(ColoredTextScope.RESET_COLOR_CODE);
-
-                    bldr.Append('\t');
-                    bldr.Append(available.Item1.displayName);
-                }
+                    WriteChoiceLine(bldr, available, selectedCount);
             }
 
             if (i == 0)
             {
                 bldr.AppendLine();
                 using (new ColoredTextScope(bldr, new Rgba(0.5f, 0.5f, 0.5f, 1)))
-                    bldr.Append("No suitable items collected.");
+                    bldr.Append(NO_STOCK);
             }
 
             bldr.AppendLine();
@@ -206,9 +239,9 @@ namespace LD58.World.Interaction.Steps
 
             if (cursor == i + 1)
                 bldr.Append('>');
-            bldr.AppendLine("Leave");
+            bldr.AppendLine(CANCEL);
 
-            UpdateText(bldr.ToString());
+            UpdateText(bldr.ToString(), minWidth);
         }
 
         string GetFailedRequirement()

@@ -26,29 +26,48 @@ namespace LD58
             text = new Text(scene.game.textRenderer, 4096);
         }
 
-        public void Update(string value, LayoutInfo layout, Vector2f position, Vector2f anchor, float charSize)
+        public void Update(string value, LayoutInfo layout, Vector2f position, Vector2f anchor, float charSize, float minWidth = 0)
         {
             this.charSize = charSize;
 
             text.UpdateText(scene.game.textFont, value, layout);
 
-            boxBounds = new Bounds2f(text.geometry.textBounds.low, text.geometry.textBounds.high);
+            boxBounds = new Bounds2f(
+                text.geometry.textBounds.low,
+                text.geometry.textBounds.high
+                );
+
+            float diff = minWidth - boxBounds.width;
             boxBounds.low -= PADDING;
             boxBounds.high += PADDING;
+
+            if (diff > 0)
+            {
+                switch (layout.align & ChaosFramework.Graphics.Align.LeftRight)
+                {
+                    case ChaosFramework.Graphics.Align.Right:
+                        boxBounds.low.x -= diff;
+                        break;
+
+                    case ChaosFramework.Graphics.Align.Left:
+                        boxBounds.high.x += diff;
+                        break;
+                }
+            }
 
             Matrix offset = Matrix.Translation(
                 position.x - anchor.x * boxBounds.width * charSize * 0.5f,
                 position.y - anchor.y * boxBounds.height * charSize * 0.5f,
                 0);
 
-            this.text.transform = Matrix.Translation(
-                                    -boxBounds.center.x,
-                                    -boxBounds.center.y + 0.25f /* arbitrary offset to make it LOOK centered */,
-                                    0
-                                )
-                                * Matrix.Scaling(charSize)
-                                * offset
-                                ;
+            text.transform = Matrix.Translation(
+                    -boxBounds.center.x,
+                    -boxBounds.center.y + 0.25f /* arbitrary offset to make it LOOK centered */,
+                    0
+                )
+                * Matrix.Scaling(charSize)
+                * offset
+                ;
             text.color = Rgba.OPAQUE_WHITE;
 
             boxTransform = Matrix.Scaling(boxBounds.width * charSize * 0.5f, boxBounds.height * charSize * 0.5f, 1)
