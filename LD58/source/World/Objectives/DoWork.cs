@@ -151,7 +151,9 @@ namespace LD58.World.Objectives
                     bldr.AppendLine(DO_WORK);
                     bldr.Append("[");
                     bldr.Append(new string('=', Min(progress, required)));
-                    bldr.Append(new string(' ', Max(0, required - progress)));
+                    bldr.Append(ColoredTextScope.GetColorCode(Rgba.TRANSPARENT_BLACK));
+                    bldr.Append(new string('=', Max(0, required - progress)));
+                    bldr.Append(ColoredTextScope.RESET_COLOR_CODE);
                     bldr.Append("]");
                 }
                 else
