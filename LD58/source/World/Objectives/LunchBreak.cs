@@ -4,12 +4,12 @@ using SysCol = System.Collections.Generic;
 
 namespace LD58.World.Objectives
 {
+    using Constants;
     using Interaction.Steps;
-    using Objects;
     using Inventory;
+    using Objects;
     using Objects.WorldObjects;
     using Player;
-    using Constants;
 
     class LunchBreak
         : Objective
@@ -113,6 +113,6 @@ namespace LD58.World.Objectives
         }
 
         void Complete(Interactor interactor)
-            => scene.SetObjective<DoWork2>();
+            => scene.SetObjective<ConsiderDoWork2>();
     }
 }
