@@ -1,16 +1,14 @@
 using ChaosFramework.Components;
-using ChaosFramework.Graphics;
+using LD58.World.Inventory;
 
 namespace LD58.EndScreen
 {
     internal class EndScreen : TextScene
     {
-        public Camera fullScreenView { get; set; }
-
-        public EndScreen(Game game)
+        public EndScreen(Game game, ItemBag collectedItems)
             : base(game)
         {
-            AddComponent<CollectedCharacterTraits>();
+            AddComponent<CollectedCharacterTraits>(CreateParameters.Create(collectedItems));
         }
     }
 }

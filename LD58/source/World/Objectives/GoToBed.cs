@@ -24,7 +24,7 @@ namespace LD58.World.Objectives
         {
             if (interactible is Bed)
             {
-                scene.game.scenes.Add(new EndScreen(scene.game));
+                scene.game.scenes.Add(new EndScreen(scene.game, interactor.parent.inventory.CopyBag()));
                 scene.doUpdate = false;
                 return true;
             }
