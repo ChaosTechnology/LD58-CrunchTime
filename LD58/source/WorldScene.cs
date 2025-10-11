@@ -1,5 +1,3 @@
-using ChaosFramework.Components;
-using ChaosFramework.Math;
 using ChaosFramework.Graphics;
 using ChaosFramework.Graphics.Colors;
 using ChaosFramework.Graphics.OpenGl;
@@ -14,20 +12,19 @@ using static ChaosFramework.Math.Constants;
 
 namespace LD58
 {
-    public class WorldScene : Scene<Game>
+    public class WorldScene : TextScene
     {
         protected AntiAliasing antiEdger = new AntiAliasing();
         public TransparencyRenderer transparencyRenderer;
 
-        public readonly Camera view, fullScreenView;
+        public readonly Camera view;
         public readonly LightSet lights;
         public readonly DeferredShader shader;
 
         Light theFamousInsideSun;
         public readonly InstancingManagerContainer<WorldScene> instancers;
 
-        public WorldScene(Game game)
-            : base(game, typeof(UpdateLayers), typeof(DrawLayers))
+        public WorldScene(Game game) : base(game)
         {
             view = new Camera();
             view.Update(
@@ -40,16 +37,6 @@ namespace LD58
                 screenRatio: game.graphics.ratio
                 );
 
-            fullScreenView = new Camera();
-            fullScreenView.Update(
-                new Vector3f(0, 0, -1),
-                new Vector3f(0, 0, 1),
-                new Vector3f(0, 1, 0),
-                0.5f,
-                1.5f,
-                PI_QUART,
-                screenRatio: game.graphics.ratio
-                );
 
             lights = new LightSet();
             shader = new DeferredShader(
@@ -92,21 +79,20 @@ namespace LD58
             AddComponent<Background>();
         }
 
-        void UpdateView() => view.Update(view.Position, view.Direction, view.Up, float.NaN, float.NaN, float.NaN, game.graphics.ratio);
+        void UpdateView()
+            => view.Update(view.Position, view.Direction, view.Up, float.NaN, float.NaN, float.NaN, game.graphics.ratio);
 
         public override void SetDrawCalls()
         {
             base.SetDrawCalls();
             drawLayers[(int)DrawLayers.UpdateView].Add(UpdateView);
             instancers.SetDrawCalls(drawLayers[(int)DrawLayers.ResetInstancers], drawLayers[(int)DrawLayers.FillInstancers]);
-            drawLayers[(int)DrawLayers.ResetInstancers].Add(game.textBuffer.Clear);
             drawLayers[(int)DrawLayers.BeginWorld].Add(shader.BeginWorld);
             drawLayers[(int)DrawLayers.BeginMaterial].Add(shader.BeginMaterial);
             drawLayers[(int)DrawLayers.RenderDeferredShader].Add(shader.Render);
             drawLayers[(int)DrawLayers.PrepareBackground].Add(PrepareBackground);
             drawLayers[(int)DrawLayers.Transparents].Add(RenderTransparents);
             drawLayers[(int)DrawLayers.Postprocessing].Add(AntiEdgy);
-            drawLayers[(int)DrawLayers.Text].Add(DrawText);
         }
 
         void RenderTransparents()
@@ -132,13 +118,6 @@ namespace LD58
             antiEdger.normalFactor = 6f;
             antiEdger.positionFactor = .6f;
             antiEdger.Apply(shader);
-        }
-
-        void DrawText()
-        {
-            fullScreenView.SetValues(game.graphics.shaders.managedText, Matrix.IDENTITY);
-            game.textBuffer.Flush();
-            game.textRenderer.DrawTexts(game.graphics.shaders.managedText, "HUD", game.textBuffer);
         }
 
         protected override void DoDispose()
