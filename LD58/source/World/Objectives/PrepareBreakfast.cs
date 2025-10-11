@@ -1,5 +1,6 @@
 using ChaosFramework.Math.Vectors;
 using SysCol = System.Collections.Generic;
+using System.Linq;
 
 namespace LD58.World.Objectives
 {
@@ -12,12 +13,10 @@ namespace LD58.World.Objectives
     class PrepareBreakfast
         : Objective
     {
-        static readonly RequiredItemsSelection.Requirement[] req = new RequiredItemsSelection.Requirement[]
-        {
-            new RequiredItemsSelection.Requirement(Inventory.Traits.Dish, 1, "Can't prepare it in the toilet bowl..."),
-            new RequiredItemsSelection.Requirement(Inventory.Traits.Food, 2, "An empty plate won't cut it."),
-            new RequiredItemsSelection.Requirement(Inventory.Traits.Beverage, 1, "Maybe add some liquids.")
-        };
+        const int CONSUMED_FOOR_REQUIREMENT = 2;
+        const int CONSUMED_BEVERAGE_REQUIREMENT = 1;
+
+        DoorFrame kitchenDoor;
 
         protected override string GetText()
             => "Grab some grub.";
@@ -28,16 +27,59 @@ namespace LD58.World.Objectives
             if (table != null && table.GetName() == "Kitchen Table")
             {
                 interactor.AddInteraction(
-                    new RequiredItemsSelection(interactor, "Let's prepare breakfast.", "Yummy!", req, Complete)
+                    new TransformItemsDialog(
+                        interactor,
+                        "Let's prepare breakfast.",
+                        "Yummy!",
+                        Traits.Food | Traits.Dish | Traits.Beverage,
+                        CheckComplete,
+                        new TransformItemsDialog.Requirement("I need a dish to eat this from.", PlateForFoods)
+                        )
                     );
 
                 return true;
             }
 
+            DoorFrame kitchenDoor = interactible as DoorFrame;
+            if (kitchenDoor != null)
+            {
+                string unmentRequirement = GetUnmentRequirement(interactor);
+                if (unmentRequirement != null)
+                {
+                    interactor.AddInteraction(new DialogLine(interactor, unmentRequirement));
+                    return true;
+                }
+            }
+
             return base.Interact(interactor, interactible, interactAt);
         }
 
-        void Complete(Interactor interactor, SysCol.Dictionary<Item, int> selectedItems)
+        public override void Step(Interactor interactor, WorldObject steppedOn)
+        {
+            DoorFrame door = steppedOn as DoorFrame;
+            if (door?.GetName() == "Dining Room" && door.OnDoorMat(interactor.parent.position))
+                (kitchenDoor = door).Lock();
+            base.Step(interactor, steppedOn);
+        }
+
+        bool PlateForFoods(Interactor interactor, ItemBag selected)
+        {
+            SysCol.Dictionary<Traits, int> traitCount = selected.CountTraits().ToDictionary(x => x.Item1, x => x.Item2);
+            return !traitCount.ContainsKey(Traits.RequiresDish) || traitCount.ContainsKey(Traits.Dish);
+        }
+
+        string GetUnmentRequirement(Interactor interactor)
+        {
+            if (interactor.parent.inventory.Where(item => item.Item1.traits.HasFlag(Traits.Food | Traits.Consumed)).Sum(item => item.Item2) < CONSUMED_FOOR_REQUIREMENT)
+                return "I'm still hungry.";
+
+            if (interactor.parent.inventory.Where(item => item.Item1.traits.HasFlag(Traits.Beverage | Traits.Consumed)).Sum(item => item.Item2) < CONSUMED_BEVERAGE_REQUIREMENT)
+                return "My throat is dry.";
+
+            return null;
+        }
+
+        void CheckComplete(Interactor interactor, SysCol.Dictionary<Item, int> selectedItems)
         {
             foreach (SysCol.KeyValuePair<Item, int> item in selectedItems)
                 for (int i = 0; i < item.Value; ++i)
@@ -50,7 +92,11 @@ namespace LD58.World.Objectives
                             ));
                 }
 
-            scene.SetObjective<GetToWork>();
+            if (GetUnmentRequirement(interactor) == null)
+            {
+                kitchenDoor?.Unlock();
+                scene.SetObjective<GetToWork>();
+            }
         }
     }
 }

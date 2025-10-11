@@ -13,11 +13,11 @@ namespace LD58.World.Constants
 
         // Kitchen
         public static readonly Item BEER = new Item("Beer", Traits.Beverage | Traits.Alcohol);
-        public static readonly Item EXTRA_MOLDY_CHEESE = new Item("Extra moldy cheese", Traits.Weird | Traits.Food);
+        public static readonly Item EXTRA_MOLDY_CHEESE = new Item("Extra moldy cheese", Traits.Weird | Traits.Food | Traits.RequiresDish);
         public static readonly Item BLACK_SUBSTANCE = new Item("Unidentifiable black substance", Traits.Weird | Traits.Food | Traits.ClothingBottom);
 
-        public static readonly Item EGG = new Item("Egg", Traits.Incredient);
-        public static readonly Item BACON = new Item("Bacon", Traits.Incredient);
+        public static readonly Item EGG = new Item("Egg", Traits.Incredient | Traits.RequiresDish);
+        public static readonly Item BACON = new Item("Bacon", Traits.Incredient | Traits.RequiresDish);
 
         public static readonly Item ESSENCE_OF_DARKNESS = new Item("Essence of darkness", Traits.Weird | Traits.Beverage | Traits.Incredient);
 
@@ -53,20 +53,20 @@ namespace LD58.World.Constants
         public static readonly Item URGENT_WORK_ITEM = new Item("Urgent work item", Traits.Invisible | Traits.Satisfying | Traits.Distressing);
 
         // Lunch break
-        public static readonly Item DONUT = new Item("Donut", Traits.Food);
-        public static readonly Item COFFEE_BEANS = new Item("Coffee Beans", Traits.Incredient | Traits.Food | Traits.Caffeine);
+        public static readonly Item DONUT = new Item("Donut", Traits.Food | Traits.RequiresDish);
+        public static readonly Item COFFEE_BEANS = new Item("Coffee Beans", Traits.Incredient | Traits.Food | Traits.Caffeine | Traits.RequiresDish);
         public static readonly Item COFFEE = new Item("Coffee", Traits.Incredient | Traits.Beverage | Traits.Caffeine);
         public static readonly Item COLD_COFFEE = new Item("Cold Coffee", Traits.Beverage | Traits.Caffeine);
-        public static readonly Item SOFT_DRINK = new Item("Soft drink", Traits.Beverage);
+        public static readonly Item SOFT_DRINK = new Item("Soft drink", Traits.Beverage | Traits.RequiresLiquidContainer);
         public static readonly Item ENERGY_DRINK = new Item("Energy drink", Traits.Beverage | Traits.Caffeine);
-        public static readonly Item SMOKY_IRISH_WHISKEY = new Item("Smoky Irish Whiskey", Traits.Beverage | Traits.Alcohol);
-        public static readonly Item SCOTCH = new Item("Scotch", Traits.Beverage | Traits.Alcohol);
-        public static readonly Item GIN = new Item("London Dry Gin", Traits.Beverage | Traits.Alcohol);
-        public static readonly Item TONIC_WATER = new Item("Tonic Water", Traits.Beverage);
-        public static readonly Item VODKA = new Item("Vodka", Traits.Beverage | Traits.Alcohol);
+        public static readonly Item SMOKY_IRISH_WHISKEY = new Item("Smoky Irish Whiskey", Traits.Beverage | Traits.Alcohol |  Traits.RequiresLiquidContainer);
+        public static readonly Item SCOTCH = new Item("Scotch", Traits.Beverage | Traits.Alcohol | Traits.RequiresLiquidContainer);
+        public static readonly Item GIN = new Item("London Dry Gin", Traits.Beverage | Traits.Alcohol | Traits.RequiresLiquidContainer);
+        public static readonly Item TONIC_WATER = new Item("Tonic Water", Traits.Beverage | Traits.RequiresLiquidContainer);
+        public static readonly Item VODKA = new Item("Vodka", Traits.Beverage | Traits.Alcohol | Traits.RequiresLiquidContainer);
         public static readonly Item SECRET_ROOM_KEY = new Key("Suspicious Key", "Secret Room");
         public static readonly Item BEER_JAR = new Item("Beer jar", Traits.LiquidContainer);
-        public static readonly Item MOLTEN_ICE_CUBES = new Item("Molten ice cubes", Traits.Beverage);
+        public static readonly Item MOLTEN_ICE_CUBES = new Item("Molten ice cubes", Traits.Beverage | Traits.RequiresLiquidContainer);
         public static readonly Item SHOT_GLASS = new Item("Shot glass", Traits.LiquidContainer);
         public static readonly Item STALE_BEER = new Item("Stale Beer", Traits.Beverage | Traits.LiquidContainer);
         public static readonly Item CANDY_UNDIES = new Item("Candy undies", Traits.Food | Traits.Erotic | Traits.ClothingBottom);

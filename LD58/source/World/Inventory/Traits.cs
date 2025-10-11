@@ -27,6 +27,8 @@ namespace LD58.World.Inventory
         Alcohol = 1 << 19,
         LiquidContainer = 1 << 20,
         Erotic = 1 << 21,
+        RequiresDish = 1 << 22,
+        RequiresLiquidContainer = 1 << 23,
 
         ClothingTop = Clothing | CoversTop,
         ClothingBottom = Clothing | CoversBottom,
