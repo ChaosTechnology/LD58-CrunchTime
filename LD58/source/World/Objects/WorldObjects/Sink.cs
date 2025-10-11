@@ -25,19 +25,19 @@ namespace LD58.World.Objects.WorldObjects
                             new CustomAction(interactor, (Interactor _) => inventory.Remove(KnownItems.DIRTY_HANDS, all: true))
                             ));
 
-            SysCol.IEnumerable<System.Tuple<Item, int>> dirtyDishes
-                = inventory.Where(item => item.Item1.traits.HasFlag(Traits.Dish | Traits.Consumed));
+            SysCol.IEnumerable<ItemBag.ItemCount> dirtyDishes
+                = inventory.Where(item => item.item.traits.HasFlag(Traits.Dish | Traits.Consumed));
 
             if (dirtyDishes.Any())
                 options.Add(new Choice.Option(
                             "Clean dishes",
                             new CustomAction(interactor, (Interactor _) =>
                             {
-                                foreach (System.Tuple<Item, int> dish in dirtyDishes)
+                                foreach (ItemBag.ItemCount dish in dirtyDishes)
                                 {
-                                    inventory.Remove(dish.Item1, all: true);
-                                    for (int i = 0; i < dish.Item2; i++)
-                                        inventory.AddItem(new Item(dish.Item1.displayName, dish.Item1.traits & ~(Traits.Consumed | Traits.Invisible)));
+                                    inventory.Remove(dish.item, all: true);
+                                    for (int i = 0; i < dish.count; i++)
+                                        inventory.AddItem(new Item(dish.item.displayName, dish.item.traits & ~(Traits.Consumed | Traits.Invisible)));
                                 }
                             })
                             ));

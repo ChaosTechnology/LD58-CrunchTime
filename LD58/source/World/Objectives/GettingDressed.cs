@@ -12,14 +12,14 @@ namespace LD58.World.Objectives
     class GettingDressed
         : Objective
     {
-        static bool FeetCovered(Interactor interactor, ItemBag selected, SysCol.Dictionary<Traits, int> traitsFromSelection)
-            => traitsFromSelection.ContainsKey(Traits.CoversFeet);
+        static bool FeetCovered(Interactor interactor, ItemBag selected)
+            => selected.Contains(Traits.CoversFeet);
 
-        static bool BottomCovered(Interactor interactor, ItemBag selected, SysCol.Dictionary<Traits, int> traitsFromSelection)
-            => traitsFromSelection.ContainsKey(Traits.CoversBottom);
+        static bool BottomCovered(Interactor interactor, ItemBag selected)
+            => selected.Contains(Traits.CoversBottom);
 
-        static bool TopCovered(Interactor interactor, ItemBag selected, SysCol.Dictionary<Traits, int> traitsFromSelection)
-            => traitsFromSelection.ContainsKey(Traits.CoversTop);
+        static bool TopCovered(Interactor interactor, ItemBag selected)
+            => selected.Contains(Traits.CoversTop);
 
         public override bool Interact(Interactor interactor, Interactible interactible, Vector2i interactAt)
         {
@@ -33,9 +33,9 @@ namespace LD58.World.Objectives
                     new Choice.Option("Choose clothes...", new CustomAction(interactor, (Interactor i) =>
                         i.AddInteraction(new ChooseItemsDialog(
                             i,
+                            i.parent.inventory.CopyBag().Filter(Traits.Clothing),
                             "Choose clothes to wear:",
-                            "Wear this!",
-                            Traits.Clothing,
+                            "Wear this",
                             Complete,
                             new ChooseItemsDialog.Requirement("Need some bottom clothing piece.", BottomCovered),
                             new ChooseItemsDialog.Requirement("Can't go topless.", TopCovered),
@@ -50,15 +50,15 @@ namespace LD58.World.Objectives
             return interactible.Interact(interactor, interactAt);
         }
 
-        void Complete(Interactor interactor, SysCol.Dictionary<Item, int> selectedItems)
+        void Complete(Interactor interactor, ItemBag selectedItems)
         {
-            foreach (SysCol.KeyValuePair<Item, int> item in selectedItems)
-                for (int i = 0; i < item.Value; ++i)
+            foreach (ItemBag.ItemCount item in selectedItems)
+                for (int i = 0; i < item.count; ++i)
                 {
-                    interactor.parent.inventory.Remove(item.Key);
+                    interactor.parent.inventory.Remove(item.item);
                     interactor.parent.inventory.AddItem(new Item(
-                        $"Wearing {item.Key.displayName}",
-                        item.Key.traits | Traits.Wearing | Traits.Invisible
+                        $"Wearing {item.item.displayName}",
+                        item.item.traits | Traits.Wearing | Traits.Invisible
                         ));
                 }
 

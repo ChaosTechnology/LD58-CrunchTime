@@ -14,7 +14,14 @@ namespace LD58.World.Objects.WorldObjects
     class Fridge
         : StockedInteractible
     {
-        bool collectedEssenceOfDarkness = false;
+        bool stockedEssenceOfDarkness = false;
+
+        protected override string promptEmpty
+            => scene.name == "home" && !stock.Contains(KnownItems.BEER)
+                ? "Where has all the beer gone?"
+                : "It's empty."
+                ;
+
 
         public Fridge()
             : base(2, 1)
@@ -40,51 +47,29 @@ namespace LD58.World.Objects.WorldObjects
             }
         }
 
-        public override bool Interact(Interactor interactor, Vector2i interactAt)
+        protected override SysCol.IEnumerable<InteractionStep> PrependSteps(Interactor interactor)
         {
-            LinkedList<Choice.Option> choices = new LinkedList<Choice.Option>(EnumerateStockOptions(interactor));
+            switch (scene.name)
+            {
+                case "home":
+                    yield return new DialogLine(interactor, "Most of the food is spoiled.");
+                    break;
 
-            if (scene.name == "home" && !stock.Contains(KnownItems.BLACK_SUBSTANCE) && !collectedEssenceOfDarkness)
-                choices.Add(
-                    new Choice.Option(
-                        KnownItems.ESSENCE_OF_DARKNESS.displayName,
-                        new InteractionStep[] {
-                            new AddItem(interactor, KnownItems.ESSENCE_OF_DARKNESS),
-                            new CustomAction(interactor, CollectEssenceOfDarkness)
-                            }
-                        )
-                    );
-
-            LinkedList<InteractionStep> interactions = new LinkedList<InteractionStep>();
-            if (choices.empty)
-                if (scene.name == "home" && !stock.Contains(KnownItems.BEER))
-                    interactions.Insert(0, new DialogLine(interactor, "Where has all the beer gone?"));
-                else
-                    interactions.Insert(0, new DialogLine(interactor, "It's empty."));
-            else
-                switch (scene.name)
-                {
-                    case "home":
-                        interactions.Add(
-                            new DialogLine(interactor, "Most of the food is spoiled."),
-                            new Choice(interactor, "Take some?", choices.ToArray())
-                            );
-                        break;
-
-                    case "office":
-                        interactions.Add(
-                            new DialogLine(interactor, "I've never put anything in there."),
-                            new DialogLine(interactor, "My coworkers may have done that though..."),
-                            new Choice(interactor, "Nobody's here.\nSteal some?", choices.ToArray())
-                            );
-                        break;
-                }
-
-            interactor.AddInteraction(interactions);
-            return true;
+                case "office":
+                    yield return new DialogLine(interactor, "I've never put anything in there.");
+                    yield return new DialogLine(interactor, "My coworkers may have done that though...");
+                    break;
+            }
         }
 
-        void CollectEssenceOfDarkness(Interactor interactor)
-            => collectedEssenceOfDarkness = true;
+        protected override void SuccessCallback(Interactor interactor, ItemBag selectedItems)
+        {
+            base.SuccessCallback(interactor, selectedItems);
+            if (!stockedEssenceOfDarkness && !stock.Contains(KnownItems.BLACK_SUBSTANCE))
+            {
+                stock.Add(KnownItems.ESSENCE_OF_DARKNESS);
+                stockedEssenceOfDarkness = true;
+            }
+        }
     }
 }

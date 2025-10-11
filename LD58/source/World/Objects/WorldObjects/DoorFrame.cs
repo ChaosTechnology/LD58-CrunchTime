@@ -42,7 +42,7 @@ namespace LD58.World.Objects.WorldObjects
             {
                 interactor.AddInteraction(new DialogLine(interactor, "It's locked"));
 
-                Key key = (Key)interactor.parent.inventory.Where(CorrectKey).FirstOrDefault()?.Item1;
+                Key key = (Key)interactor.parent.inventory.Where(CorrectKey).FirstOrDefault()?.item;
                 if (key != null)
                 {
                     interactor.AddInteraction(
@@ -68,8 +68,8 @@ namespace LD58.World.Objects.WorldObjects
             else return false;
         }
 
-        bool CorrectKey(System.Tuple<Item, int> key)
-            => (key.Item1 as Key)?.doorName == name;
+        bool CorrectKey(ItemBag.ItemCount key)
+            => (key.item as Key)?.doorName == name;
 
         public bool OnDoorMat(Vector2i pos)
             => TransformRelativeTilePositions(doorMatPositions).Contains(pos);

@@ -24,9 +24,9 @@ namespace LD58.World.Objectives
             foreach (Player p in scene.EnumerateChildren<Player>(false))
             {
                 p.inventory.AddItem(KnownItems.HELD_IN_POOP);
-                foreach (System.Tuple<Item, int> i in p.inventory)
-                    if (i.Item1.traits.HasFlag(Traits.Consumed))
-                        p.inventory.Remove(i.Item1, true);
+                foreach (ItemBag.ItemCount i in p.inventory)
+                    if (i.item.traits.HasFlag(Traits.Consumed))
+                        p.inventory.Remove(i.item, true);
             }
         }
 
@@ -78,9 +78,9 @@ namespace LD58.World.Objectives
                 interactor.AddInteraction(
                     new ChooseItemsDialog(
                         interactor,
+                        interactor.parent.inventory.CopyBag().Filter(Traits.Food | Traits.Beverage | Traits.Dish | Traits.LiquidContainer),
                         "Consume nourishments?.",
                         "Eat.",
-                        Traits.Food | Traits.Beverage | Traits.Dish | Traits.LiquidContainer,
                         Consume,
                         CommonSense.FOOD_NEEDS_DISH,
                         CommonSense.BEVERAGE_NEEDS_CONTAINER
@@ -93,17 +93,17 @@ namespace LD58.World.Objectives
             return false;
         }
 
-        void Consume(Interactor interactor, SysCol.Dictionary<Item, int> selectedItems)
+        void Consume(Interactor interactor, ItemBag selectedItems)
         {
-            foreach (SysCol.KeyValuePair<Item, int> consumed in selectedItems)
-                for (int i = 0; i < consumed.Value; ++i)
+            foreach (ItemBag.ItemCount consumed in selectedItems)
+                for (int i = 0; i < consumed.count; ++i)
                 {
-                    interactor.parent.inventory.Remove(consumed.Key);
-                    if (!consumed.Key.traits.HasFlag(Traits.Dish))
+                    interactor.parent.inventory.Remove(consumed.item);
+                    if (!consumed.item.traits.HasFlag(Traits.Dish))
                         interactor.parent.inventory.AddItem(
                             new Item(
-                                $"Consumed {consumed.Key.displayName}",
-                                consumed.Key.traits | Traits.Invisible | Traits.Consumed
+                                $"Consumed {consumed.item.displayName}",
+                                consumed.item.traits | Traits.Invisible | Traits.Consumed
                                 )
                             );
                 }
