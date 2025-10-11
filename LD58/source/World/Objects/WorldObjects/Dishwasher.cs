@@ -13,7 +13,7 @@ namespace LD58.World.Objects.WorldObjects
             => "There are clean dishes in there.";
 
         protected override string takeOption
-            => "Break!";
+            => "Take";
 
         protected override SysCol.IEnumerable<Item> GetInitialStock()
         {
