@@ -153,5 +153,12 @@ namespace LD58.World.Player
 
         public SysCol.IEnumerator<Tuple<Item, int>> GetEnumerator()
             => itemBag.GetEnumerator();
+
+        public ItemBag CopyBag()
+        {
+            ItemBag bag = new ItemBag();
+            bag.Transfer(itemBag);
+            return bag;
+        }
     }
 }
