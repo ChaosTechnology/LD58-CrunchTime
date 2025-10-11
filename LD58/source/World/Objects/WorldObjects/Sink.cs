@@ -25,7 +25,7 @@ namespace LD58.World.Objects.WorldObjects
                             new CustomAction(interactor, (Interactor _) => inventory.Remove(KnownItems.DIRTY_HANDS, all: true))
                             ));
 
-            SysCol.IEnumerable<ItemBag.Entry> dirtyDishes
+            SysCol.IEnumerable<ItemBag.ItemCount> dirtyDishes
                 = inventory.Where(item => item.item.traits.HasFlag(Traits.Dish | Traits.Consumed));
 
             if (dirtyDishes.Any())
@@ -33,7 +33,7 @@ namespace LD58.World.Objects.WorldObjects
                             "Clean dishes",
                             new CustomAction(interactor, (Interactor _) =>
                             {
-                                foreach (ItemBag.Entry dish in dirtyDishes)
+                                foreach (ItemBag.ItemCount dish in dirtyDishes)
                                 {
                                     inventory.Remove(dish.item, all: true);
                                     for (int i = 0; i < dish.count; i++)

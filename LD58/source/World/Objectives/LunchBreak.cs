@@ -24,7 +24,7 @@ namespace LD58.World.Objectives
             foreach (Player p in scene.EnumerateChildren<Player>(false))
             {
                 p.inventory.AddItem(KnownItems.HELD_IN_POOP);
-                foreach (ItemBag.Entry i in p.inventory)
+                foreach (ItemBag.ItemCount i in p.inventory)
                     if (i.item.traits.HasFlag(Traits.Consumed))
                         p.inventory.Remove(i.item, true);
             }
@@ -95,7 +95,7 @@ namespace LD58.World.Objectives
 
         void Consume(Interactor interactor, ItemBag selectedItems)
         {
-            foreach (ItemBag.Entry consumed in selectedItems)
+            foreach (ItemBag.ItemCount consumed in selectedItems)
                 for (int i = 0; i < consumed.count; ++i)
                 {
                     interactor.parent.inventory.Remove(consumed.item);

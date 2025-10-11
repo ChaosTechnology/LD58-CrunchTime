@@ -68,7 +68,7 @@ namespace LD58.World.Objects.WorldObjects
             else return false;
         }
 
-        bool CorrectKey(ItemBag.Entry key)
+        bool CorrectKey(ItemBag.ItemCount key)
             => (key.item as Key)?.doorName == name;
 
         public bool OnDoorMat(Vector2i pos)

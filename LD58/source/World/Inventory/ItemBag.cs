@@ -6,28 +6,28 @@ using SysCol = System.Collections.Generic;
 namespace LD58.World.Inventory
 {
     public class ItemBag
-        : SysCol.IEnumerable<ItemBag.Entry>
+        : SysCol.IEnumerable<ItemBag.ItemCount>
     {
-        public class Entry
+        public class ItemCount
         {
             public readonly Item item;
             public readonly int count;
 
-            public Entry(Item item, int count)
+            public ItemCount(Item item, int count)
             {
                 this.item = item;
                 this.count = count;
             }
         }
 
-        public class Traitor
+        public class TraitCount
         {
-            public readonly Traits item;
+            public readonly Traits traits;
             public readonly int count;
 
-            public Traitor(Traits item, int count)
+            public TraitCount(Traits traits, int count)
             {
-                this.item = item;
+                this.traits = traits;
                 this.count = count;
             }
         }
@@ -55,8 +55,8 @@ namespace LD58.World.Inventory
             public bool Discard()
                 => --count <= 0;
 
-            public static implicit operator Entry(Node n)
-                => new Entry(n.item, n.count);
+            public static implicit operator ItemCount(Node n)
+                => new ItemCount(n.item, n.count);
         }
 
         AdvancedLinkedList<Node> items = new AdvancedLinkedList<Node>();
@@ -114,26 +114,26 @@ namespace LD58.World.Inventory
         IEnumerator IEnumerable.GetEnumerator()
             => GetEnumerator();
 
-        SysCol.IEnumerator<Entry> SysCol.IEnumerable<Entry>.GetEnumerator()
+        SysCol.IEnumerator<ItemCount> SysCol.IEnumerable<ItemCount>.GetEnumerator()
             => GetEnumerator();
 
-        public SysCol.IEnumerator<Entry> GetEnumerator()
+        public SysCol.IEnumerator<ItemCount> GetEnumerator()
         {
             foreach (Node n in items)
-                yield return new Entry(n.item, n.count);
+                yield return new ItemCount(n.item, n.count);
         }
 
-        public SysCol.IEnumerable<Traitor> CountTraits()
+        public SysCol.IEnumerable<TraitCount> CountTraits()
         {
             int[] traits = new int[64];
-            foreach (Entry item in this)
+            foreach (ItemCount item in this)
                 for (int i = 0; i < 64; i++)
                     if (((ulong)item.item.traits & (1ul << i)) != 0)
                         traits[i] += item.count;
 
             for (int i = 0; i < 64; i++)
                 if (traits[i] > 0)
-                    yield return new Traitor((Traits)(1ul << i), traits[i]);
+                    yield return new TraitCount((Traits)(1ul << i), traits[i]);
         }
 
         public void Transfer(ItemBag other)
@@ -150,7 +150,7 @@ namespace LD58.World.Inventory
             return bag;
         }
 
-        public ItemBag Filter(System.Func<Entry, bool> filter)
+        public ItemBag Filter(System.Func<ItemCount, bool> filter)
         {
             ItemBag bag = new ItemBag();
             foreach (Node node in items)

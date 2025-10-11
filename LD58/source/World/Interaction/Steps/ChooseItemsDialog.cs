@@ -46,7 +46,7 @@ namespace LD58.World.Interaction.Steps
 
         static readonly Rgba CHANGE_AMOUNT_DISABLED_COLOR = new Rgba(new Rgb(0.2f), 1);
 
-        static bool IsVisible(ItemBag.Entry item)
+        static bool IsVisible(ItemBag.ItemCount item)
             => !item.item.traits.HasFlag(Traits.Invisible);
 
         int cursor = 0;
@@ -145,8 +145,8 @@ namespace LD58.World.Interaction.Steps
             if (cursor >= available.numItemKinds) // cursor is on accept or leave option
                 return;
 
-            ItemBag.Entry a = available.ElementAt(cursor);
-            ItemBag.Entry s = selection.FirstOrDefault(x => x.item == a.item);
+            ItemBag.ItemCount a = available.ElementAt(cursor);
+            ItemBag.ItemCount s = selection.FirstOrDefault(x => x.item == a.item);
             int? availableCount = s?.count;
             delta = Clamp(-s?.count ?? 0, a.count, delta);
 
@@ -171,7 +171,7 @@ namespace LD58.World.Interaction.Steps
             minWidth = Max(minWidth, geo.textBounds.width);
         }
 
-        void WriteChoiceLine(StringBuilder bldr, ItemBag.Entry available, int selectedCount)
+        void WriteChoiceLine(StringBuilder bldr, ItemBag.ItemCount available, int selectedCount)
         {
             if (selectedCount <= 0) bldr.Append(ColoredTextScope.GetColorCode(CHANGE_AMOUNT_DISABLED_COLOR));
             bldr.Append("< ");
@@ -204,7 +204,7 @@ namespace LD58.World.Interaction.Steps
             }
 
             StringBuilder bldr = new StringBuilder();
-            foreach (ItemBag.Entry choice in available)
+            foreach (ItemBag.ItemCount choice in available)
                 for (int count = 0; count < choice.count; ++count)
                 {
                     WriteChoiceLine(bldr, choice, count);
@@ -216,7 +216,7 @@ namespace LD58.World.Interaction.Steps
 
             SysCol.Dictionary<Item, int> itemCounts = selection.ToDictionary(x => x.item, x => x.count);
             int i = 0;
-            foreach (ItemBag.Entry available in available)
+            foreach (ItemBag.ItemCount available in available)
             {
                 bldr.AppendLine();
                 int selectedCount;

@@ -52,7 +52,7 @@ namespace LD58.World.Objectives
 
         void Complete(Interactor interactor, ItemBag selectedItems)
         {
-            foreach (ItemBag.Entry item in selectedItems)
+            foreach (ItemBag.ItemCount item in selectedItems)
                 for (int i = 0; i < item.count; ++i)
                 {
                     interactor.parent.inventory.Remove(item.item);

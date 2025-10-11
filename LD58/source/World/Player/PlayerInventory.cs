@@ -15,7 +15,7 @@ namespace LD58.World.Player
 
     public class PlayerInventory
         : StrictComponent<Player>
-        , SysCol.IEnumerable<ItemBag.Entry>
+        , SysCol.IEnumerable<ItemBag.ItemCount>
     {
         // TODO: be fancy and smoothly reorder lines in graphical display
 
@@ -88,19 +88,19 @@ namespace LD58.World.Player
         void UpdateText()
         {
             System.Text.StringBuilder bldr = new System.Text.StringBuilder();
-            foreach (ItemBag.Entry i in itemBag)
+            foreach (ItemBag.ItemCount i in itemBag)
                 if (!i.item.traits.HasFlag(Traits.Invisible))
                     bldr.AppendLine($"{i.item.displayName} x{i.count}");
 
 #if DEBUG
-            SysCol.IEnumerable<ItemBag.Entry> invisible = itemBag.Filter(Traits.Invisible);
+            SysCol.IEnumerable<ItemBag.ItemCount> invisible = itemBag.Filter(Traits.Invisible);
             if (invisible.Any(L.PredicateTrue))
             {
                 if (bldr.Length > 0)
                     bldr.AppendLine();
 
                 bldr.AppendLine("Hidden:");
-                foreach (ItemBag.Entry i in invisible)
+                foreach (ItemBag.ItemCount i in invisible)
                     bldr.AppendLine($"{i.item.displayName} x{i.count}");
             }
 #endif
@@ -109,8 +109,8 @@ namespace LD58.World.Player
 
 #if DEBUG
             bldr.Clear();
-            foreach (ItemBag.Traitor i in itemBag.CountTraits())
-                bldr.AppendLine($"{i.item} x{i.count}");
+            foreach (ItemBag.TraitCount i in itemBag.CountTraits())
+                bldr.AppendLine($"{i.traits} x{i.count}");
 
             traits.UpdateText(parent.scene.game.textFont, bldr.ToString(), LayoutInfo.TOP_RIGHT);
 #endif
@@ -142,13 +142,13 @@ namespace LD58.World.Player
 #endif
         }
 
-        SysCol.IEnumerator<ItemBag.Entry> SysCol.IEnumerable<ItemBag.Entry>.GetEnumerator()
+        SysCol.IEnumerator<ItemBag.ItemCount> SysCol.IEnumerable<ItemBag.ItemCount>.GetEnumerator()
             => GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator()
             => GetEnumerator();
 
-        public SysCol.IEnumerator<ItemBag.Entry> GetEnumerator()
+        public SysCol.IEnumerator<ItemBag.ItemCount> GetEnumerator()
             => itemBag.GetEnumerator();
 
         public ItemBag CopyBag()
