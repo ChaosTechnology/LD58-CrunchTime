@@ -34,7 +34,7 @@ namespace LD58.World.Objectives
         }
 
         void LeaveForHome(Interactor interactor)
-            => scene.game.SwitchScene<Hygiene>(interactor, "home");
+            => scene.game.SwitchScene<GoToBed>(interactor, "home");
 
         void MovePlayerToLastSteppedOnTile(Interactor interactor)
         {

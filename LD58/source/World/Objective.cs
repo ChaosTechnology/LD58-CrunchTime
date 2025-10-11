@@ -31,5 +31,12 @@ namespace LD58.World
 
         public virtual void Step(Interactor interactor, WorldObject steppedOn)
         { }
+
+        protected void ChoosePlayerName(string name)
+        {
+            foreach (Player.Player obj in scene.EnumerateChildren<Player.Player>(false))
+                if (obj.GetName() != name)
+                    obj.Dispose();
+        }
     }
 }
