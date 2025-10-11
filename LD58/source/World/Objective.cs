@@ -1,4 +1,5 @@
 using ChaosFramework.Components;
+using ChaosFramework.Graphics;
 using ChaosFramework.Graphics.Text;
 using ChaosFramework.Math.Vectors;
 
@@ -10,6 +11,8 @@ namespace LD58.World
     public abstract class Objective
         : Component<Stage>
     {
+        static readonly LayoutInfo layout = new LayoutInfo(Align.TopLeft, enableEscapeSequences: true);
+
         TextBox text;
 
         protected override void Create(CreateParameters cparams)
@@ -22,7 +25,7 @@ namespace LD58.World
         }
 
         void UpdateText()
-            => text.Update(GetText(), LayoutInfo.TOP_LEFT, new Vector2f(0, 0.95f), new Vector2f(0, 1), 0.05f);
+            => text.Update(GetText(), layout, new Vector2f(0, 0.95f), new Vector2f(0, 1), 0.05f);
 
         protected abstract string GetText();
 

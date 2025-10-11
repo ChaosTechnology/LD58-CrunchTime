@@ -1,16 +1,19 @@
-using System.Linq;
 using ChaosFramework.Collections;
 using ChaosFramework.Components;
+using ChaosFramework.Graphics.Text.Formatting;
 using ChaosFramework.Math.Vectors;
 using ChaosUtil.Primitives;
+using System.Linq;
+using System.Text;
 using static ChaosFramework.Math.Clamping;
 using SysCol = System.Collections.Generic;
 
 namespace LD58.World.Objectives
 {
+    using ChaosFramework.Graphics.Colors;
+    using Constants;
     using Interaction;
     using Interaction.Steps;
-    using Constants;
     using Objects;
     using Objects.WorldObjects;
     using Player;
@@ -25,6 +28,8 @@ namespace LD58.World.Objectives
             public int almostDoneThought = 0;
             public int doneThought = 0;
         }
+
+        public const string DO_WORK = "Do work!";
 
         static readonly string[] SUPER_LAZY_THOUGHTS = new[] {
             "I haven't done a thing yet.",
@@ -105,6 +110,8 @@ namespace LD58.World.Objectives
         };
 
         protected virtual int required => 15;
+        protected virtual float overTimeFactor => 2f;
+        protected int overTimeRequired => (int)(required * overTimeFactor);
         protected virtual string[] superLazyThoughts => SUPER_LAZY_THOUGHTS;
         protected virtual string[] lazyThoughts => LAZY_THOUGHTS;
         protected virtual string[] almostDoneThoughts => ALMOST_DONE_THOUGHTS;
@@ -113,6 +120,8 @@ namespace LD58.World.Objectives
         protected virtual string failureThought => "Might as well take a break.";
         protected virtual string endOption => "Take a break";
         protected virtual string endThought => "Time to wind down a bit. Let's see...";
+        protected virtual string optionalGoal => "Take a break.";
+        protected virtual string overtimeFinishGoal => "Take a break already!";
 
         SysCol.Dictionary<Interactor, UserInteractionStatus> interactionStatus = new SysCol.Dictionary<Interactor, UserInteractionStatus>();
 
@@ -126,16 +135,53 @@ namespace LD58.World.Objectives
         protected readonly SysCol.HashSet<DoorFrame> objectiveEndingDoors = new SysCol.HashSet<DoorFrame>();
 
         protected override string GetText()
-            => $"Do work!\n[{new string('=', progress)}{new string(' ', Max(0, required - progress))}{new string('\b', Max(0, progress - required))}]";
+        {
+            StringBuilder bldr = new StringBuilder();
+
+            if (progress >= overTimeRequired)
+            {
+                bldr.AppendLine($"There's literally no more work to do!");
+                bldr.AppendLine();
+                bldr.Append(overtimeFinishGoal);
+            }
+            else
+            {
+                if (progress <= required)
+                {
+                    bldr.AppendLine(DO_WORK);
+                    bldr.Append("[");
+                    bldr.Append(new string('=', Min(progress, required)));
+                    bldr.Append(ColoredTextScope.GetColorCode(Rgba.TRANSPARENT_BLACK));
+                    bldr.Append(new string('=', Max(0, required - progress)));
+                    bldr.Append(ColoredTextScope.RESET_COLOR_CODE);
+                    bldr.Append("]");
+                }
+                else
+                {
+                    bldr.AppendLine("Do overtime!");
+                    bldr.Append("[");
+                    bldr.Append(new string('=', progress - required));
+                    bldr.Append("]");
+                }
+
+                if (progress >= required)
+                {
+                    bldr.AppendLine();
+                    bldr.AppendLine();
+                    bldr.Append(ColoredTextScope.GetColorCode(new Rgba(new Rgb(0.2f), 1)));
+                    bldr.Append("Optional: ");
+                    bldr.Append(optionalGoal);
+                    bldr.Append(ColoredTextScope.RESET_COLOR_CODE);
+                }
+            }
+
+            return bldr.ToString();
+        }
 
         protected override void Create(CreateParameters cparams)
         {
             base.Create(cparams);
-            InitWork();
-        }
 
-        protected void InitWork()
-        {
             foreach (WorldObject obj in scene.EnumerateChildren<WorldObject>(false))
             {
                 OfficeTable table = obj as OfficeTable;
@@ -159,7 +205,7 @@ namespace LD58.World.Objectives
         public override void SetUpdateCalls()
         {
             base.SetUpdateCalls();
-            scene.updateLayers[(int)UpdateLayers.ObjectiveLogic].Add(Update);
+            scene.updateLayers[(int)UpdateLayers.ObjectiveLogic].Add(UpdateWorkItems);
         }
 
         public override bool Interact(Interactor interactor, Interactible interactible, Vector2i interactAt)
@@ -221,7 +267,7 @@ namespace LD58.World.Objectives
                     interactor.AddInteraction(new DialogLine(interactor, almostDoneThoughts[userStatus.almostDoneThought]));
                     userStatus.almostDoneThought = Min(userStatus.almostDoneThought + 1, almostDoneThoughts.Length - 1);
                 }
-                else if (progress < required * 5)
+                else if (progress < required * overTimeFactor)
                 {
                     if (userStatus.doneThought == doneThoughts.Length - 1)
                         interactor.AddInteraction(
@@ -250,11 +296,20 @@ namespace LD58.World.Objectives
             return base.Interact(interactor, interactible, interactAt);
         }
 
-        void Update()
+        void UpdateWorkItems()
         {
+            // TODO: only pause for work related items?
+            foreach (Interactor interactor in scene.EnumerateChildren<Interactor>(true))
+                if (interactor.busy)
+                    return;
+
             speed += ftime * 0.025f;
             if ((newWorkTimer -= ftime * speed) < 0)
             {
+                int openWork = scene.EnumerateChildren<WorkItem>(true).Count();
+                if (openWork >= overTimeRequired - progress)
+                    return;
+
                 OfficeTable chosen = null;
                 int i = 0;
                 int chosenIndex = Random.instance.RndInt(freeTables.Count);

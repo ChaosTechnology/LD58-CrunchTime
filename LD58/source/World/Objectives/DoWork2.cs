@@ -1,9 +1,7 @@
 using ChaosFramework.Components;
-using System.Linq;
 
 namespace LD58.World.Objectives
 {
-    using Interaction.Steps;
     using Objects.WorldObjects;
     using Player;
 
@@ -59,62 +57,27 @@ namespace LD58.World.Objectives
         protected override string failureThought => "All I can do is go home now...";
         protected override string endOption => "Wrap up";
         protected override string endThought => "That's enough for the day. Time to wrap up.";
+        protected override string optionalGoal => "Go home.";
+        protected override string overtimeFinishGoal => "Go home already!";
 
         DoorFrame exitDoor;
-
-        bool failedPreviously = false;
-        bool ex = false;
 
         protected override void Create(CreateParameters cparams)
         {
             base.Create(cparams);
             objectiveEndingDoors.Add(exitDoor = scene.Find<DoorFrame>("Exit"));
-
-            failedPreviously = scene.EnumerateChildren<WorkItem>(true).Any();
-            if (!failedPreviously)
-                InitWork();
-
         }
 
-        public override void SetUpdateCalls()
-        {
-            base.SetUpdateCalls();
-            scene.updateLayers[(int)UpdateLayers.ObjectiveLogic].Add(SkipIfFailed);
-        }
-
-        void SkipIfFailed()
-        {
-            if (ex)
-                return;
-
-            ex = true;
-            foreach (Interactor interactor in scene.EnumerateChildren<Interactor>(false))
-                interactor.AddInteraction(
-                    new DialogLine(interactor, "Oh right, everything broke down earlier.\nThere's no way I can fix all that."),
-                    new DialogLine(interactor, "With the servers down, this company will be bankrupt within hours..."),
-                    new DialogLine(interactor, "Hmm... looks like I'll be out of a job for a while then."),
-                    new DialogLine(interactor, "Well..."),
-                    new DialogLine(interactor, "..."),
-                    new DialogLine(interactor, "What a depressing thought."),
-                    new DialogLine(interactor, "..."),
-                    new DialogLine(interactor, "The others really could have pulled their weight, though!"),
-                    new DialogLine(interactor, "I just can't do everyone's work."),
-                    new DialogLine(interactor, "..."),
-                    new DialogLine(interactor, "I need to rest."),
-                    new CustomAction(interactor, ConcludeFailed)
-                    );
-
-        }
-
-        protected override void Complete(Interactor _)
+        protected override void Complete(Interactor interactor)
         {
             ConcludeWork(!failure);
-            scene.SetObjective<GoHome>();
+            GoHome(interactor);
         }
 
         void ConcludeFailed(Interactor _)
-        {
-            ConcludeWork(false);
-        }
+            => ConcludeWork(false);
+
+        void GoHome(Interactor _)
+            => scene.SetObjective<GoHome>();
     }
 }
