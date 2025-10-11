@@ -12,13 +12,14 @@ namespace LD58.World.Objectives
     class GettingDressed
         : Objective
     {
-        static readonly RequiredItemsSelection.Requirement[] requirements
-            = new RequiredItemsSelection.Requirement[]
-        {
-            new RequiredItemsSelection.Requirement(Traits.CoversBottom, 1, "Need some bottom clothing piece."),
-            new RequiredItemsSelection.Requirement(Traits.CoversTop, 1, "Can't go topless"),
-            new RequiredItemsSelection.Requirement(Traits.CoversFeet, 1, "I still need something for the feet."),
-        };
+        static bool FeetCovered(Interactor interactor, ItemBag selected, SysCol.Dictionary<Traits, int> traitsFromSelection)
+            => traitsFromSelection.ContainsKey(Traits.CoversFeet);
+
+        static bool BottomCovered(Interactor interactor, ItemBag selected, SysCol.Dictionary<Traits, int> traitsFromSelection)
+            => traitsFromSelection.ContainsKey(Traits.CoversBottom);
+
+        static bool TopCovered(Interactor interactor, ItemBag selected, SysCol.Dictionary<Traits, int> traitsFromSelection)
+            => traitsFromSelection.ContainsKey(Traits.CoversTop);
 
         public override bool Interact(Interactor interactor, Interactible interactible, Vector2i interactAt)
         {
@@ -30,12 +31,15 @@ namespace LD58.World.Objectives
                         new CustomAction(interactor, (Interactor i) => interactible.Interact(interactor, interactAt))
                         ),
                     new Choice.Option("Choose clothes...", new CustomAction(interactor, (Interactor i) =>
-                        i.AddInteraction(new RequiredItemsSelection(
+                        i.AddInteraction(new TransformItemsDialog(
                             i,
                             "Choose clothes to wear:",
                             "Wear this!",
-                            requirements,
-                            Complete
+                            Traits.Clothing,
+                            Complete,
+                            new TransformItemsDialog.Requirement("Need some bottom clothing piece.", BottomCovered),
+                            new TransformItemsDialog.Requirement("Can't go topless.", TopCovered),
+                            new TransformItemsDialog.Requirement("I still need something for the feet.", FeetCovered)
                             ))
                         )),
                     new Choice.Option("Leave")

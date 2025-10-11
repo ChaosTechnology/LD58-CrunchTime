@@ -72,11 +72,12 @@ namespace LD58.World.Inventory
             return false;
         }
 
-        public bool Contains(Traits trait)
+        public bool Contains(Traits trait, int count)
         {
             foreach (Node n in items)
                 if (n.item.traits.HasFlag(trait))
-                    return true;
+                    if ((count -= n.count) <= 0)
+                        return true;
 
             return false;
         }

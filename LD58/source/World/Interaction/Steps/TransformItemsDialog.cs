@@ -26,7 +26,7 @@ namespace LD58.World.Interaction.Steps
 
         public struct Requirement
         {
-            public delegate bool IsRequirementFulfilled(Interactor interactor, ItemBag selectedItems);
+            public delegate bool IsRequirementFulfilled(Interactor interactor, ItemBag selectedItems, SysCol.Dictionary<Traits, int> countedTraits);
 
             public readonly string failureText;
             public readonly IsRequirementFulfilled fulfilled;
@@ -102,7 +102,8 @@ namespace LD58.World.Interaction.Steps
                     if (cursor == available.length + 1)
                         done = true;
 
-                    if (cursor == available.length && requirements.All(req => req.fulfilled(interactor, selection)))
+                    SysCol.Dictionary<Traits, int> traitLookup = selection.CountTraits().ToDictionary(x => x.Item1, x => x.Item2);
+                    if (cursor == available.length && requirements.All(req => req.fulfilled(interactor, selection, traitLookup)))
                     {
                         done = true;
                         callback(interactor, selection.ToDictionary(x => x.Item1, x => x.Item2));
@@ -197,7 +198,8 @@ namespace LD58.World.Interaction.Steps
             string failedRequirement = null;
             foreach (Requirement req in requirements)
             {
-                if (failedRequirement == null && !req.fulfilled(interactor, selection))
+                SysCol.Dictionary<Traits, int> traitLookup = selection.CountTraits().ToDictionary(x => x.Item1, x => x.Item2);
+                if (failedRequirement == null && !req.fulfilled(interactor, selection, traitLookup))
                     failedRequirement = req.failureText;
                 CalculateLineWidth($">{req.failureText}", ref minWidth);
             }

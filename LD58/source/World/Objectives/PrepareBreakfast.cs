@@ -6,6 +6,7 @@ namespace LD58.World.Objectives
 {
     using Interaction.Steps;
     using Inventory;
+    using LD58.World.Constants;
     using Objects;
     using Objects.WorldObjects;
     using Player;
@@ -33,7 +34,7 @@ namespace LD58.World.Objectives
                         "Yummy!",
                         Traits.Food | Traits.Dish | Traits.Beverage,
                         CheckComplete,
-                        new TransformItemsDialog.Requirement("I need a dish to eat this from.", PlateForFoods)
+                        CommonSense.FOOD_NEEDS_DISH
                         )
                     );
 
@@ -60,12 +61,6 @@ namespace LD58.World.Objectives
             if (door?.GetName() == "Dining Room" && door.OnDoorMat(interactor.parent.position))
                 (kitchenDoor = door).Lock();
             base.Step(interactor, steppedOn);
-        }
-
-        bool PlateForFoods(Interactor interactor, ItemBag selected)
-        {
-            SysCol.Dictionary<Traits, int> traitCount = selected.CountTraits().ToDictionary(x => x.Item1, x => x.Item2);
-            return !traitCount.ContainsKey(Traits.RequiresDish) || traitCount.ContainsKey(Traits.Dish);
         }
 
         string GetUnmentRequirement(Interactor interactor)

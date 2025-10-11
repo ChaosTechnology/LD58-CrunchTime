@@ -1,5 +1,4 @@
 using ChaosFramework.Math.Vectors;
-using System.Linq;
 using SysCol = System.Collections.Generic;
 
 namespace LD58.World.Objectives
@@ -13,24 +12,25 @@ namespace LD58.World.Objectives
     class GetToWork
         : Objective
     {
-        static readonly RequiredItemsSelection.Requirement[] requirements
-            = new RequiredItemsSelection.Requirement[]
-        {
-            new RequiredItemsSelection.Requirement(Traits.OpensDoor, 1, "The door is still locked."),
-            new RequiredItemsSelection.Requirement(Traits.StartsCar, 1, "Yeah, but how do I start my car?"),
-        };
+        static bool CanOpenDoor(Interactor interactor, ItemBag selected, SysCol.Dictionary<Traits, int> traitsFromSelection)
+            => traitsFromSelection.ContainsKey(Traits.OpensDoor);
+
+        static bool CanDriveCar(Interactor interactor, ItemBag selected, SysCol.Dictionary<Traits, int> traitsFromSelection)
+            => traitsFromSelection.ContainsKey(Traits.StartsCar);
 
         public override bool Interact(Interactor interactor, Interactible interactible, Vector2i interactAt)
         {
             DoorFrame wardrobe = interactible as DoorFrame;
             if (wardrobe != null)
             {
-                interactor.AddInteraction(new RequiredItemsSelection(
+                interactor.AddInteraction(new TransformItemsDialog(
                     interactor,
                     "I guess I'll leave for work now... let's check my inventory:",
                     "Get going already!",
-                    requirements,
-                    Complete
+                    Traits.OpensDoor | Traits.StartsCar,
+                    Complete,
+                    new TransformItemsDialog.Requirement("The door is still locked.", CanOpenDoor),
+                    new TransformItemsDialog.Requirement("Yeah, but how do I start my car?", CanDriveCar)
                     ));
 
                 return true;

@@ -85,8 +85,8 @@ namespace LD58.World.Player
         public bool Contains(Item item)
             => itemBag.Contains(item);
 
-        public bool Contains(Traits trait)
-            => itemBag.Contains(trait);
+        public bool Contains(Traits trait, int count)
+            => itemBag.Contains(trait, count);
 
         void UpdateText()
         {

@@ -46,15 +46,15 @@ namespace LD58.World.Objectives
                     interactor.AddInteraction(
                         new DialogLine(interactor, "I really need to hit the bathroom.")
                         );
-                else if (!interactor.parent.inventory.Contains(Traits.Hydrated))
+                else if (!interactor.parent.inventory.Contains(Traits.Hydrated, 3))
                     interactor.AddInteraction(
                         new DialogLine(interactor, "Gotta drink something.")
                         );
-                else if (!interactor.parent.inventory.Contains(Traits.WellFed))
+                else if (!interactor.parent.inventory.Contains(Traits.WellFed, 6))
                     interactor.AddInteraction(
-                        new DialogLine(interactor, "Gotta eat something.")
+                        new DialogLine(interactor, "I'm hungry, gotta eat something.")
                         );
-                else if (!interactor.parent.inventory.Contains(Traits.Caffeinated))
+                else if (!interactor.parent.inventory.Contains(Traits.Caffeinated, 1))
                     interactor.AddInteraction(
                         new DialogLine(interactor, "Man, I really need some caffeine.")
                         );
@@ -76,17 +76,14 @@ namespace LD58.World.Objectives
             if (table != null && table.GetName() == "Break Room")
             {
                 interactor.AddInteraction(
-                    new RequiredItemsSelection(
+                    new TransformItemsDialog(
                         interactor,
                         "Consume nourishments?.",
                         "Eat.",
-                        new[] {
-                            new RequiredItemsSelection.Requirement(Traits.Food, 6, "I'm hungry, need more food."),
-                            new RequiredItemsSelection.Requirement(Traits.Dish, 1, "I still need a plate or something."),
-                            new RequiredItemsSelection.Requirement(Traits.Beverage, 3, "My mouth is so dry, need more drinks."),
-                            new RequiredItemsSelection.Requirement(Traits.LiquidContainer, 1, "Can't just pour my drink on the table."),
-                            },
-                        Consume
+                        Traits.Food | Traits.Beverage | Traits.Dish | Traits.LiquidContainer,
+                        Consume,
+                        CommonSense.FOOD_NEEDS_DISH,
+                        CommonSense.BEVERAGE_NEEDS_CONTAINER
                         )
                     );
 
