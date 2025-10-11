@@ -109,5 +109,16 @@ namespace LD58.World.Inventory
 
         public void Transfer(ItemBag other)
             => items = new AdvancedLinkedList<Node>(other.items);
+
+        public ItemBag Filter(Traits filter)
+        {
+            ItemBag bag = new ItemBag();
+            foreach (Node node in items)
+                if (node.item.traits.HasFlag(filter))
+                    for (int i = 0; i < node.count; ++i)
+                        bag.Add(node.item);
+
+            return bag;
+        }
     }
 }
