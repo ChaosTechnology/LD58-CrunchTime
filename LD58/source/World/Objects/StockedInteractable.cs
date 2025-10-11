@@ -1,13 +1,14 @@
-using ChaosFramework.Collections;
 using ChaosFramework.Components;
 using ChaosFramework.Math.Vectors;
+using System.Linq;
 using SysCol = System.Collections.Generic;
+using ChaosUtil.Primitives;
 
 namespace LD58.World.Objects
 {
-    using Interaction;
     using Interaction.Steps;
     using Inventory;
+    using Interaction;
     using Player;
 
     public abstract class StockedInteractible
@@ -16,6 +17,10 @@ namespace LD58.World.Objects
         protected readonly ItemBag stock = new ItemBag();
 
         protected virtual string displayName => name;
+
+        protected virtual string prompt => "Take something?";
+        protected virtual string promptEmpty => "There nothing in here.";
+        protected virtual string takeOption => "Take";
 
         public StockedInteractible(uint width = 1, uint height = 1)
             : base(width, height)
@@ -32,34 +37,33 @@ namespace LD58.World.Objects
 
         public override bool Interact(Interactor interactor, Vector2i interactAt)
         {
-            LinkedList<Choice.Option> choices = new LinkedList<Choice.Option>
-            {
-                EnumerateStockOptions(interactor),
-                new Choice.Option("Leave")
-            };
-
             interactor.AddInteraction(
-                choices.length > 1
-                ? new Choice(interactor, $"Take from {displayName}?", choices.ToArray())
-                : new DialogLine(interactor, "There nothing in here.")
+                stock.Any()
+                ? new ChooseItemsDialog(
+                    interactor,
+                    stock,
+                    prompt,
+                    takeOption,
+                    SuccessCallback,
+                    null
+                    )
+                : new DialogLine(interactor, promptEmpty)
                 );
 
             return true;
         }
 
-        protected SysCol.IEnumerable<Choice.Option> EnumerateStockOptions(Interactor interactor)
+        protected virtual SysCol.IEnumerable<InteractionStep> PrependSteps(Interactor interactor)
+            => Array<InteractionStep>.empty;
+
+        protected virtual void SuccessCallback(Interactor interactor, ItemBag selectedItems)
         {
-            foreach (System.Tuple<Item, int> _i in stock)
-            {
-                System.Tuple<Item, int> i = _i;
-                yield return new Choice.Option(
-                    $"{i.Item1.displayName} x{i.Item2}",
-                    new InteractionStep[] {
-                        new AddItem(interactor, i.Item1),
-                        new CustomAction(interactor, (Interactor _) => stock.Remove(i.Item1))
-                        }
-                    );
-            }
+            foreach (ItemBag.Entry i in selectedItems)
+                for (int x = 0; x < i.count; ++x)
+                {
+                    stock.Remove(i.item);
+                    interactor.parent.inventory.AddItem(i.item);
+                }
         }
     }
 }

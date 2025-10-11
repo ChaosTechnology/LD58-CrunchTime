@@ -15,16 +15,13 @@ namespace LD58.World.Player
 
     public class PlayerInventory
         : StrictComponent<Player>
-        , SysCol.IEnumerable<System.Tuple<Item, int>>
+        , SysCol.IEnumerable<ItemBag.Entry>
     {
         // TODO: be fancy and smoothly reorder lines in graphical display
 
         const float CHAR_SIZE = 0.05f;
         const float MARGIN_X = 0.025f;
         const float MARGIN_Y = 0.0125f;
-
-        static bool Hidden(Tuple<Item, int> item)
-            => item.Item1.traits.HasFlag(Traits.Invisible);
 
         readonly ItemBag itemBag = new ItemBag();
 
@@ -91,20 +88,20 @@ namespace LD58.World.Player
         void UpdateText()
         {
             System.Text.StringBuilder bldr = new System.Text.StringBuilder();
-            foreach (System.Tuple<Item, int> i in itemBag)
-                if (!i.Item1.traits.HasFlag(Traits.Invisible))
-                    bldr.AppendLine($"{i.Item1.displayName} x{i.Item2}");
+            foreach (ItemBag.Entry i in itemBag)
+                if (!i.item.traits.HasFlag(Traits.Invisible))
+                    bldr.AppendLine($"{i.item.displayName} x{i.count}");
 
 #if DEBUG
-            SysCol.IEnumerable<Tuple<Item, int>> invisible = itemBag.Where(Hidden);
+            SysCol.IEnumerable<ItemBag.Entry> invisible = itemBag.Filter(Traits.Invisible);
             if (invisible.Any(L.PredicateTrue))
             {
                 if (bldr.Length > 0)
                     bldr.AppendLine();
 
                 bldr.AppendLine("Hidden:");
-                foreach (Tuple<Item, int> i in invisible)
-                    bldr.AppendLine($"{i.Item1.displayName} x{i.Item2}");
+                foreach (ItemBag.Entry i in invisible)
+                    bldr.AppendLine($"{i.item.displayName} x{i.count}");
             }
 #endif
 
@@ -112,8 +109,8 @@ namespace LD58.World.Player
 
 #if DEBUG
             bldr.Clear();
-            foreach (System.Tuple<Traits, int> i in itemBag.CountTraits())
-                bldr.AppendLine($"{i.Item1} x{i.Item2}");
+            foreach (ItemBag.Traitor i in itemBag.CountTraits())
+                bldr.AppendLine($"{i.item} x{i.count}");
 
             traits.UpdateText(parent.scene.game.textFont, bldr.ToString(), LayoutInfo.TOP_RIGHT);
 #endif
@@ -145,13 +142,13 @@ namespace LD58.World.Player
 #endif
         }
 
-        SysCol.IEnumerator<Tuple<Item, int>> SysCol.IEnumerable<Tuple<Item, int>>.GetEnumerator()
+        SysCol.IEnumerator<ItemBag.Entry> SysCol.IEnumerable<ItemBag.Entry>.GetEnumerator()
             => GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator()
             => GetEnumerator();
 
-        public SysCol.IEnumerator<Tuple<Item, int>> GetEnumerator()
+        public SysCol.IEnumerator<ItemBag.Entry> GetEnumerator()
             => itemBag.GetEnumerator();
 
         public ItemBag CopyBag()
