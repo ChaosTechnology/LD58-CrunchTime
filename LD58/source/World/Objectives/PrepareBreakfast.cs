@@ -85,11 +85,10 @@ namespace LD58.World.Objectives
                 for (int i = 0; i < item.Value; ++i)
                 {
                     interactor.parent.inventory.Remove(item.Key);
-                    if (!item.Key.traits.HasFlag(Traits.Dish))
-                        interactor.parent.inventory.AddItem(new Item(
-                            $"Consumed {item.Key.displayName}",
-                            item.Key.traits | Traits.Consumed | Traits.Invisible
-                            ));
+                    interactor.parent.inventory.AddItem(new Item(
+                        item.Key.displayName,
+                        item.Key.traits | Traits.Consumed | Traits.Invisible
+                        ));
                 }
 
             if (GetUnmentRequirement(interactor) == null)
