@@ -76,7 +76,7 @@ namespace LD58.World.Objectives
             if (table != null && table.GetName() == "Break Room")
             {
                 interactor.AddInteraction(
-                    new TransformItemsDialog(
+                    new ChooseItemsDialog(
                         interactor,
                         "Consume nourishments?.",
                         "Eat.",

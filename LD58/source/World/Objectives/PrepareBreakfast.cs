@@ -28,7 +28,7 @@ namespace LD58.World.Objectives
             if (table != null && table.GetName() == "Kitchen Table")
             {
                 interactor.AddInteraction(
-                    new TransformItemsDialog(
+                    new ChooseItemsDialog(
                         interactor,
                         "Let's prepare breakfast.",
                         "Yummy!",

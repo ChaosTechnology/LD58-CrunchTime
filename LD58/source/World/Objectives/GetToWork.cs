@@ -23,14 +23,14 @@ namespace LD58.World.Objectives
             DoorFrame wardrobe = interactible as DoorFrame;
             if (wardrobe != null)
             {
-                interactor.AddInteraction(new TransformItemsDialog(
+                interactor.AddInteraction(new ChooseItemsDialog(
                     interactor,
                     "I guess I'll leave for work now... let's check my inventory:",
                     "Get going already!",
                     Traits.OpensDoor | Traits.StartsCar,
                     Complete,
-                    new TransformItemsDialog.Requirement("The door is still locked.", CanOpenDoor),
-                    new TransformItemsDialog.Requirement("Yeah, but how do I start my car?", CanDriveCar)
+                    new ChooseItemsDialog.Requirement("The door is still locked.", CanOpenDoor),
+                    new ChooseItemsDialog.Requirement("Yeah, but how do I start my car?", CanDriveCar)
                     ));
 
                 return true;

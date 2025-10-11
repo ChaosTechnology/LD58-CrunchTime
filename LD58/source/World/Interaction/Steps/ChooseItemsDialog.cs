@@ -14,7 +14,7 @@ namespace LD58.World.Interaction.Steps
     using Inventory;
     using Player;
 
-    public class TransformItemsDialog
+    public class ChooseItemsDialog
         : DialogLine
     {
         // TODO: Add option for OPTIONALLY consuming items
@@ -56,7 +56,7 @@ namespace LD58.World.Interaction.Steps
         readonly string prompt;
         readonly string acceptText;
 
-        public TransformItemsDialog(
+        public ChooseItemsDialog(
             Interactor interactor,
             string prompt,
             string acceptText,

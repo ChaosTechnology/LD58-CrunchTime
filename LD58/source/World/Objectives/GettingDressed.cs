@@ -31,15 +31,15 @@ namespace LD58.World.Objectives
                         new CustomAction(interactor, (Interactor i) => interactible.Interact(interactor, interactAt))
                         ),
                     new Choice.Option("Choose clothes...", new CustomAction(interactor, (Interactor i) =>
-                        i.AddInteraction(new TransformItemsDialog(
+                        i.AddInteraction(new ChooseItemsDialog(
                             i,
                             "Choose clothes to wear:",
                             "Wear this!",
                             Traits.Clothing,
                             Complete,
-                            new TransformItemsDialog.Requirement("Need some bottom clothing piece.", BottomCovered),
-                            new TransformItemsDialog.Requirement("Can't go topless.", TopCovered),
-                            new TransformItemsDialog.Requirement("I still need something for the feet.", FeetCovered)
+                            new ChooseItemsDialog.Requirement("Need some bottom clothing piece.", BottomCovered),
+                            new ChooseItemsDialog.Requirement("Can't go topless.", TopCovered),
+                            new ChooseItemsDialog.Requirement("I still need something for the feet.", FeetCovered)
                             ))
                         )),
                     new Choice.Option("Leave")

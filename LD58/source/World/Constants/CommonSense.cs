@@ -8,12 +8,12 @@ namespace LD58.World.Constants
 
     public static class CommonSense
     {
-        public static readonly TransformItemsDialog.Requirement FOOD_NEEDS_DISH = new TransformItemsDialog.Requirement(
+        public static readonly ChooseItemsDialog.Requirement FOOD_NEEDS_DISH = new ChooseItemsDialog.Requirement(
                 "I need a dish to eat this from.",
                 HasPlateForFoods
             );
 
-        public static readonly TransformItemsDialog.Requirement BEVERAGE_NEEDS_CONTAINER = new TransformItemsDialog.Requirement(
+        public static readonly ChooseItemsDialog.Requirement BEVERAGE_NEEDS_CONTAINER = new ChooseItemsDialog.Requirement(
                 "Can't just pour my drink on the table.",
                 HasContainerForBeverage
             );
