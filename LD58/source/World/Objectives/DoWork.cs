@@ -298,7 +298,6 @@ namespace LD58.World.Objectives
 
         void UpdateWorkItems()
         {
-            // TODO: only pause for work related items?
             foreach (Interactor interactor in scene.EnumerateChildren<Interactor>(true))
                 if (interactor.busy)
                     return;
