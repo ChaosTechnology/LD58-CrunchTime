@@ -17,8 +17,6 @@ namespace LD58.World.Interaction.Steps
     public class ChooseItemsDialog
         : DialogLine
     {
-        // TODO: Add vertical scroll for very full inventories
-
         public struct Requirement
         {
             public delegate bool IsRequirementFulfilled(Interactor interactor, ItemBag selectedItems, SysCol.Dictionary<Traits, int> countedTraits);
