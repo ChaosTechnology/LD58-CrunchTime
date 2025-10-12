@@ -17,8 +17,6 @@ namespace LD58.World.Player
         : StrictComponent<Player>
         , SysCol.IEnumerable<System.Tuple<Item, int>>
     {
-        // TODO: be fancy and smoothly reorder lines in graphical display
-
         const float CHAR_SIZE = 0.05f;
         const float MARGIN_X = 0.025f;
         const float MARGIN_Y = 0.0125f;
