@@ -17,11 +17,6 @@ namespace LD58.World.Interaction.Steps
     public class ChooseItemsDialog
         : DialogLine
     {
-        // TODO: Add option for OPTIONALLY consuming items
-        //       e.g. interact multiple times and check completion elsewhere
-        //            Interaction 1: eat egg with plate
-        //            Interaction 2: eat bacon (with new plate?) & drink coffee
-
         // TODO: Add vertical scroll for very full inventories
 
         public struct Requirement
