@@ -30,9 +30,9 @@ namespace LD58.World.Objectives
                 interactor.AddInteraction(
                     new ChooseItemsDialog(
                         interactor,
+                        interactor.parent.inventory.CopyBag().Filter(Traits.Food | Traits.Dish | Traits.Beverage),
                         "Let's prepare breakfast.",
                         "Yummy!",
-                        Traits.Food | Traits.Dish | Traits.Beverage,
                         CheckComplete,
                         CommonSense.FOOD_NEEDS_DISH
                         )
@@ -65,24 +65,24 @@ namespace LD58.World.Objectives
 
         string GetUnmentRequirement(Interactor interactor)
         {
-            if (interactor.parent.inventory.Where(item => item.Item1.traits.HasFlag(Traits.Food | Traits.Consumed)).Sum(item => item.Item2) < CONSUMED_FOOR_REQUIREMENT)
+            if (interactor.parent.inventory.Where(item => item.item.traits.HasFlag(Traits.Food | Traits.Consumed)).Sum(item => item.count) < CONSUMED_FOOR_REQUIREMENT)
                 return "I'm still hungry.";
 
-            if (interactor.parent.inventory.Where(item => item.Item1.traits.HasFlag(Traits.Beverage | Traits.Consumed)).Sum(item => item.Item2) < CONSUMED_BEVERAGE_REQUIREMENT)
+            if (interactor.parent.inventory.Where(item => item.item.traits.HasFlag(Traits.Beverage | Traits.Consumed)).Sum(item => item.count) < CONSUMED_BEVERAGE_REQUIREMENT)
                 return "My throat is dry.";
 
             return null;
         }
 
-        void CheckComplete(Interactor interactor, SysCol.Dictionary<Item, int> selectedItems)
+        void CheckComplete(Interactor interactor, ItemBag selectedItems)
         {
-            foreach (SysCol.KeyValuePair<Item, int> item in selectedItems)
-                for (int i = 0; i < item.Value; ++i)
+            foreach (ItemBag.ItemCount item in selectedItems)
+                for (int i = 0; i < item.count; ++i)
                 {
-                    interactor.parent.inventory.Remove(item.Key);
+                    interactor.parent.inventory.Remove(item.item);
                     interactor.parent.inventory.AddItem(new Item(
-                        item.Key.displayName,
-                        item.Key.traits | Traits.Consumed | Traits.Invisible
+                        item.item.displayName,
+                        item.item.traits | Traits.Consumed | Traits.Invisible
                         ));
                 }
 

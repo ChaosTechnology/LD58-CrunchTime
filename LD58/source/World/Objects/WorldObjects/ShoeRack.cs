@@ -23,13 +23,13 @@ namespace LD58.World.Objects.WorldObjects
 
         protected override SysCol.IEnumerable<Item> GetInitialStock()
         {
-            Item[] a;
-            foreach (Item specificItem in stocksByName.TryGetValue(name ?? "", out a) ? a : Array<Item>.empty)
-                yield return specificItem;
-
             yield return KnownItems.SNEAKERS;
             yield return KnownItems.COMBAT_BOOTS;
             yield return KnownItems.CAT_SLIPPERS;
+
+            Item[] a;
+            foreach (Item specificItem in stocksByName.TryGetValue(name ?? "", out a) ? a : Array<Item>.empty)
+                yield return specificItem;
         }
     }
 }

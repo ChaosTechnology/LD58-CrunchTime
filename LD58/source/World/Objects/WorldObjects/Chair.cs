@@ -31,7 +31,6 @@ namespace LD58.World.Objects.WorldObjects
         }
 
         public override bool Interact(Interactor interactor, Vector2i interactAt)
-            => EnumerateStockOptions(interactor).Any(Linq.PredicateTrue<Choice.Option>)
-            && base.Interact(interactor, interactAt);
+            => !stock.Empty() && base.Interact(interactor, interactAt);
     }
 }

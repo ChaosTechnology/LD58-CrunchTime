@@ -18,10 +18,10 @@ namespace LD58.World.Constants
                 HasContainerForBeverage
             );
 
-        static bool HasPlateForFoods(Interactor interactor, ItemBag selected, SysCol.Dictionary<Traits, int> traitsFromSelected)
-            => !traitsFromSelected.ContainsKey(Traits.RequiresDish) || traitsFromSelected.ContainsKey(Traits.Dish);
+        static bool HasPlateForFoods(Interactor interactor, ItemBag selected)
+            => !selected.Contains(Traits.RequiresDish) || selected.Contains(Traits.Dish);
 
-        static bool HasContainerForBeverage(Interactor interactor, ItemBag selected, SysCol.Dictionary<Traits, int> traitsFromSelected)
-            => !traitsFromSelected.ContainsKey(Traits.RequiresLiquidContainer) || traitsFromSelected.ContainsKey(Traits.LiquidContainer);
+        static bool HasContainerForBeverage(Interactor interactor, ItemBag selected)
+            => !selected.Contains(Traits.RequiresLiquidContainer) || selected.Contains(Traits.LiquidContainer);
     }
 }
