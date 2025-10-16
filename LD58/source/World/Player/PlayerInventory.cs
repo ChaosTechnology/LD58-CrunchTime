@@ -67,15 +67,15 @@ namespace LD58.World.Player
             UpdateText();
         }
 
-        public void AddItem(Item item)
+        public void AddItem(Item item, int count = 1)
         {
-            itemBag.Add(item);
+            itemBag.Add(item, count);
             UpdateText();
         }
 
-        public void Remove(Item item, bool all = false)
+        public void Remove(Item item, int count = 1)
         {
-            itemBag.Remove(item, all);
+            itemBag.Remove(item, count);
             UpdateText();
         }
 

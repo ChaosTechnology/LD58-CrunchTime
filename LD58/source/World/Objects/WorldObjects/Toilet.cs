@@ -94,16 +94,16 @@ namespace LD58.World.Objects.WorldObjects
                                 ));
                         break;
                     default:
-                    options.Add(new Choice.Option(
-                            "Collect",
-                            new CustomAction(interactor, (Interactor _) =>
-                            {
-                                playerInventory.AddItem(KnownItems.POOP);
-                                playerInventory.AddItem(KnownItems.DIRTY_HANDS);
-                                hasContent = false;
-                            }),
-                            new DialogLine(interactor, "Can't let it go to waste...")
-                            ));
+                        options.Add(new Choice.Option(
+                                "Collect",
+                                new CustomAction(interactor, (Interactor _) =>
+                                {
+                                    playerInventory.AddItem(KnownItems.POOP);
+                                    playerInventory.AddItem(KnownItems.DIRTY_HANDS);
+                                    hasContent = false;
+                                }),
+                                new DialogLine(interactor, "Can't let it go to waste...")
+                                ));
                         break;
                 }
             }

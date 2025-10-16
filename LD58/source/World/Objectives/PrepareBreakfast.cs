@@ -77,14 +77,16 @@ namespace LD58.World.Objectives
         void CheckComplete(Interactor interactor, ItemBag selectedItems)
         {
             foreach (ItemBag.ItemCount item in selectedItems)
-                for (int i = 0; i < item.count; ++i)
-                {
-                    interactor.parent.inventory.Remove(item.item);
-                    interactor.parent.inventory.AddItem(new Item(
+            {
+                interactor.parent.inventory.Remove(item.item, item.count);
+                interactor.parent.inventory.AddItem(
+                    new Item(
                         item.item.displayName,
                         item.item.traits | Traits.Consumed | Traits.Invisible
-                        ));
-                }
+                        ),
+                    item.count
+                    );
+            }
 
             if (GetUnmentRequirement(interactor) == null)
             {

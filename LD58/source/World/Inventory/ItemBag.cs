@@ -40,23 +40,38 @@ namespace LD58.World.Inventory
             public readonly Item item;
             public int count;
 
-            public Node(Item item)
+            public Node(Item item, int count)
             {
                 this.item = item;
-                count = 1;
+                this.count = count;
             }
 
             /// <summary> Add a single instance of this item. </summary>
-            public void Pickup()
-                => count++;
+            public void Pickup(int howMany)
+                => count += howMany;
 
             /// <summary> Discard a single instance of this item. </summary>
+            /// <param name="howMany">How many items to remove. If negative remove all.</param>
             /// <returns>
             ///     true, if the node can be removed from the collection;
             ///     false otherwise
             /// </returns>
-            public bool Discard()
-                => --count <= 0;
+            public bool Discard(int howMany)
+            {
+                if (howMany < 0)
+                {
+                    count = 0;
+                    return true;
+                }
+                else
+                {
+                    count -= howMany;
+                    if (count < 0)
+                        throw new InvalidOperationException("Can't remove more than we have.");
+
+                    return count == 0;
+                }
+            }
 
             public static implicit operator ItemCount(Node n)
                 => new ItemCount(n.item, n.count);
@@ -66,32 +81,35 @@ namespace LD58.World.Inventory
 
         public int numItemKinds => items.length;
 
-        public void Add(Item item)
+        public void Add(Item item, int count = 1)
         {
+            if (count < 0)
+                throw new InvalidOperationException("Can't add negative amount of item. Use remove instead.");
+
             foreach (Node n in items)
                 if (n.item.Equals(item))
                 {
                     items.RemoveCurrent();
                     items.Add(n);
-                    n.Pickup();
+                    n.Pickup(count);
                     return;
                 }
 
-            items.Add(new Node(item));
+            items.Add(new Node(item, count));
         }
 
-        public void Remove(Item item, bool all = false)
+        public void Remove(Item item, int count = 1)
         {
             foreach (Node n in items)
                 if (n.item.Equals(item))
                 {
-                    if (all || n.Discard())
+                    if (n.Discard(count))
                         items.RemoveCurrent();
 
                     return;
                 }
 
-            if (!all)
+            if (count > 0)
                 throw new InvalidOperationException("Can't remove items that we don't have.");
         }
 
@@ -147,8 +165,7 @@ namespace LD58.World.Inventory
             ItemBag bag = new ItemBag();
             foreach (Node node in items)
                 if (node.item.traits.HasFlag(filter))
-                    for (int i = 0; i < node.count; ++i)
-                        bag.Add(node.item);
+                    bag.Add(node.item, node.count);
 
             return bag;
         }
@@ -159,8 +176,10 @@ namespace LD58.World.Inventory
             foreach (Node node in items)
                 foreach (Traits filter in filters)
                     if (node.item.traits.HasFlag(filter))
-                        for (int i = 0; i < node.count; ++i)
-                            bag.Add(node.item);
+                    {
+                        bag.Add(node.item, node.count);
+                        break;
+                    }
 
             return bag;
         }
@@ -170,8 +189,7 @@ namespace LD58.World.Inventory
             ItemBag bag = new ItemBag();
             foreach (Node node in items)
                 if (filter(node))
-                    for (int i = 0; i < node.count; ++i)
-                        bag.Add(node.item);
+                    bag.Add(node.item, node.count);
 
             return bag;
         }

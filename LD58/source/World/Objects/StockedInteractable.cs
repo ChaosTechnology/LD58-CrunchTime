@@ -59,11 +59,10 @@ namespace LD58.World.Objects
         protected virtual void SuccessCallback(Interactor interactor, ItemBag selectedItems)
         {
             foreach (ItemBag.ItemCount i in selectedItems)
-                for (int x = 0; x < i.count; ++x)
-                {
-                    stock.Remove(i.item);
-                    interactor.parent.inventory.AddItem(i.item);
-                }
+            {
+                stock.Remove(i.item, i.count);
+                interactor.parent.inventory.AddItem(i.item, i.count);
+            }
         }
     }
 }

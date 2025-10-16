@@ -26,7 +26,7 @@ namespace LD58.World.Objectives
                 p.inventory.AddItem(KnownItems.HELD_IN_POOP);
                 foreach (ItemBag.ItemCount i in p.inventory)
                     if (i.item.traits.HasFlag(Traits.Consumed))
-                        p.inventory.Remove(i.item, true);
+                        p.inventory.Remove(i.item, -1);
             }
         }
 
@@ -96,17 +96,17 @@ namespace LD58.World.Objectives
         void Consume(Interactor interactor, ItemBag selectedItems)
         {
             foreach (ItemBag.ItemCount consumed in selectedItems)
-                for (int i = 0; i < consumed.count; ++i)
-                {
-                    interactor.parent.inventory.Remove(consumed.item);
-                    if (!consumed.item.traits.HasFlag(Traits.Dish))
-                        interactor.parent.inventory.AddItem(
-                            new Item(
-                                $"Consumed {consumed.item.displayName}",
-                                consumed.item.traits | Traits.Invisible | Traits.Consumed
-                                )
-                            );
-                }
+            {
+                interactor.parent.inventory.Remove(consumed.item, consumed.count);
+                if (!consumed.item.traits.HasFlag(Traits.Dish))
+                    interactor.parent.inventory.AddItem(
+                        new Item(
+                            $"Consumed {consumed.item.displayName}",
+                            consumed.item.traits | Traits.Invisible | Traits.Consumed
+                            ),
+                        consumed.count
+                        );
+            }
         }
 
         void Complete(Interactor interactor)
