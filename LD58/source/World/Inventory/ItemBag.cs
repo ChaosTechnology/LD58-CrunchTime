@@ -8,6 +8,7 @@ namespace LD58.World.Inventory
     public class ItemBag
         : SysCol.IEnumerable<ItemBag.ItemCount>
     {
+        [System.Diagnostics.DebuggerDisplay("{" + nameof(item) + "." + nameof(Item.displayName) + "}, {" + nameof(count) + "}")]
         public class ItemCount
         {
             public readonly Item item;
@@ -20,6 +21,7 @@ namespace LD58.World.Inventory
             }
         }
 
+        [System.Diagnostics.DebuggerDisplay("{" + nameof(traits) + "}, {" + nameof(count) + "}")]
         public class TraitCount
         {
             public readonly Traits traits;
@@ -32,6 +34,7 @@ namespace LD58.World.Inventory
             }
         }
 
+        [System.Diagnostics.DebuggerDisplay("{" + nameof(item) + "." + nameof(Item.displayName) + "}, {" + nameof(count) + "}")]
         class Node
         {
             public readonly Item item;
