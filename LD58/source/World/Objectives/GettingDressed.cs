@@ -33,7 +33,7 @@ namespace LD58.World.Objectives
                     new Choice.Option("Choose clothes...", new CustomAction(interactor, (Interactor i) =>
                         i.AddInteraction(new ChooseItemsDialog(
                             i,
-                            i.parent.inventory.CopyBag().Filter(Traits.Clothing),
+                            i.parent.inventory.Filter(Traits.Clothing),
                             "Choose clothes to wear:",
                             "Wear this",
                             Complete,

@@ -151,11 +151,10 @@ namespace LD58.World.Player
         public SysCol.IEnumerator<ItemBag.ItemCount> GetEnumerator()
             => itemBag.GetEnumerator();
 
-        public ItemBag CopyBag()
-        {
-            ItemBag bag = new ItemBag();
-            bag.Transfer(itemBag);
-            return bag;
-        }
+        public ItemBag Filter(Traits traits)
+            => itemBag.Filter(traits);
+
+        public ItemBag Filter(params Traits[] traits)
+            => itemBag.Filter(traits);
     }
 }

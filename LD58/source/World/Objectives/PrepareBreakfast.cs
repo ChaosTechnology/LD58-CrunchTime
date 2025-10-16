@@ -30,7 +30,7 @@ namespace LD58.World.Objectives
                 interactor.AddInteraction(
                     new ChooseItemsDialog(
                         interactor,
-                        interactor.parent.inventory.CopyBag().Filter(Traits.Food, Traits.Dish, Traits.Beverage),
+                        interactor.parent.inventory.Filter(Traits.Food, Traits.Dish, Traits.Beverage),
                         "Let's prepare breakfast.",
                         "Yummy!",
                         CheckComplete,
