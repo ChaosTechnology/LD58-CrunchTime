@@ -78,7 +78,7 @@ namespace LD58.World.Objectives
                 interactor.AddInteraction(
                     new ChooseItemsDialog(
                         interactor,
-                        interactor.parent.inventory.CopyBag().Filter(Traits.Food | Traits.Beverage | Traits.Dish | Traits.LiquidContainer),
+                        interactor.parent.inventory.CopyBag().Filter(Traits.Food, Traits.Beverage, Traits.Dish, Traits.LiquidContainer),
                         "Consume nourishments?.",
                         "Eat.",
                         Consume,

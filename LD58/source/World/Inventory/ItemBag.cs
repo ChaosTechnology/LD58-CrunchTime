@@ -150,6 +150,18 @@ namespace LD58.World.Inventory
             return bag;
         }
 
+        public ItemBag Filter(params Traits[] filters)
+        {
+            ItemBag bag = new ItemBag();
+            foreach (Node node in items)
+                foreach (Traits filter in filters)
+                    if (node.item.traits.HasFlag(filter))
+                        for (int i = 0; i < node.count; ++i)
+                            bag.Add(node.item);
+
+            return bag;
+        }
+
         public ItemBag Filter(System.Func<ItemCount, bool> filter)
         {
             ItemBag bag = new ItemBag();
