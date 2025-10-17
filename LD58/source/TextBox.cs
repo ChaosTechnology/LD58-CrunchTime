@@ -9,7 +9,7 @@ using ChaosFramework.Math.Vectors;
 
 namespace LD58
 {
-    public class TextBox : Component<WorldScene>
+    public class TextBox : Component<TextScene>
     {
         const float PADDING = 0.75f;
 

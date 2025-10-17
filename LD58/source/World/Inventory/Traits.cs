@@ -6,9 +6,16 @@ namespace LD58.World.Inventory
     {
         None = 0,
         Invisible = 1,
+
+        [CharacterTrait(displayName = "Weird")]
         Weird = 1 << 1,
+
+        [CharacterTrait(displayName = "Stressed")]
         Distressing = 1 << 2,
+
+        [CharacterTrait(displayName = "Satisfied")]
         Satisfying = 1 << 3,
+
         RESERVED_EMOTION_3 = 1 << 4,
         RESERVED_EMOTION_4 = 1 << 5,
         Food = 1 << 6,
