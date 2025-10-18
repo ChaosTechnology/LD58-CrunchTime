@@ -79,6 +79,20 @@ namespace LD58.World.Objectives
             "I'm just gonna delete this...\nHopefully no one uses this feature.",
             "Soooo much spaghetti code...",
             "This bug fix probably introduces 5 new bugs in the process!",
+            "And yet another idiot who doesn't know the difference\nbetween a sorted and an ordered collection...",
+            "How did nobody notice this bug?\nThere were literally eight people reviewing this!",
+            "This looks like somebody fell asleep on their keyboard.",
+            "Eeeehm. Why?",
+            "So some random antivirus software\nflagged our product again.\nGreat...",
+            "Slapping my ... on the keyboard would\nproduce better code than this!",
+            "Looks like some idiot hardcoded strings again.\nThese belong into some kind of language database...",
+            "Who hired this guy?\nAnd why?",
+            "This is beyond saving.\nI'll just discontinue this product now...",
+            "Refuse intellect.\nGo back to retard.",
+            "Why do I have to fix this?!",
+            "Somone just added a random delay here.\nJust so they can 'optimize' it later I guess...",
+            "Unexpected ';' on line 749.\nWait, that's an empty line.\nProfessional IDEs 2025...",
+            "Ok, let's just delete the bad parts.\nThere's nothing left...",
         };
 
         static readonly string[][] URGENT_WORK_TASKS = new[]
@@ -106,7 +120,24 @@ namespace LD58.World.Objectives
                 "WHYYYYYYYYYYYYY???",
                 "Who thought it was a good idea to connect to the database...\nFOR EVERY SINGLE ITEM!",
                 "No wonder that we need to restock on hardware every other month!",
-            }
+            },
+            new[]
+            {
+                "How the hell did this ever work?!",
+                "Depending on static initialization order is just plain stupid!",
+                "Stop relying on undefined behavior, for fuck's sake!!!",
+            },
+            new[]
+            {
+                "I can't do this anymore.",
+                "> sudo rm -rf /",
+            },
+            new[]
+            {
+                "Holy shit, just get your fucking constness right!!!",
+                "You're providing an equality function!",
+                "If that mutates your instance,\nsomething's seriously wrong in your head!!!",
+            },
         };
 
         protected virtual int required => 15;
