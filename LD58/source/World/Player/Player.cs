@@ -63,8 +63,6 @@ namespace LD58.World.Player
 
         Vector2f cameraTarget;
 
-        // TODO: Capture actual input instead of just direction,
-        //       to support multiple keys (or keyboards) for the same action
         LinkedList<Direction> inputs = new LinkedList<Direction>();
 
         protected override void Create(CreateParameters args)
