@@ -154,5 +154,8 @@ namespace LD58.World.Player
 
         public ItemBag Filter(params Traits[] traits)
             => itemBag.Filter(traits);
+
+        public ItemBag Filter(System.Func<ItemBag.ItemCount, bool> filter)
+            => itemBag.Filter(filter);
     }
 }

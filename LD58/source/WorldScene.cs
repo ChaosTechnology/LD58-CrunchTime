@@ -6,6 +6,7 @@ using ChaosFramework.Graphics.OpenGl.Lights;
 using ChaosFramework.Graphics.OpenGl.Lights.Intrinsic;
 using ChaosFramework.Graphics.OpenGl.PostProcessors;
 using ChaosFramework.Math.Vectors;
+using ChaosFramework.Platform;
 using LD58.source;
 using OpenTK.Graphics.OpenGL;
 using static ChaosFramework.Math.Constants;
@@ -34,7 +35,7 @@ namespace LD58
                 float.NaN,
                 float.NaN,
                 PI_QUART / 2,
-                screenRatio: game.graphics.ratio
+                screenRatio: game.window.Ratio()
                 );
 
 
@@ -43,17 +44,17 @@ namespace LD58
                 base.game.graphics,
                 view,
                 new Vector2i(
-                    (game.settings.deferredShaderResolution.x <= 0) ? game.panel.Width : game.settings.deferredShaderResolution.x,
-                    (game.settings.deferredShaderResolution.y <= 0) ? game.panel.Height : game.settings.deferredShaderResolution.y
+                    (game.settings.deferredShaderResolution.x <= 0) ? game.window.width : game.settings.deferredShaderResolution.x,
+                    (game.settings.deferredShaderResolution.y <= 0) ? game.window.height : game.settings.deferredShaderResolution.y
                     ),
                 lights,
                 new DeferredShaderIntrinsicLights[] {
                     new DirectionalLightIntrinsics(1),
-                    new SpotLightIntrinsics(11)
+                    // new CircularSpotLightIntrinsics(11) // TODO!
                 },
                 new LightInstancerBase[] {
                     new PointLightInstancer(game.graphics, 128),
-                    new SpotLightInstancer(game.graphics, 11)
+                    new CircularSpotLightInstancer(game.graphics, 22)
                     }
                 );
 
@@ -80,7 +81,7 @@ namespace LD58
         }
 
         void UpdateView()
-            => view.Update(view.Position, view.Direction, view.Up, float.NaN, float.NaN, float.NaN, game.graphics.ratio);
+            => view.Update(view.Position, view.Direction, view.Up, float.NaN, float.NaN, float.NaN, game.window.Ratio());
 
         public override void SetDrawCalls()
         {
@@ -102,17 +103,17 @@ namespace LD58
         {
             GL.Viewport(
                 0,
-                game.panel.Height - game.panel.ClientSize.Height,
-                game.panel.ClientSize.Width,
-                game.panel.ClientSize.Height
-                );
+                0,
+                game.window.width,
+                game.window.height
+                ); // TODO: client size
             Graphics.ThrowErrors();
             game.graphics.stateTracker.BindFramebuffer(FramebufferTarget.Framebuffer, null);
         }
 
         void AntiEdgy()
         {
-            GL.Viewport(0, game.panel.Height - game.panel.ClientSize.Height, game.panel.ClientSize.Width, game.panel.ClientSize.Height);
+            GL.Viewport(0, 0, game.window.width, game.window.height); // TODO: client size
             Graphics.ThrowErrors();
             game.graphics.stateTracker.BindFramebuffer(FramebufferTarget.Framebuffer, null);
             antiEdger.normalFactor = 6f;

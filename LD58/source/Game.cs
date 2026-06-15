@@ -1,15 +1,14 @@
+using System.Linq;
 using ChaosFramework.Components;
 using ChaosFramework.Core;
 using ChaosFramework.Graphics.OpenGl;
 using ChaosFramework.Graphics.OpenGl.AssetContainers;
 using ChaosFramework.Graphics.OpenGl.Text;
 using ChaosFramework.Input;
-using ChaosFramework.Input.RawInput;
 using ChaosFramework.IO.Streams;
-using ChaosUtil.Platform.Windows.WinAPI.winuser;
+using ChaosFramework.Platform;
 using ChaosUtil.Serialization.Text;
 using OpenTK.Graphics.OpenGL;
-using System.Linq;
 
 namespace LD58
 {
@@ -20,13 +19,15 @@ namespace LD58
     {
         const float UPDATE_INPUT_DEVICE_INTERVAL = 3;
 
+        public readonly Window window;
+        public readonly PlatformContext platformContext;
         public readonly Settings settings;
 
         public StreamSource assetSource { get; private set; }
 
         public Graphics graphics { get; private set; }
         // public Audio audio { get; private set; }
-        public InputContext input { get; private set; }
+        public readonly InputContext input;
         // public SoundPool sounds { get; private set; }
         public TextRenderer textRenderer { get; private set; }
         public TextRenderer.TextBuffer textBuffer { get; private set; }
@@ -44,12 +45,14 @@ namespace LD58
 
         float updateInputDeviceTimer;
 
-        public Game() : base()
+        public Game(PlatformContext platformContext, Window window, System.Func<InputContext, InputDeviceHost> createInputContext)
+            : base(platformContext.messageQueue)
         {
-            System.Windows.Forms.Cursor.Hide();
-            window.Cursor.Dispose();
-            window.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            window.Bounds = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
+            this.window = window;
+            this.platformContext = platformContext;
+            input = new InputContext(typeof(InputLayers), createInputContext);
+            input.UpdateDeviceList();
+            platformContext.Terminate += Terminate;
 
             settings = new Settings();
             bool settingsExist = System.IO.File.Exists(Settings.FILE);
@@ -62,15 +65,14 @@ namespace LD58
         public override void LoadGame()
         {
             base.LoadGame();
-            gameLoop = new ChaosFramework.Components.GameLoop.CappedVariableTimeLoop(settings.maxFPS);
+            gameLoop = new ChaosFramework.Components.GameLoop.CappedVariableTimeLoop(platformContext.messageQueue, settings.maxFPS);
 
             assetSource = new ChaosFramework.IO.ChaosArchive(new System.IO.FileInfo("assets.cha"), false);
 
             // audio = new Audio();
             // samples = new SoundDataContainer(assetSource, false);
-            input = new InputContext(typeof(InputLayers), context => new RawInputDeviceHost(context));
 
-            graphics = new Graphics(panel, 3, 3);
+            graphics = new Graphics(platformContext.glContext, 3, 3);
             fonts = new FontContainer(assetSource, graphics, false);
             textures = new TextureContainer(assetSource, graphics.dispatcher, false);
             materials = new MaterialContainer(assetSource, graphics, textures, false);
@@ -89,8 +91,8 @@ namespace LD58
             home.SetObjective<World.Objectives.Hygiene>();
             scenes.Add(home);
 
-            window.BackgroundImage.Dispose();
-            window.BackgroundImage = null;
+            // window.BackgroundImage.Dispose();
+            // window.BackgroundImage = null;
         }
 
         protected override void Update()
@@ -99,12 +101,12 @@ namespace LD58
 
             base.Update();
 
-            if (GetActiveWindow.Invoke() == window.Handle)
-                System.Windows.Forms.Cursor.Position
-                    = new System.Drawing.Point(
-                        window.Location.X + window.Width / 2,
-                        window.Location.Y + window.Height / 2
-                        );
+            // if (GetActiveWindow.Invoke() == window.Handle)
+            //     System.Windows.Forms.Cursor.Position
+            //         = new System.Drawing.Point(
+            //             window.Location.X + window.Width / 2,
+            //             window.Location.Y + window.Height / 2
+            //             );
 
             Dispatcher.dispatcher.ExecuteDispatchers(10);
             // sounds.Update();
@@ -146,7 +148,7 @@ namespace LD58
             GL.Clear(ClearBufferMask.ColorBufferBit);
             Graphics.ThrowErrors();
             base.Draw();
-            graphics.graphicsContext.SwapBuffers();
+            window.Present();
         }
 
         public void SwitchScene<T>(Interactor theOnlyOneToKeepTheirStuff, string whereAreWeGoing)

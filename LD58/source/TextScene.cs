@@ -4,6 +4,7 @@ using ChaosFramework.Math;
 using ChaosFramework.Math.Vectors;
 using ChaosFramework.Graphics.OpenGl;
 using static ChaosFramework.Math.Constants;
+using ChaosFramework.Platform;
 
 namespace LD58
 {
@@ -22,7 +23,7 @@ namespace LD58
                 0.5f,
                 1.5f,
                 PI_QUART,
-                screenRatio: game.graphics.ratio
+                screenRatio: game.window.Ratio()
                 );
         }
 

@@ -26,7 +26,7 @@ namespace LD58.World.Objects.WorldObjects
             new TimeIndicatorColor(0.0f, new Rgba(2, 0, 0, 1)),
         };
 
-        SpotLight light;
+        CircularSpotLight light;
         public bool isRightSide { get; private set; }
 
         float timeRemaining = 15;
@@ -46,7 +46,7 @@ namespace LD58.World.Objects.WorldObjects
             Vector3f bonePos = bone.GetPosition();
             Vector3f boneDir = bone.GetDirection().x0z;
             Vector3f boneSide = new Vector3f(-boneDir.z, 0, boneDir.x);
-            light = new SpotLight(
+            light = new CircularSpotLight(
                 new Vector3f(bonePos.x, 5, bonePos.z) + boneDir * 1.5f - boneSide * (isRightSide ? 2 : 0),
                 Rgba.OPAQUE_BLACK,
                 10,

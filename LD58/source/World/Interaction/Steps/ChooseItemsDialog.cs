@@ -2,8 +2,8 @@ using ChaosFramework.Collections;
 using ChaosFramework.Graphics.Colors;
 using ChaosFramework.Graphics.Text;
 using ChaosFramework.Graphics.Text.Formatting;
+using ChaosFramework.Input;
 using ChaosFramework.Input.InputEvents;
-using ChaosFramework.Input.RawInput;
 using ChaosUtil.Primitives;
 using System.Linq;
 using System.Text;
@@ -80,17 +80,11 @@ namespace LD58.World.Interaction.Steps
 
         public override bool interactionDone => done;
 
-        public override void SetUpdateCalls()
+        protected override bool KeyDown(InputPushEvent<Keyboard.Key> e)
         {
-            base.SetUpdateCalls();
-            interactor.parent.scene.game.input.AddHandler<InputPushEvent<Keyboard.Key>, Keyboard.Key>(InputLayers.Interaction, KeyDown);
-        }
-
-        bool KeyDown(InputPushEvent<Keyboard.Key> e)
-        {
-            switch (e.axis.key)
+            switch (e.axis.hidKey)
             {
-                case Keyboard.Keys.Space:
+                case Keyboard.HidUsage.Space:
                     if (cursor == available.numItemKinds + 1)
                         done = true;
 
@@ -105,19 +99,19 @@ namespace LD58.World.Interaction.Steps
 
                     return true;
 
-                case Keyboard.Keys.W:
+                case Keyboard.HidUsage.W:
                     DeltaChoice(-1);
                     return true;
 
-                case Keyboard.Keys.S:
+                case Keyboard.HidUsage.S:
                     DeltaChoice(1);
                     return true;
 
-                case Keyboard.Keys.A:
+                case Keyboard.HidUsage.A:
                     DeltaCount(-1);
                     return true;
 
-                case Keyboard.Keys.D:
+                case Keyboard.HidUsage.D:
                     DeltaCount(1);
                     return true;
 

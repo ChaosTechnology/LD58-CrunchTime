@@ -9,11 +9,11 @@ namespace LD58.World.Objects.WorldObjects
     internal class Highlight
         : WorldObject
     {
-        SpotLight light;
+        CircularSpotLight light;
         protected override void Create(CreateParameters args)
         {
             base.Create(args);
-            light = new SpotLight(
+            light = new CircularSpotLight(
                 bone.GetPosition(),
                 Rgba.OPAQUE_WHITE,
                 14,

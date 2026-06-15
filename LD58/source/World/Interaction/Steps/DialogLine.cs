@@ -1,6 +1,6 @@
 using ChaosFramework.Graphics.Text;
+using ChaosFramework.Input;
 using ChaosFramework.Input.InputEvents;
-using ChaosFramework.Input.RawInput;
 using ChaosFramework.Math.Vectors;
 
 namespace LD58.World.Interaction.Steps
@@ -50,14 +50,14 @@ namespace LD58.World.Interaction.Steps
         public override void SetUpdateCalls()
         {
             base.SetUpdateCalls();
-            interactor.parent.scene.game.input.AddHandler<InputPushEvent<Keyboard.Key>, Keyboard.Key>(InputLayers.Interaction, KeyDown);
+            interactor.parent.scene.game.input.AddHandler<InputPushEvent<Keyboard.Key>, Keyboard.Key, InputChange>(InputLayers.Interaction, KeyDown);
         }
 
-        bool KeyDown(InputPushEvent<Keyboard.Key> key)
+        protected virtual bool KeyDown(InputPushEvent<Keyboard.Key> key)
         {
-            switch (key.axis.key)
+            switch (key.axis.hidKey)
             {
-                case Keyboard.Keys.Space:
+                case Keyboard.HidUsage.Space:
                     done = true;
                     return true;
 

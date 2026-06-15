@@ -1,8 +1,8 @@
 using ChaosFramework.Collections;
 using ChaosFramework.Components;
 using ChaosFramework.Graphics.OpenGl.Instancing;
+using ChaosFramework.Input;
 using ChaosFramework.Input.InputEvents;
-using ChaosFramework.Input.RawInput;
 using ChaosFramework.Math;
 using ChaosFramework.Math.Vectors;
 using System.Linq;
@@ -83,8 +83,8 @@ namespace LD58.World.Player
         {
             base.SetUpdateCalls();
 
-            scene.game.input.AddHandler<InputPushEvent<Keyboard.Key>, Keyboard.Key>(InputLayers.Move, KeyDown);
-            scene.game.input.AddHandler<InputReleaseEvent<Keyboard.Key>, Keyboard.Key>(InputLayers.Move, KeyUp);
+            scene.game.input.AddHandler<InputPushEvent<Keyboard.Key>, Keyboard.Key, InputChange>(InputLayers.Move, KeyDown);
+            scene.game.input.AddHandler<InputReleaseEvent<Keyboard.Key>, Keyboard.Key, InputChange>(InputLayers.Move, KeyUp);
 
             scene.updateLayers[(int)UpdateLayers.PlayerMove].Add(Move);
             scene.updateLayers[(int)UpdateLayers.UpdateCamera].Add(UpdateView);
@@ -111,13 +111,13 @@ namespace LD58.World.Player
         bool KeyDown(InputPushEvent<Keyboard.Key> e)
         {
             if (!interactor.busy)
-                switch (e.axis.key)
+                switch (e.axis.hidKey)
                 {
-                    case Keyboard.Keys.W: return StartWalking(Direction.Up);
-                    case Keyboard.Keys.A: return StartWalking(Direction.Left);
-                    case Keyboard.Keys.S: return StartWalking(Direction.Down);
-                    case Keyboard.Keys.D: return StartWalking(Direction.Right);
-                    case Keyboard.Keys.Space: return Interact();
+                    case Keyboard.HidUsage.W: return StartWalking(Direction.Up);
+                    case Keyboard.HidUsage.A: return StartWalking(Direction.Left);
+                    case Keyboard.HidUsage.S: return StartWalking(Direction.Down);
+                    case Keyboard.HidUsage.D: return StartWalking(Direction.Right);
+                    case Keyboard.HidUsage.Space: return Interact();
                 }
 
             return false;
@@ -126,12 +126,12 @@ namespace LD58.World.Player
         bool KeyUp(InputReleaseEvent<Keyboard.Key> e)
         {
             if (!interactor.busy)
-                switch (e.axis.key)
+                switch (e.axis.hidKey)
                 {
-                    case Keyboard.Keys.W: return StopWalking(Direction.Up);
-                    case Keyboard.Keys.A: return StopWalking(Direction.Left);
-                    case Keyboard.Keys.S: return StopWalking(Direction.Down);
-                    case Keyboard.Keys.D: return StopWalking(Direction.Right);
+                    case Keyboard.HidUsage.W: return StopWalking(Direction.Up);
+                    case Keyboard.HidUsage.A: return StopWalking(Direction.Left);
+                    case Keyboard.HidUsage.S: return StopWalking(Direction.Down);
+                    case Keyboard.HidUsage.D: return StopWalking(Direction.Right);
                 }
 
             return false;

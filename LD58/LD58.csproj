@@ -6,6 +6,7 @@
     <AssemblyName>LD58 - Crunch Time</AssemblyName>
     <RootNamespace>LD58</RootNamespace>
     <ProjectGuid>{ADFC01E7-7D26-4518-8403-C1164AD3B0EF}</ProjectGuid>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <!-- Properties -->
@@ -69,7 +70,7 @@
     >
     <ChaosArchive
       SourceFolder="assets"
-      TargetFile="Assets.cha"
+      TargetFile="assets.cha"
       OutputPath="$(OutputPath)"
       IntermediateOutputPath="$(IntermediateOutputPath)"
       />

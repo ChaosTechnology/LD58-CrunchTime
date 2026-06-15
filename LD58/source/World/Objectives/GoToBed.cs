@@ -1,5 +1,6 @@
 using ChaosFramework.Components;
 using ChaosFramework.Math.Vectors;
+using LD58.World.Inventory;
 using LD58.World.Objects;
 using LD58.World.Objects.WorldObjects;
 using LD58.World.Player;
@@ -24,7 +25,7 @@ namespace LD58.World.Objectives
         {
             if (interactible is Bed)
             {
-                scene.game.scenes.Add(new EndScreen(scene.game, interactor.parent.inventory.CopyBag()));
+                scene.game.scenes.Add(new EndScreen(scene.game, interactor.parent.inventory));
                 scene.doUpdate = false;
                 return true;
             }
