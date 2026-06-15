@@ -65,15 +65,15 @@ namespace LD58.World.Player
             UpdateText();
         }
 
-        public void AddItem(Item item)
+        public void AddItem(Item item, int count = 1)
         {
-            itemBag.Add(item);
+            itemBag.Add(item, count);
             UpdateText();
         }
 
-        public void Remove(Item item, bool all = false)
+        public void Remove(Item item, int count = 1)
         {
-            itemBag.Remove(item, all);
+            itemBag.Remove(item, count);
             UpdateText();
         }
 
@@ -149,11 +149,10 @@ namespace LD58.World.Player
         public SysCol.IEnumerator<ItemBag.ItemCount> GetEnumerator()
             => itemBag.GetEnumerator();
 
-        public ItemBag CopyBag()
-        {
-            ItemBag bag = new ItemBag();
-            bag.Transfer(itemBag);
-            return bag;
-        }
+        public ItemBag Filter(Traits traits)
+            => itemBag.Filter(traits);
+
+        public ItemBag Filter(params Traits[] traits)
+            => itemBag.Filter(traits);
     }
 }

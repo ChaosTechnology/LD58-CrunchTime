@@ -33,7 +33,7 @@ namespace LD58.World.Objectives
                     new Choice.Option("Choose clothes...", new CustomAction(interactor, (Interactor i) =>
                         i.AddInteraction(new ChooseItemsDialog(
                             i,
-                            i.parent.inventory.CopyBag().Filter(Traits.Clothing),
+                            i.parent.inventory.Filter(Traits.Clothing),
                             "Choose clothes to wear:",
                             "Wear this",
                             Complete,
@@ -53,14 +53,16 @@ namespace LD58.World.Objectives
         void Complete(Interactor interactor, ItemBag selectedItems)
         {
             foreach (ItemBag.ItemCount item in selectedItems)
-                for (int i = 0; i < item.count; ++i)
-                {
-                    interactor.parent.inventory.Remove(item.item);
-                    interactor.parent.inventory.AddItem(new Item(
+            {
+                interactor.parent.inventory.Remove(item.item, item.count);
+                interactor.parent.inventory.AddItem(
+                    new Item(
                         $"Wearing {item.item.displayName}",
                         item.item.traits | Traits.Wearing | Traits.Invisible
-                        ));
-                }
+                        ),
+                    item.count
+                    );
+            }
 
             interactor.parent.scene.SetObjective<PrepareBreakfast>();
         }

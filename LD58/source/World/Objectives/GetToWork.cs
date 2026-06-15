@@ -25,7 +25,7 @@ namespace LD58.World.Objectives
             {
                 interactor.AddInteraction(new ChooseItemsDialog(
                     interactor,
-                    interactor.parent.inventory.CopyBag().Filter(Traits.OpensDoor | Traits.StartsCar),
+                    interactor.parent.inventory.Filter(Traits.OpensDoor, Traits.StartsCar),
                     "I guess I'll leave for work now... let's check my inventory:",
                     "Get going already!",
                     Complete,

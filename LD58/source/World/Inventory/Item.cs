@@ -1,5 +1,6 @@
 namespace LD58.World.Inventory
 {
+    [System.Diagnostics.DebuggerDisplay("{" + nameof(displayName) + "}")]
     public class Item
     {
         public readonly string displayName;
