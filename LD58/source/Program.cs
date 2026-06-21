@@ -1,10 +1,7 @@
 using ChaosFramework.Input;
 using System;
 using System.Reflection;
-
-#if OS_WINDOWS
-using System.Windows.Forms;
-#endif
+using ChaosFramework.Platform.Glfw;
 
 namespace LD58
 {
@@ -33,24 +30,11 @@ namespace LD58
                 typeof(ChaosFramework.Graphics.Text.GlyphDimensions).Assembly
                 );
 
-#if OS_WINDOWS
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
-            Game game = new Game();
-            game.window.Icon = Properties.Resources.Icon;
-            game.window.Text = "LD58";
-            game.window.MinimumSize = new System.Drawing.Size(800, 450);
-            game.window.Size = game.settings.deferredShaderResolution;
-            game.window.BackgroundImageLayout = ImageLayout.Stretch;
-            game.window.BackgroundImage = Properties.Resources.wallpaper;
-#else
             GlfwPlatformContext platformContext = new GlfwPlatformContext();
             GlfwPlatformContext.GlfwWindow window = platformContext.CreateWindow();
             Func<InputContext, InputDeviceHost> createHost = _ => new ChaosFramework.Input.OpenTk.DeviceHost(_, window.window);
-            Game g = new Game(platformContext, window, createHost);
-#endif
 
+            Game g = new Game(platformContext, window, createHost);
             g.Run();
         }
     }

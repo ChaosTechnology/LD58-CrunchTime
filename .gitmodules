@@ -10,9 +10,6 @@
 [submodule "submodules/ChaosUtil.Platform"]
 	path = submodules/ChaosUtil.Platform
 	url = ../../ChaosFramework/ChaosUtil.Platform.git
-[submodule "submodules/ChaosUtil.Platform.Windows"]
-	path = submodules/ChaosUtil.Platform.Windows
-	url = ../../ChaosFramework/ChaosUtil.Platform.Windows.git
 [submodule "submodules/ChaosUtil.Primitives"]
 	path = submodules/ChaosUtil.Primitives
 	url = ../../ChaosFramework/ChaosUtil.Primitives.git
@@ -58,12 +55,6 @@
 [submodule "submodules/ChaosFramework.Input"]
 	path = submodules/ChaosFramework.Input
 	url = ../../ChaosFramework/ChaosFramework.Input.git
-[submodule "submodules/ChaosFramework.Input.RawInput"]
-	path = submodules/ChaosFramework.Input.RawInput
-	url = ../../ChaosFramework/ChaosFramework.Input.RawInput.git
-[submodule "submodules/ChaosFramework.Input.RawInput.Sharp"]
-	path = submodules/ChaosFramework.Input.RawInput.Sharp
-	url = ../../ChaosFramework/ChaosFramework.Input.RawInput.Sharp.git
 [submodule "submodules/ChaosFramework.IO"]
 	path = submodules/ChaosFramework.IO
 	url = ../../ChaosFramework/ChaosFramework.IO.git
@@ -97,3 +88,6 @@
 [submodule "submodules/ChaosFrameworkBuild.ArchiveCreator"]
 	path = submodules/ChaosFrameworkBuild.ArchiveCreator
 	url = ../../ChaosFramework/ChaosFrameworkBuild.ArchiveCreator.git
+[submodule "submodules/ChaosFramework.Platform.Glfw"]
+	path = submodules/ChaosFramework.Platform.Glfw
+	url = ../../ChaosFramework/ChaosFramework.Platform.Glfw.git
