@@ -7,6 +7,6 @@ set -euo pipefail
 SolutionDir="$(realpath "$(dirname "${BASH_SOURCE[0]}")")/"
 cd "$SolutionDir"
 
-dotnet build "./submodules/ChaosBuild.CodeFormatter.Tasks/"
-dotnet build "./submodules/ChaosFrameworkBuild.ArchiveCreator/"
-dotnet build "./LD58.sln"
+SolutionDir="$SolutionDir" bash -c 'dotnet build "./submodules/ChaosBuild.CodeFormatter.Tasks/"'
+SolutionDir="$SolutionDir" bash -c 'dotnet build "./submodules/ChaosFrameworkBuild.ArchiveCreator/"'
+SolutionDir="$SolutionDir" bash -c 'dotnet build "./LD58.sln"'
