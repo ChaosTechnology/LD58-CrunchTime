@@ -209,6 +209,9 @@ namespace LD58.World.Player
                     Step();
                 }
 
+            if (interactor.busy)
+                FullStop();
+
             visualPosition += (position - visualPosition) * EaseIn(ftime * 10);
         }
 

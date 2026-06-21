@@ -1,28 +1,27 @@
-using ChaosFramework.Components;
+using ChaosFramework.Graphics.OpenGl.Instancing;
 using ChaosFramework.Math.Vectors;
-using LD58.World.Player;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace LD58.World.Objects.WorldObjects
 {
+    using Interaction.Steps;
+    using Inventory;
+    using Player;
+
     [DefaultInstancer(64, "objects/Door Frame.gmdl", "objects/Kitchen.mat")]
+    [DefaultInstancer(64, "objects/Door.gmdl", "objects/Kitchen.mat")]
     class DoorFrame
         : Interactible
     {
-        static readonly Vector2i[] DOOR_MAT_POSITIONS = new[] { new Vector2i(0, -1), new Vector2i(1, -1) };
-        static readonly Vector2i[] FRAME_POSITIONS = new[] { new Vector2i(0, 0), new Vector2i(1, 0) };
+        protected virtual Vector2i[] doorMatPositions => new[] { new Vector2i(0, -1), new Vector2i(1, -1) };
+        protected virtual Vector2i[] doorFramePositions => new[] { new Vector2i(0, 0), new Vector2i(1, 0) };
 
-        bool locked;
-
-        protected override void Create(CreateParameters args)
-        {
-            base.Create(args);
-            locked = name == "Apartment Door";
-        }
+        [BoneParameter]
+        protected bool locked = false;
 
         protected override IEnumerable<Vector2i> RelativeOffsetsForOccupiedTiles()
-            => DOOR_MAT_POSITIONS.Concat(FRAME_POSITIONS);
+            => doorMatPositions.Concat(doorFramePositions);
 
         public override bool CanStepOn(Vector2i pos)
         {
@@ -30,11 +29,50 @@ namespace LD58.World.Objects.WorldObjects
             return !locked || doorMatTile;
         }
 
+        public override void GiveMeInstances(InstancingAttribute[] instancers)
+        {
+            base.GiveMeInstances(instancers);
+            if (locked)
+                instancers[1].informer.AddInstance(bone.GetBoneTransform());
+        }
+
         public override bool Interact(Interactor interactor, Vector2i interactAt)
-            => false;
+        {
+            if (locked && TransformRelativeTilePositions(doorFramePositions).Contains(interactAt))
+            {
+                interactor.AddInteraction(new DialogLine(interactor, "It's locked"));
+
+                Key key = (Key)interactor.parent.inventory.Where(CorrectKey).FirstOrDefault()?.item;
+                if (key != null)
+                {
+                    interactor.AddInteraction(
+                        new Choice(interactor,
+                            "Unlock?",
+                            new Choice.Option(
+                                "yes",
+                                new CustomAction(
+                                    interactor,
+                                    i =>
+                                    {
+                                        Unlock();
+                                        i.parent.inventory.Remove(key);
+                                    })
+                                ),
+                            new Choice.Option("no")
+                            )
+                       );
+                }
+
+                return true;
+            }
+            else return false;
+        }
+
+        bool CorrectKey(ItemBag.ItemCount key)
+            => (key.item as Key)?.doorName == name;
 
         public bool OnDoorMat(Vector2i pos)
-            => TransformRelativeTilePositions(DOOR_MAT_POSITIONS).Contains(pos);
+            => TransformRelativeTilePositions(doorMatPositions).Contains(pos);
 
         public void Lock()
             => locked = true;

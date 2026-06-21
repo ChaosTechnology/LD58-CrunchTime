@@ -5,18 +5,23 @@ using ChaosFramework.Graphics.Text;
 using ChaosFramework.Math;
 using System;
 using System.Collections;
+using System.Linq;
+using L = ChaosFramework.Collections.Linq;
 using SysCol = System.Collections.Generic;
 
 namespace LD58.World.Player
 {
     using Inventory;
-    using LD58.World.Constants;
 
     public class PlayerInventory
         : StrictComponent<Player>
-        , SysCol.IEnumerable<System.Tuple<Item, int>>
+        , SysCol.IEnumerable<ItemBag.ItemCount>
     {
         // TODO: be fancy and smoothly reorder lines in graphical display
+
+        const float CHAR_SIZE = 0.05f;
+        const float MARGIN_X = 0.025f;
+        const float MARGIN_Y = 0.0125f;
 
         readonly ItemBag itemBag = new ItemBag();
 
@@ -31,20 +36,34 @@ namespace LD58.World.Player
             text = new Text(parent.scene.game.textRenderer, 4096);
             text.color = Rgba.OPAQUE_WHITE;
             float tan = parent.scene.fullScreenView.tan;
-            text.transform = Matrix.Scaling(0.1f)
-                           * Matrix.Translation(parent.scene.fullScreenView.screenRatio * -tan, tan, 0)
+            text.transform = Matrix.Scaling(CHAR_SIZE)
+                           * Matrix.Translation(parent.scene.fullScreenView.screenRatio * -tan + MARGIN_X, tan - MARGIN_Y, 0)
                            ;
 #if DEBUG
             traits = new Text(parent.scene.game.textRenderer, 4096);
             traits.color = Rgba.OPAQUE_WHITE;
-            traits.transform = Matrix.Scaling(0.1f)
-                             * Matrix.Translation(parent.scene.fullScreenView.screenRatio * tan, tan, 0)
+            traits.transform = Matrix.Scaling(CHAR_SIZE)
+                             * Matrix.Translation(parent.scene.fullScreenView.screenRatio * tan - MARGIN_X, tan - MARGIN_Y, 0)
                              ;
+
+            foreach (Item item in new[] {
+                Constants.KnownItems.PANTS,
+                Constants.KnownItems.BACON,
+                Constants.KnownItems.BEER,
+                Constants.KnownItems.EGG,
+                Constants.KnownItems.CANDY_UNDIES,
+                Constants.KnownItems.BLACK_SUBSTANCE,
+                Constants.KnownItems.ESSENCE_OF_DARKNESS,
+                })
+                itemBag.Add(new Item($"Hidden Debug {item.displayName}", item.traits | Traits.Invisible));
 #endif
 
-            foreach (Item item in InitialInventory.INITIAL_INVENTORY)
-                itemBag.Add(item);
+            UpdateText();
+        }
 
+        public void CarryOver(PlayerInventory source)
+        {
+            itemBag.Transfer(source.itemBag);
             UpdateText();
         }
 
@@ -63,27 +82,35 @@ namespace LD58.World.Player
         public bool Contains(Item item)
             => itemBag.Contains(item);
 
+        public bool Contains(Traits trait, int count)
+            => itemBag.Contains(trait, count);
+
         void UpdateText()
         {
             System.Text.StringBuilder bldr = new System.Text.StringBuilder();
-            foreach (System.Tuple<Item, int> i in itemBag)
-                if (!i.Item1.traits.HasFlag(Traits.Invisible))
-                    bldr.AppendLine($"{i.Item1.displayName} x{i.Item2}");
+            foreach (ItemBag.ItemCount i in itemBag)
+                if (!i.item.traits.HasFlag(Traits.Invisible))
+                    bldr.AppendLine($"{i.item.displayName} x{i.count}");
 
 #if DEBUG
-            bldr.AppendLine();
-            bldr.AppendLine("Hidden:");
-            foreach (System.Tuple<Item, int> i in itemBag)
-                if (i.Item1.traits.HasFlag(Traits.Invisible))
-                    bldr.AppendLine($"{i.Item1.displayName} x{i.Item2}");
+            SysCol.IEnumerable<ItemBag.ItemCount> invisible = itemBag.Filter(Traits.Invisible);
+            if (invisible.Any(L.PredicateTrue))
+            {
+                if (bldr.Length > 0)
+                    bldr.AppendLine();
+
+                bldr.AppendLine("Hidden:");
+                foreach (ItemBag.ItemCount i in invisible)
+                    bldr.AppendLine($"{i.item.displayName} x{i.count}");
+            }
 #endif
 
             text.UpdateText(parent.scene.game.textFont, bldr.ToString(), LayoutInfo.TOP_LEFT);
 
 #if DEBUG
             bldr.Clear();
-            foreach (System.Tuple<Traits, int> i in itemBag.CountTraits())
-                bldr.AppendLine($"{i.Item1} x{i.Item2}");
+            foreach (ItemBag.TraitCount i in itemBag.CountTraits())
+                bldr.AppendLine($"{i.traits} x{i.count}");
 
             traits.UpdateText(parent.scene.game.textFont, bldr.ToString(), LayoutInfo.TOP_RIGHT);
 #endif
@@ -115,13 +142,20 @@ namespace LD58.World.Player
 #endif
         }
 
-        SysCol.IEnumerator<Tuple<Item, int>> SysCol.IEnumerable<Tuple<Item, int>>.GetEnumerator()
+        SysCol.IEnumerator<ItemBag.ItemCount> SysCol.IEnumerable<ItemBag.ItemCount>.GetEnumerator()
             => GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator()
             => GetEnumerator();
 
-        public SysCol.IEnumerator<Tuple<Item, int>> GetEnumerator()
+        public SysCol.IEnumerator<ItemBag.ItemCount> GetEnumerator()
             => itemBag.GetEnumerator();
+
+        public ItemBag CopyBag()
+        {
+            ItemBag bag = new ItemBag();
+            bag.Transfer(itemBag);
+            return bag;
+        }
     }
 }
