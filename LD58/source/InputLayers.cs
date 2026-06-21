@@ -2,9 +2,9 @@ namespace LD58
 {
     public enum InputLayers
     {
-        Move,
-        HUD,
+        Menu,
         Interaction,
-        Menu
+        HUD,
+        Move,
     }
 }

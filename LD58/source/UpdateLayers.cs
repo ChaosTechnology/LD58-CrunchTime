@@ -5,6 +5,8 @@ namespace LD58
         PlayerMove,
         PrepareInteraction,
         Interaction,
+        ObjectLogic,
+        ObjectiveLogic,
         UpdateCamera
     }
 }

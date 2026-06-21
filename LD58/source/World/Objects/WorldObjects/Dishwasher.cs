@@ -1,41 +1,26 @@
-using ChaosFramework.Math.Vectors;
-using System.Collections.Generic;
+using SysCol = System.Collections.Generic;
 
 namespace LD58.World.Objects.WorldObjects
 {
     using Constants;
-    using Interaction.Steps;
     using Inventory;
-    using Player;
 
     [DefaultInstancer(64, "objects/Dishwasher.gmdl", "objects/Kitchen.mat")]
     class Dishwasher
         : StockedInteractible
     {
-        protected override IEnumerable<Item> GetInitialStock()
-        {
-            yield return KnownItems.CLEAN_PLATE;
-        }
+        protected override string prompt
+            => "There are clean dishes in there.";
 
-        public override bool Interact(Interactor interactor, Vector2i interactAt)
+        protected override string takeOption
+            => "Take";
+
+        protected override SysCol.IEnumerable<Item> GetInitialStock()
         {
-            if (stock.Contains(KnownItems.CLEAN_PLATE))
-                interactor.AddInteraction(
-                    new Choice(
-                        interactor,
-                        "Take a plate?",
-                        new Choice.Option("Yes.",
-                            new DialogLine(interactor, "Took plate."),
-                            new AddItem(interactor, KnownItems.CLEAN_PLATE)
-                            ),
-                        new Choice.Option("No")
-                        )
-                    );
-            else
-                interactor.AddInteraction(
-                    new DialogLine(interactor, "Nothing in there.")
-                    );
-            return true;
+            for (int i = 0; i < 4; ++i) yield return KnownItems.CLEAN_PLATE;
+            for (int i = 0; i < 3; ++i) yield return KnownItems.CLEAN_BOWL;
+            for (int i = 0; i < 6; ++i) yield return KnownItems.CLEAN_CUP;
+            for (int i = 0; i < 3; ++i) yield return KnownItems.CLEAN_GLASS;
         }
     }
 }

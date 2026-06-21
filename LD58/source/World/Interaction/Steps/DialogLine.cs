@@ -1,6 +1,6 @@
 using ChaosFramework.Graphics.Text;
+using ChaosFramework.Input;
 using ChaosFramework.Input.InputEvents;
-using ChaosFramework.Input.RawInput;
 using ChaosFramework.Math.Vectors;
 
 namespace LD58.World.Interaction.Steps
@@ -10,7 +10,7 @@ namespace LD58.World.Interaction.Steps
     public class DialogLine
         : InteractionStep
     {
-        const float CHAR_SIZE = 0.08f;
+        protected const float CHAR_SIZE = 0.08f;
 
         public readonly string text;
         public readonly LayoutInfo layout;
@@ -24,39 +24,40 @@ namespace LD58.World.Interaction.Steps
             : base(interactor)
         {
             this.text = text;
-            this.layout = layout;
+            this.layout = layout ?? new LayoutInfo(ChaosFramework.Graphics.Align.TopLeft, enableEscapeSequences: true);
         }
 
         public override void Activate()
         {
             base.Activate();
             textBox = interactor.AddComponent<TextBox>();
-            UpdateText(text, layout);
+            UpdateText(text);
         }
 
-        protected void UpdateText(string text, LayoutInfo layout = null)
+        protected void UpdateText(string text, float minWidth = 0)
         {
             float screenToBoxDistance = 0.1f;
             textBox.Update(
                 text,
-                layout ?? new LayoutInfo(ChaosFramework.Graphics.Align.TopLeft, enableEscapeSequences: true),
+                layout,
                 new Vector2f(0, -1 + screenToBoxDistance),
                 new Vector2f(0, -1),
-                CHAR_SIZE
+                CHAR_SIZE,
+                minWidth
                 );
         }
 
         public override void SetUpdateCalls()
         {
             base.SetUpdateCalls();
-            interactor.parent.scene.game.input.AddHandler<InputPushEvent<Keyboard.Key>, Keyboard.Key>(InputLayers.Interaction, KeyDown);
+            interactor.parent.scene.game.input.AddHandler<InputPushEvent<Keyboard.Key>, Keyboard.Key, InputChange>(InputLayers.Interaction, KeyDown);
         }
 
-        bool KeyDown(InputPushEvent<Keyboard.Key> key)
+        protected virtual bool KeyDown(InputPushEvent<Keyboard.Key> key)
         {
-            switch (key.axis.key)
+            switch (key.axis.hidKey)
             {
-                case Keyboard.Keys.Space:
+                case Keyboard.HidUsage.Space:
                     done = true;
                     return true;
 

@@ -5,11 +5,11 @@ namespace LD58.World.Interaction.Steps
     class CustomAction
         : InteractionStep
     {
-        readonly System.Action action;
+        readonly System.Action<Interactor> action;
 
         public override bool interactionDone => true;
 
-        public CustomAction(Interactor interactor, System.Action action)
+        public CustomAction(Interactor interactor, System.Action<Interactor> action)
             : base(interactor)
         {
             this.action = action;
@@ -18,7 +18,7 @@ namespace LD58.World.Interaction.Steps
         public override void Activate()
         {
             base.Activate();
-            action();
+            action(interactor);
         }
     }
 }

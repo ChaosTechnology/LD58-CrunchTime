@@ -1,6 +1,7 @@
+using ChaosFramework.Input;
 using System;
 using System.Reflection;
-using System.Windows.Forms;
+using ChaosFramework.Platform.Glfw;
 
 namespace LD58
 {
@@ -13,6 +14,8 @@ namespace LD58
                 "s_userDefaultCulture",
                 BindingFlags.NonPublic | BindingFlags.Static
                 ).SetValue(null, System.Globalization.CultureInfo.InvariantCulture);
+
+            Environment.CurrentDirectory = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             ChaosUtil.Reflection.AssemblyManager.RegisterAssemblies(
                 typeof(Program).Assembly,
@@ -27,17 +30,12 @@ namespace LD58
                 typeof(ChaosFramework.Graphics.Text.GlyphDimensions).Assembly
                 );
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
+            GlfwPlatformContext platformContext = new GlfwPlatformContext();
+            GlfwPlatformContext.GlfwWindow window = platformContext.CreateWindow();
+            Func<InputContext, InputDeviceHost> createHost = _ => new ChaosFramework.Input.OpenTk.DeviceHost(_, window.window);
 
-            Game game = new Game();
-            game.window.Icon = Properties.Resources.Icon;
-            game.window.Text = "LD58";
-            game.window.MinimumSize = new System.Drawing.Size(800, 450);
-            game.window.Size = game.settings.deferredShaderResolution;
-            game.window.BackgroundImageLayout = ImageLayout.Stretch;
-            game.window.BackgroundImage = Properties.Resources.wallpaper;
-            Application.Run(game.window);
+            Game g = new Game(platformContext, window, createHost);
+            g.Run();
         }
     }
 }
