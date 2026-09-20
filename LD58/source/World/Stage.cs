@@ -1,15 +1,15 @@
+using ChaosFramework.Components;
 using ChaosFramework.IO.Streams;
 using ChaosFramework.Math.Vectors;
 using ChaosFramework.Shapes.Rigging;
 using ChaosUtil.Reflection;
-using ChaosFramework.Components;
 using System.IO;
-using SysCol = System.Collections.Generic;
+using System.Linq;
 using static ChaosFramework.Math.Clamping;
+using SysCol = System.Collections.Generic;
 
 namespace LD58.World
 {
-    using System.Linq;
     using Objects;
 
     public class Stage
@@ -30,6 +30,7 @@ namespace LD58.World
         static System.Type GetBoneType(Rig.Bone b)
             => boneTypeCache[GetBoneTypeName(b)];
 
+        public readonly string name;
         public readonly Vector2i size;
         readonly WorldObject[,] tiles;
 
@@ -41,6 +42,7 @@ namespace LD58.World
         public Stage(Game game, StreamSource source, string name)
             : base(game)
         {
+            this.name = name;
             Vector2i size = 0;
             SysCol.Dictionary<Vector2i, WorldObject> occupied = new SysCol.Dictionary<Vector2i, WorldObject>();
 
@@ -102,6 +104,20 @@ namespace LD58.World
         {
             objective?.Dispose();
             objective = AddComponent<Objective>();
+        }
+
+        public Object Find<Object>(string name)
+            where Object : WorldObject
+        {
+            for (Vector2i pos = 0; pos.x < size.x; ++pos.x)
+                for (pos.y = 0; pos.y < size.y; ++pos.y)
+                {
+                    Object obj = this[pos] as Object;
+                    if (obj?.GetName() == name)
+                        return obj;
+                }
+
+            return null;
         }
     }
 }

@@ -12,13 +12,14 @@ namespace LD58.World.Objectives
     class GettingDressed
         : Objective
     {
-        static readonly RequiredItemsSelection.Requirement[] requirements
-            = new RequiredItemsSelection.Requirement[]
-        {
-            new RequiredItemsSelection.Requirement(Traits.CoversBottom, 1, "Need some bottom clothing piece."),
-            new RequiredItemsSelection.Requirement(Traits.CoversTop, 1, "Can't go topless"),
-            new RequiredItemsSelection.Requirement(Traits.CoversFeet, 1, "I still need something for the feet."),
-        };
+        static bool FeetCovered(Interactor interactor, ItemBag selected)
+            => selected.Contains(Traits.CoversFeet);
+
+        static bool BottomCovered(Interactor interactor, ItemBag selected)
+            => selected.Contains(Traits.CoversBottom);
+
+        static bool TopCovered(Interactor interactor, ItemBag selected)
+            => selected.Contains(Traits.CoversTop);
 
         public override bool Interact(Interactor interactor, Interactible interactible, Vector2i interactAt)
         {
@@ -26,23 +27,44 @@ namespace LD58.World.Objectives
             if (wardrobe != null)
             {
                 interactor.AddInteraction(new Choice(interactor, "I can get dressed here...",
-                    new Choice.Option("Choose clothes...", new CustomAction(interactor, () =>
-                        interactor.AddInteraction(new RequiredItemsSelection(
-                            interactor,
+                    new Choice.Option("Rummage through this wardrobe...",
+                        new CustomAction(interactor, (Interactor i) => interactible.Interact(interactor, interactAt))
+                        ),
+                    new Choice.Option("Choose clothes...", new CustomAction(interactor, (Interactor i) =>
+                        i.AddInteraction(new ChooseItemsDialog(
+                            i,
+                            i.parent.inventory.Filter(Traits.Clothing),
                             "Choose clothes to wear:",
-                            "Wear this!",
-                            requirements, _ => interactor.parent.scene.SetObjective<PrepareBreakfast>()
+                            "Wear this",
+                            Complete,
+                            new ChooseItemsDialog.Requirement("Need some bottom clothing piece.", BottomCovered),
+                            new ChooseItemsDialog.Requirement("Can't go topless.", TopCovered),
+                            new ChooseItemsDialog.Requirement("I still need something for the feet.", FeetCovered)
                             ))
                         )),
-                    new Choice.Option("Rummage through this wardrobe...",
-                        new CustomAction(interactor, () => interactible.Interact(interactor, interactAt))
-                        ),
                     new Choice.Option("Leave")
                     ));
                 return true;
             }
 
             return interactible.Interact(interactor, interactAt);
+        }
+
+        void Complete(Interactor interactor, ItemBag selectedItems)
+        {
+            foreach (ItemBag.ItemCount item in selectedItems)
+            {
+                interactor.parent.inventory.Remove(item.item, item.count);
+                interactor.parent.inventory.AddItem(
+                    new Item(
+                        $"Wearing {item.item.displayName}",
+                        item.item.traits | Traits.Wearing | Traits.Invisible
+                        ),
+                    item.count
+                    );
+            }
+
+            interactor.parent.scene.SetObjective<PrepareBreakfast>();
         }
 
         protected override string GetText()

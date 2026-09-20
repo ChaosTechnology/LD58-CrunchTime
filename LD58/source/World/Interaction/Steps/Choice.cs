@@ -1,5 +1,5 @@
+using ChaosFramework.Input;
 using ChaosFramework.Input.InputEvents;
-using ChaosFramework.Input.RawInput;
 using System.Text;
 
 namespace LD58.World.Interaction.Steps
@@ -53,27 +53,21 @@ namespace LD58.World.Interaction.Steps
 
         public override bool interactionDone => chosen;
 
-        public override void SetUpdateCalls()
+        protected override bool KeyDown(InputPushEvent<Keyboard.Key> e)
         {
-            base.SetUpdateCalls();
-            interactor.parent.scene.game.input.AddHandler<InputPushEvent<Keyboard.Key>, Keyboard.Key>(InputLayers.Interaction, KeyDown);
-        }
-
-        bool KeyDown(InputPushEvent<Keyboard.Key> e)
-        {
-            switch (e.axis.key)
+            switch (e.axis.hidKey)
             {
-                case Keyboard.Keys.Space:
+                case Keyboard.HidUsage.Space:
                     interactor.AddInteraction(options[selection].steps);
                     options[selection] = null; // it is now the interactor's responsibility to discard these
                     chosen = true;
                     return true;
 
-                case Keyboard.Keys.W:
+                case Keyboard.HidUsage.W:
                     DeltaChoice(-1);
                     return true;
 
-                case Keyboard.Keys.S:
+                case Keyboard.HidUsage.S:
                     DeltaChoice(1);
                     return true;
 

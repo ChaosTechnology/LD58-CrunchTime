@@ -37,7 +37,7 @@ namespace LD58.World.Objects.WorldObjects
             return true;
         }
 
-        void Dance()
+        void Dance(Interactor interactor)
             => danced = true;
     }
 }

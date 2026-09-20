@@ -21,16 +21,16 @@ namespace LD58.World.Objects.WorldObjects
             if (IsStove(interactAt))
             {
                 LinkedList<Tuple<Item, Item>> incredients = new LinkedList<Tuple<Item, Item>>();
-                foreach (Tuple<Item, int> i in interactor.parent.inventory)
-                    if (i.Item1.traits.HasFlag(Traits.Incredient))
-                        if (i.Item1 == KnownItems.ESSENCE_OF_DARKNESS)
-                            incredients.Add(new Tuple<Item, Item>(i.Item1, KnownItems.ETERNAL_DARKNESS));
+                foreach (ItemBag.ItemCount i in interactor.parent.inventory)
+                    if (i.item.traits.HasFlag(Traits.Incredient) && !i.item.traits.HasFlag(Traits.Invisible))
+                        if (i.item == KnownItems.ESSENCE_OF_DARKNESS)
+                            incredients.Add(new Tuple<Item, Item>(i.item, KnownItems.ETERNAL_DARKNESS));
                         else
                             incredients.Add(new Tuple<Item, Item>(
-                                i.Item1,
+                                i.item,
                                 new Item(
-                                    $"Fried {i.Item1.displayName}",
-                                    Traits.Food | i.Item1.traits & ~Traits.Incredient
+                                    $"Cooked {i.item.displayName}",
+                                    Traits.Food | i.item.traits & ~Traits.Incredient
                                     )
                                 ));
 
@@ -41,16 +41,16 @@ namespace LD58.World.Objects.WorldObjects
                 else
                 {
                     LinkedList<Choice.Option> options = new LinkedList<Choice.Option>();
-                    options.Add(new Choice.Option("Nah, I'm good."));
                     foreach (Tuple<Item, Item> _incredient in incredients)
                     {
                         Tuple<Item, Item> incredient = _incredient;
                         options.Add(new Choice.Option(
                             incredient.Item1.displayName,
                             new AddItem(interactor, incredient.Item2),
-                            new CustomAction(interactor, () => interactor.parent.inventory.Remove(incredient.Item1))
+                            new CustomAction(interactor, (Interactor i) => i.parent.inventory.Remove(incredient.Item1))
                             ));
                     }
+                    options.Add(new Choice.Option("Nah, I'm good."));
 
                     interactor.AddInteraction(new Choice(interactor, "Cook something?", options.ToArray()));
                 }

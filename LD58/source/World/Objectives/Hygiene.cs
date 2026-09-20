@@ -2,6 +2,7 @@ using ChaosFramework.Math.Vectors;
 
 namespace LD58.World.Objectives
 {
+    using ChaosFramework.Components;
     using Constants;
     using Interaction.Steps;
     using Objects;
@@ -12,6 +13,19 @@ namespace LD58.World.Objectives
         : Objective
     {
         DoorFrame bathroomDoor;
+
+        protected override void Create(CreateParameters cparams)
+        {
+            base.Create(cparams);
+            ChoosePlayerName("Bedroom");
+            scene.Find<DoorFrame>("Apartment Door").Lock();
+
+            foreach (Player p in scene.EnumerateChildren<Player>(false))
+            {
+                p.inventory.AddItem(KnownItems.HELD_IN_POOP);
+                p.inventory.AddItem(KnownItems.BODY_GREASE);
+            }
+        }
 
         protected override string GetText()
             => "Do morning hygiene.";
@@ -54,7 +68,7 @@ namespace LD58.World.Objectives
             return base.Interact(interactor, interactible, interactAt);
         }
 
-        void Complete()
+        void Complete(Interactor interactor)
         {
             bathroomDoor.Unlock();
             scene.SetObjective<GettingDressed>();

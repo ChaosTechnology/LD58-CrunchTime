@@ -14,7 +14,14 @@ namespace LD58.World.Objects.WorldObjects
     class Fridge
         : StockedInteractible
     {
-        bool collectedEssenceOfDarkness = false;
+        bool stockedEssenceOfDarkness = false;
+
+        protected override string promptEmpty
+            => scene.name == "home" && !stock.Contains(KnownItems.BEER)
+                ? "Where has all the beer gone?"
+                : "It's empty."
+                ;
+
 
         public Fridge()
             : base(2, 1)
@@ -22,50 +29,47 @@ namespace LD58.World.Objects.WorldObjects
 
         protected override SysCol.IEnumerable<Item> GetInitialStock()
         {
-            for (int i = 0; i < 3; ++i) yield return KnownItems.EXTRA_MOLDY_CHEESE;
-            for (int i = 0; i < 4; ++i) yield return KnownItems.BEER;
-            for (int i = 0; i < 2; ++i) yield return KnownItems.BLACK_SUBSTANCE;
-            for (int i = 0; i < 2; ++i) yield return KnownItems.EGG;
-            for (int i = 0; i < 1; ++i) yield return KnownItems.BACON;
-        }
-
-        public override bool Interact(Interactor interactor, Vector2i interactAt)
-        {
-            LinkedList<Choice.Option> choices = new LinkedList<Choice.Option>
+            switch (scene.name)
             {
-                EnumerateStockOptions(interactor)
-            };
+                case "home":
+                    for (int i = 0; i < 2; ++i) yield return KnownItems.EGG;
+                    for (int i = 0; i < 1; ++i) yield return KnownItems.BACON;
+                    for (int i = 0; i < 3; ++i) yield return KnownItems.EXTRA_MOLDY_CHEESE;
+                    for (int i = 0; i < 4; ++i) yield return KnownItems.BEER;
+                    for (int i = 0; i < 2; ++i) yield return KnownItems.BLACK_SUBSTANCE;
+                    break;
 
-            if (!stock.Contains(KnownItems.BLACK_SUBSTANCE) && !collectedEssenceOfDarkness)
-                choices.Add(
-                    new Choice.Option(
-                        KnownItems.ESSENCE_OF_DARKNESS.displayName,
-                        new InteractionStep[] {
-                            new AddItem(interactor, KnownItems.ESSENCE_OF_DARKNESS),
-                            new CustomAction(interactor, CollectEssenceOfDarkness)
-                            }
-                        )
-                    );
-
-            LinkedList<InteractionStep> interactions = new LinkedList<InteractionStep>(
-                new DialogLine(interactor, "Most of the food is spoiled."),
-                new Choice(interactor, "Take some?", choices.ToArray())
-                );
-
-            if (choices.empty)
-                interactions.Clear();
-
-            if (!stock.Contains(KnownItems.BEER))
-                interactions.Insert(0, new DialogLine(interactor, "Where has all the beer gone?"));
-
-            interactor.AddInteraction(interactions);
-
-            return true;
+                case "office":
+                    for (int i = 0; i < 2; ++i) yield return KnownItems.DONUT;
+                    for (int i = 0; i < 2; ++i) yield return KnownItems.COLD_COFFEE;
+                    for (int i = 0; i < 7; ++i) yield return KnownItems.SOFT_DRINK;
+                    break;
+            }
         }
 
-        void CollectEssenceOfDarkness()
+        protected override SysCol.IEnumerable<InteractionStep> PrependSteps(Interactor interactor)
         {
-            collectedEssenceOfDarkness = true;
+            switch (scene.name)
+            {
+                case "home":
+                    yield return new DialogLine(interactor, "Most of the food is spoiled.");
+                    break;
+
+                case "office":
+                    yield return new DialogLine(interactor, "I've never put anything in there.");
+                    yield return new DialogLine(interactor, "My coworkers may have done that though...");
+                    break;
+            }
+        }
+
+        protected override void SuccessCallback(Interactor interactor, ItemBag selectedItems)
+        {
+            base.SuccessCallback(interactor, selectedItems);
+            if (!stockedEssenceOfDarkness && !stock.Contains(KnownItems.BLACK_SUBSTANCE))
+            {
+                stock.Add(KnownItems.ESSENCE_OF_DARKNESS);
+                stockedEssenceOfDarkness = true;
+            }
         }
     }
 }

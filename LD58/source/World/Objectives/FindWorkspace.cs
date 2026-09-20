@@ -1,13 +1,11 @@
 using ChaosFramework.Components;
 using ChaosFramework.Math.Vectors;
-using ChaosFramework.Shapes.Rigging;
-using System;
 
 namespace LD58.World.Objectives
 {
+    using Interaction.Steps;
     using Objects;
     using Objects.WorldObjects;
-    using Interaction.Steps;
     using Player;
 
     class FindWorkspace
@@ -18,16 +16,10 @@ namespace LD58.World.Objectives
         protected override void Create(CreateParameters cparams)
         {
             base.Create(cparams);
-            for (Vector2i pos = 0; pos.x < scene.size.x; pos.x++)
-                for (pos.y = 0; pos.y < scene.size.y; pos.y++)
-                    if ((myDesk = scene[pos] as OfficeTable) != null)
-                        if (myDesk.GetName() == "MyDesk")
-                            goto ok;
-
-            throw new Exception("Workplace not found. Too bad.");
-        ok:
-
-            myDesk.AddComponent<Highlight>(CreateParameters.Create(myDesk.bone));
+            myDesk = scene.Find<OfficeTable>("MyDesk");
+            scene.Find<DoorFrame>("Exit").Lock();
+            scene.Find<DoorFrame>("Boss Office").Lock();
+            scene.Find<DoorFrameSmall>("Secret Room").Lock();
         }
 
         protected override string GetText()
@@ -54,7 +46,7 @@ namespace LD58.World.Objectives
                 return base.Interact(interactor, interactible, interactAt);
         }
 
-        void Complete()
+        void Complete(Interactor interactor)
             => scene.SetObjective<DoWork>();
     }
 }
