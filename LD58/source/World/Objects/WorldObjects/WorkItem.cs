@@ -54,6 +54,7 @@ namespace LD58.World.Objects.WorldObjects
                 0.1f
                 );
             light.direction = new Vector3f(0, -1, 0);
+            light.up = boneSide;
             scene.lights.Add(light);
         }
 
