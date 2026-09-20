@@ -31,7 +31,7 @@ namespace LD58
                 );
 
             GlfwPlatformContext platformContext = new GlfwPlatformContext();
-            GlfwPlatformContext.GlfwWindow window = platformContext.CreateWindow();
+            GlfwFullscreen window = platformContext.CreateFullscreen("LD58 - CrunchTime", platformContext.PrimaryMonitor);
             Func<InputContext, InputDeviceHost> createHost = _ => new ChaosFramework.Input.OpenTk.DeviceHost(_, window.window);
 
             Game g = new Game(platformContext, window, createHost);

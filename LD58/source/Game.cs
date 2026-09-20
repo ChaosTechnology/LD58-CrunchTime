@@ -19,7 +19,7 @@ namespace LD58
     {
         const float UPDATE_INPUT_DEVICE_INTERVAL = 3;
 
-        public readonly Window window;
+        public readonly PresentationContext window;
         public readonly PlatformContext platformContext;
         public readonly Settings settings;
 
@@ -45,8 +45,11 @@ namespace LD58
 
         float updateInputDeviceTimer;
 
-        public Game(PlatformContext platformContext, Window window, System.Func<InputContext, InputDeviceHost> createInputContext)
-            : base(platformContext.messageQueue)
+        public Game(
+            PlatformContext platformContext,
+            PresentationContext window,
+            System.Func<InputContext, InputDeviceHost> createInputContext
+            ) : base(platformContext.messageQueue)
         {
             this.window = window;
             this.platformContext = platformContext;

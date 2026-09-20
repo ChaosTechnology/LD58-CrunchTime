@@ -104,8 +104,8 @@ namespace LD58
             GL.Viewport(
                 0,
                 0,
-                game.window.width,
-                game.window.height
+                (int)game.window.width,
+                (int)game.window.height
                 ); // TODO: client size
             Graphics.ThrowErrors();
             game.graphics.stateTracker.BindFramebuffer(FramebufferTarget.Framebuffer, null);
@@ -113,7 +113,7 @@ namespace LD58
 
         void AntiEdgy()
         {
-            GL.Viewport(0, 0, game.window.width, game.window.height); // TODO: client size
+            GL.Viewport(0, 0, (int)game.window.width, (int)game.window.height); // TODO: client size
             Graphics.ThrowErrors();
             game.graphics.stateTracker.BindFramebuffer(FramebufferTarget.Framebuffer, null);
             antiEdger.normalFactor = 6f;
